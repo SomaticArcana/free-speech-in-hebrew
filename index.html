@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f4f1fb">
 <title>Free Speech in Hebrew</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Fraunces:opsz,wght@9..144,500..700&family=Barlow+Condensed:wght@500;600;700&family=Tinos:wght@700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Fraunces:opsz,wght@9..144,500..700&family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 
 /* Layout idea: a night-flight instrument panel. Deep indigo hero with gold Hebrew as the one bold element; cool sky-paper ground with a faint chart grid; floating tab bar; motion on every answer. */
@@ -552,64 +552,25 @@ html:not(#_) .topbar .brand{min-width:0} html:not(#_) .topbar .brand span{white-
 html:not(#_) td .heb{font-size:1.7rem !important;line-height:1.4;white-space:nowrap}
 html:not(#_) td .btn.opt{padding:6px 10px;min-height:40px}
 
-/* ===== rev 21: the textbook's colours. Cover yellow #FFD23F and black, bold serif titles, double-ruled boxes. ===== */
-:root:not(#_){--paper:#fbfaf3;--ink:#111111;--soft:#55554d;--line:#e6e2cf;--accent:#111111;--accent-soft:#fff3c9;--blue:#111111;--blue-soft:#fff3c9;--gold:#ffd23f;--p1:#111111;--p2:#111111;--yel:#ffd23f;--disp:"Tinos","Liberation Serif","Times New Roman",Times,serif}
-html:not(#_),html:not(#_) body{background:#fbfaf3}
-html:not(#_) h1,html:not(#_) h2,html:not(#_) h3{font-family:var(--disp);font-weight:700;letter-spacing:0;color:#111}
-html:not(#_) h1{font-size:1.9rem} html:not(#_) h3{font-size:1.22rem}
-html:not(#_) .card{border-color:var(--line)}
-html:not(#_) .btn{border:1.5px solid #111;color:#111;background:#fff}
-html:not(#_) .btn.primary,html:not(#_) .btn.gold{background:var(--yel);border:2px solid #111;color:#111;font-weight:600;box-shadow:3px 3px 0 #111}
-html:not(#_) .btn.primary:active,html:not(#_) .btn.gold:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111}
-html:not(#_) .btn.gold *,html:not(#_) .btn.primary *{color:#111}
-html:not(#_) .btn.opt{border:1px solid var(--line)}
-html:not(#_) .btn[disabled]{opacity:.45;box-shadow:none}
-html:not(#_) .chip{border:1.5px solid #111;background:#fff;color:#111}
-html:not(#_) .chip[aria-pressed="true"]{background:#111;border-color:#111;color:var(--yel)}
-html:not(#_) .chip[disabled]{opacity:.4}
-html:not(#_) .play{background:var(--yel);border:1.5px solid #111} html:not(#_) .play svg{color:#111}
-html:not(#_) .play.playing{background:#111} html:not(#_) .play.playing svg{color:var(--yel)}
-:root:not(#_):not(#__) .pic{background:#fff0b8;color:#111;border:1px solid #ecd27a}
-:root:not(#_):not(#__) .pic svg{stroke:#111}
-html:not(#_) .hook{background:#fff3c9} html:not(#_) .slot{background:#fff3c9;border-color:#111}
-html:not(#_) .hl{color:#111;background:linear-gradient(transparent 60%,var(--yel) 60%)}
-html:not(#_) .eyebrow{color:#55554d}
-html:not(#_) .meter{background:#ece8d6} html:not(#_) .meter i{background:#111}
-html:not(#_) nav.tabs{border:1.5px solid #111}
-html:not(#_) .tab[aria-current="page"]{background:var(--yel);color:#111} html:not(#_) .tab[aria-current="page"] .g{color:#111}
-html:not(#_) .cell.d{box-shadow:inset 0 -3px 0 #111} html:not(#_) .cell.m{box-shadow:inset 0 -3px 0 var(--yel)}
-html:not(#_) .num{border:1.5px solid #111}
-html:not(#_) .hero{background:var(--yel);color:#111;border:2px solid #111;outline:1px solid #111;outline-offset:3px;border-radius:6px;margin:4px}
-html:not(#_) .hero h1,html:not(#_) .hero p,html:not(#_) .hero .eyebrow,html:not(#_) .hero .small,html:not(#_) .hero .tr{color:#111}
-html:not(#_) .hw,html:not(#_) .stat{background:rgba(255,255,255,.55);border:1px solid rgba(17,17,17,.35)}
-html:not(#_) .stat span{color:#33332c}
-html:not(#_) .hero .play{background:#111} html:not(#_) .hero .play svg{color:var(--yel)}
-html:not(#_) .dial .trk{stroke:rgba(17,17,17,.18)} html:not(#_) .dial .arc{stroke:#111}
-html:not(#_) .hero .btn.gold{background:#111;color:var(--yel);border-color:#111;box-shadow:none} html:not(#_) .hero .btn.gold *{color:var(--yel)}
-html:not(#_) .topbar{background:var(--yel);border-bottom:2px solid #111;color:#111}
-html:not(#_) .topbar .brand{color:#111;font:700 1.08rem var(--disp)}
-html:not(#_) .topbar .gear{background:var(--yel);border:1.5px solid #111;color:#111;font-weight:600}
-html:not(#_) #gate{background:var(--yel);color:#111}
-.gbox{border:3px solid #111;outline:1.5px solid #111;outline-offset:4px;padding:14px 26px 10px;margin:10px 0 6px;background:var(--yel)}
-html:not(#_) #gate h1{font:700 2.5rem/1.02 var(--disp);color:#111;margin:0}
-html:not(#_) .gey{color:#111;font-weight:700;font-size:1.3rem;margin-top:4px}
-html:not(#_) .gt{color:#1d1d18} html:not(#_) .gs,html:not(#_) .gc{color:#33332c}
-html:not(#_) .glogo{filter:drop-shadow(0 10px 14px rgba(90,60,0,.28));width:min(40vw,150px)}
-html:not(#_) #gate input{background:#fffbe0;border:1.5px solid #111;color:#111} html:not(#_) #gate input::placeholder{color:#55554d}
-html:not(#_) #gate .gbtn{background:#111;color:var(--yel);border-color:#111;box-shadow:none}
-html:not(#_) .topbar .brand img{filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
-html:not(#_) .unit{padding-left:66px}
-.ub{position:absolute;left:4px;top:14px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:var(--yel);border:2px solid #111;outline:1px solid #111;outline-offset:2px;font:700 1.7rem 'Frank Ruhl Libre',serif;font-style:normal;color:#111}
-html:not(#_) .sd .s{stroke:#111} html:not(#_) .sd .n circle{fill:var(--yel);stroke:#111;stroke-width:1}
-html:not(#_) .paper{background:#fff3c9;border:1.5px dashed #111}
-html:not(#_) :focus-visible{outline:3px solid #111;outline-offset:3px}
-html:not(#_) .hero :focus-visible,html:not(#_) #gate :focus-visible,html:not(#_) .topbar :focus-visible{outline-color:#111;box-shadow:0 0 0 6px #fff}
-html:not(#_) a{color:#111}
-html:not(#_) th{color:#55554d}
-html:not(#_) #gate{align-items:flex-start} html:not(#_) .gin{margin:auto;gap:9px} html:not(#_) .glogo{width:min(34vw,128px)}
-html:not(#_) #gate h1{font-size:2.2rem}
+/* ===== colour options: same layout, different accent ===== */
+:root:not(#_){--ghost:rgba(100,114,255,.22);--hue:0deg}
+html[data-theme="sea"]:not(#_){--p1:#1f7a78;--p2:#1f7a78;--accent:#1f7a78;--blue:#1f7a78;--accent-soft:#e3f3f1;--blue-soft:#e3f3f1;--ghost:rgba(31,122,120,.2);--hue:-54deg}
+html[data-theme="garden"]:not(#_){--p1:#3c7a50;--p2:#3c7a50;--accent:#3c7a50;--blue:#3c7a50;--accent-soft:#e7f3ea;--blue-soft:#e7f3ea;--ghost:rgba(60,122,80,.2);--hue:-92deg}
+html[data-theme="clay"]:not(#_){--p1:#b84a33;--p2:#b84a33;--accent:#b84a33;--blue:#b84a33;--accent-soft:#fbebe6;--blue-soft:#fbebe6;--ghost:rgba(184,74,51,.2);--hue:140deg}
+html[data-theme="plum"]:not(#_){--p1:#7a4a9e;--p2:#7a4a9e;--accent:#7a4a9e;--blue:#7a4a9e;--accent-soft:#f3ecf8;--blue-soft:#f3ecf8;--ghost:rgba(122,74,158,.2);--hue:43deg}
+html[data-theme="sun"]:not(#_){--p1:#8f6400;--p2:#8f6400;--accent:#8f6400;--blue:#8f6400;--accent-soft:#fff1c2;--blue-soft:#fff1c2;--ghost:rgba(190,140,0,.2);--hue:173deg}
+html[data-theme="sun"]:not(#_) .hero{background:#ffe07a} html[data-theme="sun"]:not(#_) .tab[aria-current="page"]{background:#ffe07a;color:#3d2c00}
+html[data-theme="sun"]:not(#_) .tab[aria-current="page"] .g{color:#3d2c00}
+html:not(#_) .glogo,html:not(#_) .topbar .brand img,.ub{filter:hue-rotate(var(--hue))}
+html:not(#_) .glogo{filter:hue-rotate(var(--hue)) drop-shadow(0 16px 22px rgba(60,60,90,.2))}
+html:not(#_) :focus-visible{outline-color:var(--p1)}
+.swatches{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font:500 .82rem var(--body);color:var(--ink);cursor:pointer;min-height:44px}
+.sw i{width:34px;height:34px;border-radius:50%;display:block}
+.sw[aria-pressed="true"]{border:2.5px solid var(--ink)}
+.sw[data-k="blue"] i{background:#4f61cc}.sw[data-k="sea"] i{background:#1f7a78}.sw[data-k="garden"] i{background:#3c7a50}.sw[data-k="clay"] i{background:#b84a33}.sw[data-k="plum"] i{background:#7a4a9e}.sw[data-k="sun"] i{background:#f2c02e}
 </style>
-<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#FFD23F"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Free Speech">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f7f6f2"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Free Speech">
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
 <body>
@@ -641,7 +602,7 @@ const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1])
 
 /* ---------- state ---------- */
 const KEY="hebrew-flight-school-v1";
-const BLANK=()=>({big:0,voice:"std",name:"",welcomed:0,start:null,cards:{},letters:{},paper:{},tasks:{},lessons:{},log:{},ret:0.9,slow:false,newPerDay:8});
+const BLANK=()=>({theme:"blue",big:0,voice:"std",name:"",welcomed:0,start:null,cards:{},letters:{},paper:{},tasks:{},lessons:{},log:{},ret:0.9,slow:false,newPerDay:8});
 let S=BLANK();
 try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s);}catch(e){}
 if(!S.lessons)S.lessons={};
@@ -652,7 +613,7 @@ function merge(a,b){const nw=(a.saved||0)>=(b.saved||0)?a:b,od=nw===a?b:a,o=Obje
  o.letters={...(od.letters||{}),...(nw.letters||{})};o.name=nw.name||od.name||"";o.welcomed=Math.max(nw.welcomed||0,od.welcomed||0);o.paper={...(od.paper||{})};for(const[k,v]of Object.entries(nw.paper||{}))o.paper[k]=Math.max(v,o.paper[k]||0);o.log={...(od.log||{})};for(const[k,v]of Object.entries(nw.log||{}))o.log[k]=Math.max(v,o.log[k]||0);const st=[a.start,b.start].filter(x=>x!=null);o.start=st.length?Math.min(...st):null;return o;}
 function save(){S.saved=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(push,2500);}
 async function push(){if(!remote||saving||!dirty)return;saving=true;dirty=false;try{await remote.set({json:JSON.stringify(S),saved:S.saved||Date.now()});}catch(e){} saving=false;if(dirty)saveTimer=setTimeout(push,2500);}
-(async()=>{try{if(!window.claude||!window.claude.use)return;const[db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);if(!db||!user)return;const id=await user.id();if(!id)return;remote=db.doc("data/users/"+id+"/progress");SYNC=true;const snap=await remote.get();if(snap.exists){const r=JSON.parse(snap.data().json||"{}");const before=JSON.stringify(S),m=merge(S,r);S=m;setPal(S.pal);applyBig();document.documentElement.dataset.motion=S.motion==="off"?"off":"on";const ch=JSON.stringify(m)!==before;if(ch&&!session)route();if(ch||JSON.stringify(m)!==JSON.stringify(Object.assign(BLANK(),r)))save();}else if(S.start)save();}catch(e){}})();
+(async()=>{try{if(!window.claude||!window.claude.use)return;const[db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);if(!db||!user)return;const id=await user.id();if(!id)return;remote=db.doc("data/users/"+id+"/progress");SYNC=true;const snap=await remote.get();if(snap.exists){const r=JSON.parse(snap.data().json||"{}");const before=JSON.stringify(S),m=merge(S,r);S=m;setPal(S.pal);applyBig();applyTheme();document.documentElement.dataset.motion=S.motion==="off"?"off":"on";const ch=JSON.stringify(m)!==before;if(ch&&!session)route();if(ch||JSON.stringify(m)!==JSON.stringify(Object.assign(BLANK(),r)))save();}else if(S.start)save();}catch(e){}})();
 
 /* ---------- audio: real recordings only ---------- */
 let packP=null;const urls={};
@@ -758,7 +719,7 @@ V.lessons=()=>{
   talkathon(),
   UNITS.map(u=>{const idx=LESSONS.map((l,i)=>i).filter(i=>LESSONS[i].u===u[0]),all=idx.every(i=>S.lessons[i]&&S.lessons[i].done);
    const cards=idx.map(i=>{const l=LESSONS[i],st=S.lessons[i]||{},d=st.done;return h("a",{class:"card lcard",href:"#lesson-"+(i+1)},h("span",{class:"num"+(d?" done":i===nx?" next":"")},String(i+1)),h("div",{},h("h3",{},l.t),h("div",{class:"small soft"},l.goal),h("div",{class:"pics",style:"margin-top:6px"},l.words.filter(id=>W[id]).map(id=>pic(id,"sm")))),h("span",{class:"small soft"},d?"done":[1,2,3,4].filter(k=>st["s"+k]).length+"/4"));});
-   return [h("div",{class:"unit"},h("i",{class:"ub","aria-hidden":"true",lang:"he"},"אבגדהוזחטיכל"[Math.max(0,"ABCDEFGHIJKL".indexOf(u[0]))]),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
+   return [h("div",{class:"unit"},h("i",{class:"ub",style:"background-position:"+(-52*Math.max(0,"ABCDEFGHIJKL".indexOf(u[0])))+"px 0","aria-hidden":"true"}),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
   h("a",{class:"card lcard",href:"#read"},h("span",{class:"num"},String(LESSONS.length+1)),h("div",{},h("h3",{},"Skip-read Genesis 1:1-5"),h("div",{class:"small soft"},"The method's reading strategy on the first verses of the Bible."),h("div",{class:"pics",style:"margin-top:6px"},["bereshit","elohim","shamayim","erets","or","yom","layla"].map(id=>pic(id,"sm")))),h("span",{class:"small soft"},"read")),
   h("a",{class:"card lcard",href:"#forms"},h("span",{class:"num"},String(LESSONS.length+2)),h("div",{},h("h3",{},"Forms workshop: she, they, I did"),h("div",{class:"small soft"},"The next rungs of the ladder, as a reference sheet. No built-in recordings exist for these forms, so each one links out to native speakers.")),h("span",{class:"small soft"},"ref")));
 };
@@ -897,8 +858,8 @@ function openLetter(i){
  const seg=h("div",{class:"seg"},layers.map(([k,n])=>h("button",{class:"chip","data-k":k,onclick:()=>{layer=k;drawLayer();}},n)));
  const cv=h("canvas",{class:"trace",width:520,height:520,"aria-label":"Trace the letter with your finger"});
  let ghost=true,target=l.ch;const X=x=>x*4.3+45,Y=y=>y*4.3+38;
- const paint=()=>{const c=cv.getContext("2d");c.clearRect(0,0,520,520);c.strokeStyle="rgba(17,17,17,.3)";c.lineWidth=2;c.setLineDash([6,8]);c.beginPath();c.moveTo(20,Y(80));c.lineTo(500,Y(80));c.stroke();c.setLineDash([]);if(!ghost)return;const st=STROKES[target]||[];
-  c.strokeStyle="rgba(17,17,17,.13)";c.lineWidth=40;c.lineCap="round";c.lineJoin="round";st.forEach(p=>{c.beginPath();c.moveTo(X(p[0][0]),Y(p[0][1]));if(p.length===2)c.lineTo(X(p[1][0]),Y(p[1][1]));else{c.lineTo(X((p[0][0]+p[1][0])/2),Y((p[0][1]+p[1][1])/2));for(let i=1;i<p.length-1;i++)c.quadraticCurveTo(X(p[i][0]),Y(p[i][1]),X((p[i][0]+p[i+1][0])/2),Y((p[i][1]+p[i+1][1])/2));c.lineTo(X(p[p.length-1][0]),Y(p[p.length-1][1]));}c.stroke();});
+ const paint=()=>{const c=cv.getContext("2d");c.clearRect(0,0,520,520);c.strokeStyle="rgba(120,130,200,.35)";c.lineWidth=2;c.setLineDash([6,8]);c.beginPath();c.moveTo(20,Y(80));c.lineTo(500,Y(80));c.stroke();c.setLineDash([]);if(!ghost)return;const st=STROKES[target]||[];
+  c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue("--ghost").trim()||"rgba(100,114,255,.22)";c.lineWidth=40;c.lineCap="round";c.lineJoin="round";st.forEach(p=>{c.beginPath();c.moveTo(X(p[0][0]),Y(p[0][1]));if(p.length===2)c.lineTo(X(p[1][0]),Y(p[1][1]));else{c.lineTo(X((p[0][0]+p[1][0])/2),Y((p[0][1]+p[1][1])/2));for(let i=1;i<p.length-1;i++)c.quadraticCurveTo(X(p[i][0]),Y(p[i][1]),X((p[i][0]+p[i+1][0])/2),Y((p[i][1]+p[i+1][1])/2));c.lineTo(X(p[p.length-1][0]),Y(p[p.length-1][1]));}c.stroke();});
   sDots(st).forEach((d,i)=>{c.fillStyle="#f2a81d";c.beginPath();c.arc(X(d[0]),Y(d[1]),17,0,6.3);c.fill();c.fillStyle="#221600";c.font="700 22px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(String(i+1),X(d[0]),Y(d[1])+1);});};
  let drawing=false;const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*520/r.width,(e.clientY-r.top)*520/r.height];};
  cv.addEventListener("pointerdown",e=>{drawing=true;cv.setPointerCapture(e.pointerId);const c=cv.getContext("2d");c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue("--accent");c.lineWidth=22;c.lineCap="round";c.lineJoin="round";c.beginPath();c.moveTo(...pos(e));});
@@ -1106,6 +1067,8 @@ V.method=()=>h("div",{class:"stack"},
 
 /* title screen, shown once per launch; first run asks for a name */
 const CONTACT={name:"Joshua Stoltz",email:"josh.stoltz43@gmail.com",phone:"760-802-4437"};
+const THEMES=[["blue","Blue"],["sea","Sea teal"],["garden","Garden green"],["clay","Clay coral"],["plum","Plum"],["sun","Sunflower"]];
+const applyTheme=()=>{const k=THEMES.some(x=>x[0]===S.theme)?S.theme:"blue";document.documentElement.dataset.theme=k;};applyTheme();
 const applyBig=()=>{document.documentElement.style.fontSize=S.big?"118%":"";};applyBig();
 function gate(){const g=$("#gate");if(!g)return;if(/[?&]nogate/.test(location.search))return;let seen=false;try{seen=sessionStorage.getItem("hfs-gate")==="1";}catch(e){}
  if(seen&&S.welcomed)return;const first=!S.welcomed;const nx=nextLesson(),dn=lessonsDone();
@@ -1114,8 +1077,9 @@ function gate(){const g=$("#gate");if(!g)return;if(/[?&]nogate/.test(location.se
  const tell=()=>{stat.textContent=SYNC?"Signed in. Your progress follows you to your other devices.":"Your progress is saved on this device. To move it to another device, use Save a backup file in Settings.";};setTimeout(tell,2500);setTimeout(tell,9000);
  const go=()=>{if(first){S.name=inp.value.trim().slice(0,24);S.welcomed=Date.now();save();}try{sessionStorage.setItem("hfs-gate","1");}catch(e){}g.classList.add("out");setTimeout(()=>{g.hidden=true;g.replaceChildren();},450);if(first)location.hash="#lesson-1";else route();};
  g.replaceChildren(h("div",{class:"gin"},
-  h("img",{class:"glogo",src:"media/logo.webp",alt:"Free Speech in Hebrew logo: a yellow speech bubble holding the letter alef",width:"220",height:"220"}),
-  h("div",{class:"gbox"},h("h1",{},"Free Speech",h("br"),"in Hebrew"),h("div",{class:"gey"},"עִבְרִית")),
+  h("img",{class:"glogo",src:"media/logo.webp",alt:"Free Speech in Hebrew logo: a speech bubble holding the letter alef",width:"220",height:"220"}),
+  h("div",{class:"gey"},"עִבְרִית"),
+  h("h1",{},"Free Speech in Hebrew"),
   h("p",{class:"gt"},first?"Speak first. Read second. Five new words a lesson, real voices, about half an hour a day.":"Welcome back"+(S.name?", "+S.name:"")+". "+dn+" of "+LESSONS.length+" lessons done."),
   first?inp:null,
   h("button",{class:"btn primary gbtn",onclick:go},first?"Start lesson 1":(dn>=LESSONS.length?"Open the course":"Continue to lesson "+(nx+1))),
@@ -1128,6 +1092,7 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
  return h("div",{class:"stack"},
   h("div",{},h("div",{class:"eyebrow"},"Your file"),h("h1",{},"Settings and about")),
   h("div",{class:"card"},h("h3",{},"You"),h("p",{class:"small soft"},"Used only to greet you on the title screen."),nm),
+  (()=>{const seg=h("div",{class:"swatches"});const draw=()=>seg.replaceChildren(...THEMES.map(([k,n])=>h("button",{class:"sw","data-k":k,"aria-pressed":String((S.theme||"blue")===k),onclick:()=>{S.theme=k;save();applyTheme();draw();}},h("i",{}),h("span",{},n))));draw();return h("div",{class:"card"},h("h3",{},"Colour"),h("p",{class:"small soft"},"Pick the look you like. It changes straight away and is remembered on this device."),seg);})(),
   (()=>{const seg=h("div",{class:"seg"});const draw=()=>seg.replaceChildren(...[[0,"Normal text"],[1,"Larger text"]].map(([k,n])=>h("button",{class:"chip","aria-pressed":String((S.big?1:0)===k),onclick:()=>{S.big=k;save();applyBig();draw();}},n)));draw();return h("div",{class:"card"},h("h3",{},"Text size"),h("p",{class:"small soft"},"Makes all the text and buttons bigger."),seg);})(),
   h("div",{class:"card"},h("h3",{},"Where your progress lives"),tbl(["Situation","What happens"],[["Signed in to Claude",SYNC?"This is you right now. Progress is stored privately with your account and follows you to any device.":"Progress is stored privately with your account and follows you to any device."],["Not signed in",SYNC?"Progress stays on the one device and browser.":"This is you right now, or the check has not finished. Progress stays on this device and browser."],["Someone you shared it with","They get their own separate progress. Nobody, including the person who shared it, can see anyone else's."]]),
    h("div",{class:"row"},h("button",{class:"btn",onclick:()=>{try{const a=h("a",{href:URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"})),download:"hebrew-flight-school-backup.json"});document.body.appendChild(a);a.click();a.remove();msg.textContent="Backup file saved to your downloads.";}catch(e){msg.textContent="This browser would not save a file.";}}},"Save a backup file"),h("button",{class:"btn",onclick:()=>file.click()},"Restore from a backup"),file),msg),
@@ -1140,7 +1105,7 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 21. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 22. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
 
 /* study guide and cheat sheet */
 const HB=s=>h("span",{class:"heb",lang:"he",dir:"rtl"},s);
