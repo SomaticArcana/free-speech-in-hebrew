@@ -1,0 +1,24 @@
+{
+ "name": "Free Speech in Hebrew",
+ "short_name": "Free Speech",
+ "description": "Unofficial study companion to the speak-first Hebrew method taught by Alana Shuster.",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f7f6f2",
+ "theme_color": "#f7f6f2",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any maskable"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}

@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f1fb">
+<title>Free Speech in Hebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Fraunces:opsz,wght@9..144,500..700&family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* Layout idea: a night-flight instrument panel. Deep indigo hero with gold Hebrew as the one bold element; cool sky-paper ground with a faint chart grid; floating tab bar; motion on every answer. */
+:root{
+  --paper:#e8edf7; --card:#ffffff; --ink:#101a3c; --soft:#525d7d; --line:#d0d8ea; --accent:#8f5400; --accent-soft:#fdefd3; --blue:#2b3a9e; --blue-soft:#e4e8fb; --gold:#f0ac2e; --night1:#0b1437; --night2:#27308a; --teal:#0c7f79; --grid:rgba(43,58,158,.055); --shadow:16,26,60;
+  --good:#1f7a4d; --warn:#a2660a; --bad:#b03a3a;
+  --disp:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif; --heb:"Frank Ruhl Libre","Noto Serif Hebrew","Times New Roman",serif; --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#080d21; --card:#111a3a; --ink:#e9edfb; --soft:#a6b1d3; --line:#27325e; --accent:#f5b94a; --accent-soft:#3b2d10; --blue:#a9b8ff; --blue-soft:#1b2658; --gold:#f5b94a; --night1:#050a1f; --night2:#27308a; --teal:#4fd1c7; --grid:rgba(169,184,255,.05); --shadow:0,0,0;
+  --good:#5cc793; --warn:#e3b05a; --bad:#ef8a8a; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#080d21; --card:#111a3a; --ink:#e9edfb; --soft:#a6b1d3; --line:#27325e; --accent:#f5b94a; --accent-soft:#3b2d10; --blue:#a9b8ff; --blue-soft:#1b2658; --gold:#f5b94a; --night1:#050a1f; --night2:#27308a; --teal:#4fd1c7; --grid:rgba(169,184,255,.05); --shadow:0,0,0;
+  --good:#5cc793; --warn:#e3b05a; --bad:#ef8a8a; color-scheme:dark;}
+@font-face{font-family:"Paleo";src:url("fonts/phoenician.woff2") format("woff2");font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+body{padding-bottom:84px}
+main{max-width:680px;margin:0 auto;padding:16px 16px 24px}
+h1,h2,h3{margin:0;text-wrap:balance;line-height:1.2}
+h1{font-size:1.45rem;font-weight:600} h2{font-size:1.15rem;font-weight:600;margin-top:4px} h3{font-size:1rem;font-weight:600}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.soft{color:var(--soft)} .small{font-size:.86rem}
+.heb{font-family:var(--heb);direction:rtl;unicode-bidi:isolate}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:9px 13px;min-height:42px}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#08131c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{color:#08131c}}
+.btn.amber{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.btn:focus-visible,.tab:focus-visible,.cell:focus-visible,.chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.play{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--blue);background:var(--blue-soft);border-radius:999px;padding:6px 12px 6px 8px;min-height:40px}
+.play svg{width:22px;height:22px;flex:none}
+.play.playing{background:var(--accent-soft);border-color:var(--accent)}
+.play .w{font-family:var(--heb);font-size:1.25rem;direction:rtl}
+.badge{font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;padding:2px 6px;border-radius:4px;border:1px solid currentColor;white-space:nowrap;align-self:flex-start;margin-top:3px}
+.b-DOC,.b-TEXT{color:var(--good)} .b-DEB{color:var(--warn)} .b-TRAD{color:var(--blue)} .b-CHR{color:var(--accent)} .b-POP{color:var(--bad)}
+.note{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:8px 0;border-top:1px solid var(--line)}
+.note:first-child{border-top:0}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0);z-index:20}
+nav.tabs .in{display:grid;grid-template-columns:repeat(5,1fr);width:100%;max-width:680px}
+.tab{background:none;border:0;padding:8px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.72rem;color:var(--soft);border-top:3px solid transparent}
+.tab .g{font-family:var(--heb);font-size:1.3rem;line-height:1}
+.tab[aria-current="page"]{color:var(--ink);border-top-color:var(--accent);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;direction:rtl}
+.cell{direction:ltr;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:0;position:relative}
+.cell .g{font-family:var(--heb);font-size:2.1rem;line-height:1.15}
+.cell .n{font-size:.72rem;color:var(--soft)}
+.cell.done{border-color:var(--good)} .cell.done::after{content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--good)}
+.cell.m{box-shadow:inset 0 -3px 0 var(--accent)} .cell.d{box-shadow:inset 0 -3px 0 var(--blue)}
+.big{font-family:var(--heb);font-size:6rem;line-height:1;direction:rtl}
+.evo{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.evo div{border:1px solid var(--line);border-radius:8px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:86px;justify-content:space-between;animation:rise .5s both}
+.evo div:nth-child(2){animation-delay:.12s}.evo div:nth-child(3){animation-delay:.24s}.evo div:nth-child(4){animation-delay:.36s}.evo div:nth-child(5){animation-delay:.48s}
+@keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+
+.evo .s{font-size:1.9rem;line-height:1.2;height:44px;display:flex;align-items:center}
+.evo .paleo{font-family:"Paleo",var(--heb)} .evo svg{width:40px;height:40px}
+.evo .c{font-family:var(--mono);font-size:.6rem;color:var(--soft);text-align:center;line-height:1.2}
+.seg{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 12px;white-space:nowrap;min-height:38px;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+canvas.trace{width:100%;max-width:260px;aspect-ratio:1;border:1px dashed var(--line);border-radius:10px;touch-action:none;background:var(--paper);align-self:center}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.scroll{overflow-x:auto}
+.stage{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.stage div{height:34px;border-radius:5px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.68rem;color:var(--soft)}
+.stage div.on{background:var(--accent-soft);border-color:var(--accent);color:var(--ink);font-weight:500}
+.stage div.past{background:var(--blue-soft);border-color:var(--blue)}
+.task{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.task:first-of-type{border-top:0}
+.task input{width:22px;height:22px;accent-color:var(--good)}
+.task .t{font-family:var(--mono);font-size:.75rem;color:var(--soft)}
+.fc{min-height:230px;align-items:center;justify-content:center;text-align:center}
+.fc .w{font-family:var(--heb);font-size:3.2rem;line-height:1.3;direction:rtl}
+.tr{font-family:var(--mono);font-size:.95rem}
+.kb{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;direction:rtl}
+.kb button{font-family:var(--heb);font-size:1.3rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:5px 0;min-height:40px}
+.out{font-family:var(--heb);font-size:2rem;direction:rtl;min-height:48px;border-bottom:2px solid var(--line);text-align:center}
+.wl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center}
+.line{display:flex;flex-wrap:wrap;gap:6px;direction:rtl;min-height:52px;border:1px dashed var(--line);border-radius:10px;padding:8px;align-items:center}
+.line .chip{direction:rtl;font-family:var(--heb);font-size:1.25rem}
+a{color:var(--blue)}
+dialog{border:0;padding:0;width:100%;max-width:680px;max-height:100%;height:100%;background:var(--paper);color:var(--ink);margin:0 auto}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.sheet{padding:14px 16px 40px;display:flex;flex-direction:column;gap:12px}
+.bar{position:sticky;top:0;background:var(--paper);display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);z-index:2}
+.meter{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.meter i{display:block;height:100%;background:var(--good)}
+.root-map{display:flex;flex-direction:column;gap:8px}
+.root-head{display:flex;align-items:baseline;gap:12px;justify-content:space-between}
+.root-head .r{font-family:var(--heb);font-size:2rem;direction:rtl;letter-spacing:.05em;color:var(--accent)}
+textarea{width:100%;min-height:70px;font:inherit;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.hl{color:var(--accent);font-weight:700}
+
+/* accessibility pass (rev 8) */
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+html[data-motion="off"] *,html[data-motion="off"] *::before,html[data-motion="off"] *::after{animation:none!important;transition:none!important}
+html[data-motion="off"] .meter i.run{animation:drain 4s steps(4,end) forwards!important}
+
+.pic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--ink);flex:none;font-family:var(--heb);font-weight:700;font-size:1.15rem;line-height:1}
+.pic svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pic.lg{width:120px;height:120px;border-radius:20px;font-size:3rem}
+.pic.md{width:64px;height:64px;font-size:1.6rem}
+.pic.sm{width:30px;height:30px;border-radius:7px;font-size:.8rem}
+.wl{grid-template-columns:auto auto 1fr}
+.lcard{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-decoration:none;color:inherit}
+.num{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:500}
+.num.done{background:var(--good);border-color:var(--good);color:#fff}
+.num.next{border-color:var(--accent);background:var(--accent-soft)}
+.pics{display:flex;gap:4px;flex-wrap:wrap}
+.step{border-left:4px solid var(--blue);padding-left:12px}
+.step.ok{border-left-color:var(--good)}
+.steph{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.hook{background:var(--blue-soft);border-radius:8px;padding:8px 10px;font-size:.92rem}
+.wcard{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.wcard:first-of-type{border-top:0}
+.slots{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.slot{border:2px dashed var(--accent);border-radius:8px;padding:6px 10px;font-family:var(--mono);font-size:.8rem;background:var(--accent-soft)}
+.arrow{color:var(--soft);font-family:var(--mono)}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;text-align:left}
+.timer{font-family:var(--mono);font-size:2.4rem;text-align:center}
+.verse{direction:rtl;display:flex;flex-wrap:wrap;gap:6px 8px;padding:10px 0;border-top:1px solid var(--line)}
+.verse:first-of-type{border-top:0}
+.tok{font-family:var(--heb);font-size:1.55rem;line-height:1.5;border:0;background:none;padding:0 3px;border-radius:6px;color:var(--soft)}
+.tok.k{color:var(--ink);border-bottom:2px dotted var(--accent)}
+.tok.hit{background:var(--accent-soft);color:var(--ink)}
+.tok small{display:block;font-family:var(--body);font-size:.62rem;direction:ltr;text-align:center;color:var(--soft);line-height:1.1}
+.dia{width:100%;height:auto;display:block}
+.dia text{font-family:"IBM Plex Mono",monospace;fill:currentColor}
+.rootsvg text{font-family:"IBM Plex Mono",monospace;fill:currentColor;font-size:9px}
+.rootsvg .rt{font-family:"Frank Ruhl Libre",serif;font-size:20px;fill:var(--accent);font-weight:700}
+.rootsvg g.n{cursor:pointer}
+.meter i.run{background:var(--accent);width:100%;animation:drain 4s linear forwards}
+@keyframes drain{from{width:100%}to{width:0}}
+.unit{border-left:4px solid var(--accent);padding:2px 0 2px 12px}
+.btn:disabled{opacity:.45}
+.loadbar{position:fixed;left:0;right:0;top:0;z-index:50;border:0;padding:6px 12px 8px;background:var(--card);color:var(--soft);font:500 .75rem var(--mono);text-align:left;border-bottom:1px solid var(--line)}
+.loadbar i{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);transition:width .2s}
+.loadbar[hidden]{display:none}
+details.unitdone>summary{cursor:pointer;padding:8px 0}
+.fcell{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-decoration:none;color:inherit}
+a.fcell .heb{font-size:1.25rem;border-bottom:1px dashed var(--accent)}
+.ftbl td{vertical-align:top;min-width:86px}
+label.row{display:flex;gap:10px;align-items:center;text-align:left}
+label.row input{flex:0 0 auto;width:22px;height:22px}
+
+/* ===== rev 10 skin ===== */
+html,body{background:var(--paper)}
+body{padding-bottom:108px;background-image:radial-gradient(90% 40% at 100% 0%,color-mix(in srgb,var(--gold) 10%,transparent),transparent 70%),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:auto,24px 24px,24px 24px;background-attachment:fixed,scroll,scroll}
+h1{font-family:var(--disp);font-size:2.05rem;font-weight:700;letter-spacing:.005em;line-height:1.05}
+h2{font-family:var(--disp);font-size:1.5rem;font-weight:600;line-height:1.1}
+h3{font-size:1.03rem}
+.eyebrow{color:var(--accent);letter-spacing:.14em;font-weight:500}
+.stack{gap:14px}
+.card{border-radius:18px;padding:16px;box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 10px 26px -14px rgba(var(--shadow),.35);transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s}
+.btn{border-radius:12px;font-weight:500;transition:transform .12s cubic-bezier(.2,.8,.2,1),box-shadow .15s,background .2s,border-color .2s;-webkit-tap-highlight-color:transparent}
+.btn:active,.chip:active,.play:active,.tab:active,.cell:active{transform:scale(.95)}
+.btn.primary,:root[data-theme="dark"] .btn.primary{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--p1),var(--p2));border-color:transparent;color:#fff;box-shadow:0 10px 20px -10px color-mix(in srgb,var(--p2) 90%,transparent),inset 0 1px 0 rgba(255,255,255,.28);font-weight:600;letter-spacing:.01em}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{color:#fff}}
+.btn.primary::after,.btn.gold::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:shine 4.5s ease-in-out infinite}
+.btn.primary:disabled::after{display:none}
+@keyframes shine{0%,70%{left:-60%}100%{left:130%}}
+.btn.gold,.btn.amber{position:relative;overflow:hidden;color:var(--onGold)!important;background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 55%,#fff),var(--gold) 55%,color-mix(in srgb,var(--gold) 82%,#000));border-color:transparent;color:var(--onGold);font-weight:600;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--gold) 90%,transparent),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn.gold{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;font-size:1.05rem;text-decoration:none;border-radius:16px}
+.btn.gold b{font-family:var(--disp);font-size:1.35rem;font-weight:700;letter-spacing:.02em}
+.chip{transition:transform .12s,background .2s,color .2s,border-color .2s}
+.chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--p1),var(--p2));border-color:transparent;color:#fff}
+.play{background:linear-gradient(135deg,var(--blue-soft),var(--card));border-color:color-mix(in srgb,var(--blue) 55%,transparent);box-shadow:0 4px 10px -6px rgba(var(--shadow),.5);transition:transform .12s,background .2s,border-color .2s}
+.play svg{color:var(--blue)}
+.play.playing{background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 40%,#fff),var(--accent-soft));border-color:var(--gold);animation:ring 1s ease-out infinite}
+.play.playing svg{color:var(--accent);animation:beat .5s ease-in-out infinite alternate}
+@keyframes ring{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--gold) 55%,transparent)}100%{box-shadow:0 0 0 12px color-mix(in srgb,var(--gold) 0%,transparent)}}
+@keyframes beat{from{transform:scale(1)}to{transform:scale(1.18)}}
+.pic{background:linear-gradient(145deg,color-mix(in srgb,var(--accent-soft) 45%,#fff),var(--accent-soft));border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 3px 8px -5px rgba(var(--shadow),.5);border-radius:12px}
+:root[data-theme="dark"] .pic{background:linear-gradient(145deg,#4a3915,var(--accent-soft))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pic{background:linear-gradient(145deg,#4a3915,var(--accent-soft))}}
+.pic.lg{width:136px;height:136px;border-radius:30px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 18px 30px -16px color-mix(in srgb,var(--gold) 75%,transparent);animation:float 3.2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.lcard{border-radius:18px;position:relative;overflow:hidden}
+.lcard:active{transform:scale(.98)}
+.num{width:46px;height:46px;font-family:var(--disp);font-size:1.3rem;font-weight:700;border:2px solid var(--line);background:var(--card)}
+.num.done{background:linear-gradient(135deg,#37b37e,var(--good));border-color:transparent;box-shadow:0 6px 12px -6px rgba(31,122,77,.8)}
+.num.next{border-color:var(--gold);background:linear-gradient(135deg,color-mix(in srgb,var(--accent-soft) 50%,#fff),var(--accent-soft));color:var(--onGold);animation:beacon 1.8s ease-out infinite}
+@keyframes beacon{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--gold) 60%,transparent)}100%{box-shadow:0 0 0 14px color-mix(in srgb,var(--gold) 0%,transparent)}}
+.unit{border-left:5px solid var(--gold);border-radius:14px;padding:12px 14px;background:linear-gradient(90deg,var(--blue-soft),transparent 85%);margin-top:6px}
+.unit h2{font-size:1.65rem}
+.step{border-left:0;padding-left:20px;position:relative;overflow:hidden}
+.step::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--p1),var(--teal))}
+.step.ok::before{background:linear-gradient(180deg,#37b37e,var(--good))}
+.steph h3{font-family:var(--disp);font-size:1.4rem;font-weight:600}
+.hook{background:var(--blue-soft);border-radius:4px 14px 14px 14px;border-left:3px solid var(--blue);padding:9px 12px}
+.slot{border-color:var(--gold);border-radius:10px;background:var(--accent-soft)}
+.fc{min-height:300px;border-radius:26px;padding:22px 18px;gap:12px;background:radial-gradient(120% 70% at 50% 0%,var(--accent-soft),var(--card) 62%);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 26px 44px -26px rgba(var(--shadow),.6);animation:cardIn .38s cubic-bezier(.2,.9,.2,1) both}
+.fc.rev{animation:flip .5s cubic-bezier(.2,.8,.2,1) both}
+.fc .w{font-size:3.8rem;font-weight:700;line-height:1.25;text-shadow:0 2px 0 rgba(255,255,255,.4),0 10px 24px color-mix(in srgb,var(--gold) 35%,transparent)}
+@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes flip{from{opacity:.2;transform:perspective(900px) rotateY(-88deg) scale(.96)}to{opacity:1;transform:perspective(900px) rotateY(0)}}
+.opt{border-radius:16px;padding:10px 12px;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+.stack>.opt:nth-child(2){animation-delay:.05s}.stack>.opt:nth-child(3){animation-delay:.1s}.stack>.opt:nth-child(4){animation-delay:.15s}
+.meter{height:12px;border-radius:999px;background:color-mix(in srgb,var(--line) 70%,transparent);box-shadow:inset 0 1px 2px rgba(var(--shadow),.25)}
+.meter i{border-radius:999px;background:linear-gradient(90deg,#37b37e,var(--good))}
+.meter i.run{background:linear-gradient(90deg,#e0483b,var(--gold) 45%,#37b37e);background-size:340px 100%;box-shadow:0 0 12px color-mix(in srgb,var(--gold) 70%,transparent)}
+.timer{font-family:var(--disp);font-size:4rem;font-weight:700;line-height:1;background:linear-gradient(180deg,var(--ink),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+nav.tabs{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-bottom:0;border:1px solid var(--line);border-radius:22px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 14px 34px -12px rgba(var(--shadow),.55)}
+.tab{border-top:0;border-radius:16px;margin:5px 3px;padding:7px 2px 8px;transition:background .25s,color .25s,transform .12s}
+.tab .g{font-size:1.35rem;transition:color .25s,transform .25s}
+.tab[aria-current="page"]{border-top:0;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 8px 16px -8px color-mix(in srgb,var(--p2) 90%,transparent)}
+.tab[aria-current="page"] .g{color:var(--gold);transform:translateY(-1px) scale(1.08)}
+.cell{border-radius:16px;padding:10px 4px;background:linear-gradient(180deg,var(--card),color-mix(in srgb,var(--blue-soft) 60%,var(--card)));box-shadow:0 6px 14px -10px rgba(var(--shadow),.5);transition:transform .12s}
+.cell .g{font-size:2.5rem;font-weight:700}
+.cell.done{border-color:var(--good)}
+.big{font-size:7.5rem;font-weight:900;background:linear-gradient(160deg,var(--gold),color-mix(in srgb,var(--gold) 80%,#000) 45%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 18px color-mix(in srgb,var(--gold) 30%,transparent));animation:cardIn .5s both}
+.loadbar i{background:linear-gradient(90deg,var(--gold),var(--p1));height:4px}
+th{color:var(--accent)}
+.tok.hit{background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 40%,#fff),var(--accent-soft));box-shadow:0 4px 10px -6px color-mix(in srgb,var(--gold) 80%,transparent)}
+.dia circle.nx{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{stroke-width:2;stroke-opacity:1}50%{stroke-width:7;stroke-opacity:.35}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+body.enter #app>.stack>*{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+body.enter #app>.stack>*:nth-child(2){animation-delay:.05s}body.enter #app>.stack>*:nth-child(3){animation-delay:.1s}body.enter #app>.stack>*:nth-child(4){animation-delay:.15s}body.enter #app>.stack>*:nth-child(5){animation-delay:.2s}body.enter #app>.stack>*:nth-child(n+6){animation-delay:.25s}
+/* hero */
+.hero{position:relative;overflow:hidden;border-radius:26px;padding:20px 18px 18px;color:#f3f5ff;background:radial-gradient(110% 80% at 88% -10%,var(--h3) 0%,transparent 55%),radial-gradient(70% 60% at 0% 110%,var(--h4) 0%,transparent 60%),linear-gradient(160deg,var(--h1),var(--h2) 72%);box-shadow:0 22px 44px -22px rgba(11,20,55,.95);display:flex;flex-direction:column;gap:14px;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1.4px);background-size:26px 26px;opacity:.16;animation:drift 40s linear infinite}
+@keyframes drift{to{background-position:260px 130px}}
+.hero::after{content:attr(data-g);position:absolute;z-index:-1;right:-8px;bottom:-52px;font-family:var(--heb);font-weight:900;font-size:12.5rem;line-height:1;color:var(--gold);opacity:.16;direction:rtl;white-space:nowrap}
+.hero .eyebrow{color:color-mix(in srgb,var(--gold) 60%,#fff)}
+.hero h1{color:#fff;font-size:2.3rem}
+.hero p{color:rgba(255,255,255,.82)}
+.hero.slim{padding:16px 18px;gap:6px;border-radius:22px}
+.hero.slim::after{font-size:9rem;bottom:-40px;opacity:.2}
+.hrow{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.dial{width:112px;height:112px}
+.dial .trk{fill:none;stroke:rgba(255,255,255,.14);stroke-width:9}
+.dial .arc{fill:none;stroke:url(#dg);stroke-width:9;stroke-linecap:round;stroke-dasharray:263.9;stroke-dashoffset:var(--to);transform:rotate(-90deg);transform-origin:50% 50%;animation:sweep 1.4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sweep{from{stroke-dashoffset:263.9}}
+.dial text{fill:#fff;font-family:var(--disp);font-weight:700;text-anchor:middle}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:8px 10px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.stat b{display:block;font-family:var(--disp);font-size:1.7rem;font-weight:700;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
+.stat span{font-size:.7rem;color:rgba(255,255,255,.82);letter-spacing:.02em}
+/* answer feedback */
+.fx{position:fixed;inset:0;z-index:60;pointer-events:none;display:flex;align-items:center;justify-content:center;animation:fx .55s ease-out forwards}
+.fx.good{background:radial-gradient(circle at 50% 50%,rgba(55,179,126,.5),transparent 62%)}
+.fx.bad{background:radial-gradient(circle at 50% 50%,rgba(224,72,59,.42),transparent 62%)}
+.fx svg{width:120px;height:120px;fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));animation:pop .45s cubic-bezier(.2,1.4,.3,1) both}
+.fx.good svg circle{fill:#2fa873;stroke:none}.fx.bad svg circle{fill:#d24a3d;stroke:none}
+.fx svg path{stroke-dasharray:60;stroke-dashoffset:60;animation:draw .35s .12s ease-out forwards}
+@keyframes fx{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+@keyframes pop{from{transform:scale(.3)}to{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+.stamp{align-self:center;font-family:var(--disp);font-weight:700;font-size:2.6rem;letter-spacing:.12em;color:var(--good);border:5px solid var(--good);border-radius:14px;padding:4px 18px;transform:rotate(-8deg);animation:stamp .55s cubic-bezier(.2,1.5,.3,1) both;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--good) 30%,transparent)}
+@keyframes stamp{from{opacity:0;transform:rotate(-16deg) scale(2.6)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
+.score{font-family:var(--disp);font-weight:700;font-size:4.2rem;line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+.score small{font-size:1.6rem;color:var(--soft);font-weight:600}
+.btn.hit{background:linear-gradient(135deg,#37b37e,#1f7a4d);border-color:transparent;color:#fff;font-weight:600;min-height:52px;box-shadow:0 10px 20px -10px rgba(31,122,77,.9),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn.miss{background:color-mix(in srgb,var(--bad) 10%,var(--card));border-color:var(--bad);color:var(--bad);font-weight:600;min-height:52px}
+.wcard .chip{padding:5px 10px;min-height:32px;font-size:.78rem}
+.stat span{white-space:nowrap}
+
+/* palettes: accent tokens always apply; neutrals only in light mode */
+:root{--p1:#3442b8;--p2:#1a2270;--h1:#0b1437;--h2:#1b2270;--h3:#4b57d6;--h4:#5a2a8a;--onGold:#1c1300}
+:root[data-pal="olive"]{--p1:#3f7a4c;--p2:#1f4a2c;--h1:#0f2419;--h2:#1f4a2c;--h3:#6f8f3a;--h4:#5b4a12;--gold:#d9a934;--teal:#2f7d6d}
+:root[data-pal="sea"]{--p1:#0f8a96;--p2:#0a5562;--h1:#06303d;--h2:#0a6c74;--h3:#3aa7c9;--h4:#1d4f8a;--gold:#ff8a66;--teal:#0c7f79;--onGold:#2a0d02}
+:root[data-pal="wine"]{--p1:#a02a3c;--p2:#5e1424;--h1:#1a0e12;--h2:#5e1424;--h3:#b0503a;--h4:#7a4a12;--gold:#d4a640;--teal:#8a5a2a}
+:root[data-pal="graphite"]{--p1:#2c3644;--p2:#11161d;--h1:#0c1016;--h2:#1b2430;--h3:#0d5d80;--h4:#2a3340;--gold:#2fc6f0;--teal:#0a8aa8;--onGold:#00202b}
+@media (prefers-color-scheme:light){
+:root[data-pal="olive"]:not([data-theme="dark"]){--paper:#f0efe6;--card:#fffefa;--ink:#1d2a1c;--soft:#55604f;--line:#d9d8c6;--accent:#7a5a00;--accent-soft:#f6ecc8;--blue:#2f5d3a;--blue-soft:#e3eede;--grid:rgba(47,93,58,.06);--shadow:29,42,28}
+:root[data-pal="sea"]:not([data-theme="dark"]){--paper:#eaf4f6;--card:#fff;--ink:#0d2b36;--soft:#4a6570;--line:#cfe1e6;--accent:#a3401f;--accent-soft:#ffe6dc;--blue:#0b6a78;--blue-soft:#dcf1f3;--grid:rgba(11,106,120,.06);--shadow:13,43,54}
+:root[data-pal="wine"]:not([data-theme="dark"]){--paper:#f5f1ec;--card:#fffdfa;--ink:#24161a;--soft:#6a565a;--line:#e2d6cf;--accent:#8a1f2e;--accent-soft:#f8e1e0;--blue:#6b2d4a;--blue-soft:#f1e3ea;--grid:rgba(138,31,46,.05);--shadow:36,22,26}
+:root[data-pal="graphite"]:not([data-theme="dark"]){--paper:#eef0f2;--card:#fff;--ink:#14181d;--soft:#535b66;--line:#d5dae0;--accent:#0a6a8a;--accent-soft:#dff4fb;--blue:#2a3340;--blue-soft:#e6eaef;--grid:rgba(20,24,29,.05);--shadow:20,24,29}
+}
+.pals{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pal{width:44px;height:44px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 1px var(--line),0 6px 12px -6px rgba(var(--shadow),.6);padding:0;transition:transform .15s}
+.pal[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink),0 6px 12px -6px rgba(var(--shadow),.6);transform:scale(1.08)}
+
+/* ===== rev 13: one committed look. Night sky, glass panels, gold Hebrew, colour-coded word tiles. No light theme and no palette choice, by request. ===== */
+:root:not(#_){--paper:#070b1d;--card:rgba(255,255,255,.07);--solid:#11183a;--ink:#f2f4ff;--soft:#aab4da;--line:rgba(255,255,255,.14);--accent:#f6c453;--accent-soft:rgba(246,196,83,.15);--blue:#a9b9ff;--blue-soft:rgba(124,144,255,.16);--gold:#f6c453;--teal:#5fe0d0;--good:#4ade9a;--warn:#ffcf6b;--bad:#ff8585;--p1:#6a7bff;--p2:#3b2fc4;--h1:#0b1140;--h2:#241c7a;--h3:#6a7bff;--h4:#8a3fb8;--onGold:#221600;--grid:rgba(255,255,255,.028);--shadow:0,0,0;--disp:"Fraunces","Frank Ruhl Libre",Georgia,serif;--num:"Barlow Condensed","Arial Narrow",sans-serif;color-scheme:dark}
+html{background:#070b1d}
+body{background:transparent;background-image:none}
+body::before{content:"";position:fixed;inset:-10%;z-index:-2;background:radial-gradient(42% 34% at 12% 8%,rgba(106,123,255,.38),transparent 70%),radial-gradient(40% 30% at 92% 22%,rgba(138,63,184,.34),transparent 70%),radial-gradient(46% 34% at 70% 96%,rgba(14,120,130,.30),transparent 70%),radial-gradient(30% 22% at 20% 78%,rgba(246,196,83,.10),transparent 70%),linear-gradient(180deg,#070b1d,#0a0f2b 60%,#070b1d);animation:aurora 26s ease-in-out infinite alternate}
+@keyframes aurora{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3%,2%,0) scale(1.08)}}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+h1{font-family:var(--disp);font-size:1.95rem;font-weight:600;letter-spacing:-.01em;line-height:1.08}
+h2{font-family:var(--disp);font-size:1.4rem;font-weight:600;letter-spacing:-.005em}
+h3{font-size:1.02rem;font-weight:600}
+.eyebrow{color:var(--gold);opacity:.95}
+.soft{color:var(--soft)}
+a{color:var(--blue)}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.045));border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 24px 44px -28px rgba(0,0,0,.9);border-radius:22px}
+.btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:var(--ink);border-radius:14px}
+.btn.primary,:root[data-theme="dark"] .btn.primary{background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 0 0 1px rgba(255,255,255,.14) inset,0 12px 26px -10px rgba(106,123,255,.85);color:#fff}
+.btn.gold,.btn.amber{background:linear-gradient(135deg,#ffe29a,var(--gold) 50%,#e39a1c);box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 14px 30px -10px rgba(246,196,83,.75),0 0 34px -6px rgba(246,196,83,.45)}
+.btn.gold{flex-direction:row;padding:15px 18px}
+.btn.gold .btn-sub{font-size:.92rem;font-weight:500;opacity:.85;text-align:left}
+.btn.gold .btn-main{font-family:var(--num);font-size:1.5rem;letter-spacing:.04em}
+.btn.hit{background:linear-gradient(135deg,#4ade9a,#17995e);box-shadow:0 12px 26px -10px rgba(74,222,154,.7),inset 0 1px 0 rgba(255,255,255,.35);color:#04220f}
+.btn.miss{background:rgba(255,133,133,.12);border-color:rgba(255,133,133,.6);color:var(--bad)}
+.chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:var(--ink)}
+.chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 8px 18px -8px rgba(106,123,255,.9)}
+.play{background:linear-gradient(135deg,rgba(124,144,255,.28),rgba(255,255,255,.06));border-color:rgba(169,185,255,.5);color:var(--ink)}
+.play svg{color:var(--blue)}
+.play.playing{background:linear-gradient(135deg,rgba(246,196,83,.45),rgba(246,196,83,.12));border-color:var(--gold)}
+.play.playing svg{color:var(--gold)}
+/* colour-coded word tiles */
+.pic,:root[data-theme="dark"] .pic{--a:#7c8cff;--b:#4a3fd0;background:linear-gradient(145deg,var(--a),var(--b));border:0;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -8px 14px -8px rgba(0,0,0,.35),0 8px 16px -8px color-mix(in srgb,var(--b) 80%,transparent);border-radius:14px}
+.pic svg{stroke:#fff;stroke-width:1.8;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+.pic.sm{border-radius:9px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.pic.lg{width:148px;height:148px;border-radius:38px;font-size:3.2rem;box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -18px 28px -16px rgba(0,0,0,.4),0 0 0 10px color-mix(in srgb,var(--a) 14%,transparent),0 0 60px -6px color-mix(in srgb,var(--a) 75%,transparent)}
+.g-food{--a:#ff9a62;--b:#f0486e}.g-people,.g-pronouns{--a:#d08bff;--b:#7a4cf0}.g-verbs{--a:#58d0f5;--b:#3b62ea}.g-world{--a:#3fe0c5;--b:#0c8f95}.g-describe{--a:#ff86c4;--b:#b32fd6}.g-numbers{--a:#ffd166;--b:#ee8c1b}.g-basics,.g-phrases{--a:#7fb2ff;--b:#5a56ea}.g-glue{--a:#a9b6cf;--b:#5b6887}.g-scripture,.g-anchor{--a:#ffdc7a;--b:#d98a12}.g-roots{--a:#b4ee55;--b:#1c9c4e}
+.lcard{border-radius:22px}
+.num{font-family:var(--num);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);color:var(--ink)}
+.num.next{background:linear-gradient(135deg,#ffe29a,var(--gold));border-color:transparent;color:#221600}
+.num.done{color:#04220f;background:linear-gradient(135deg,#4ade9a,#17995e)}
+.unit{background:linear-gradient(90deg,rgba(106,123,255,.26),rgba(138,63,184,.10) 60%,transparent);border-left:0;border-radius:18px;padding:14px 16px;position:relative;overflow:hidden}
+.unit::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#ffe29a,var(--gold))}
+.unit h2{font-size:1.5rem}
+.step::before{background:linear-gradient(180deg,var(--p1),var(--teal))}
+.step.ok::before{background:linear-gradient(180deg,#4ade9a,#17995e)}
+.steph h3{font-family:var(--disp);font-size:1.3rem}
+.hook{background:rgba(124,144,255,.14);border-left-color:var(--blue);color:var(--ink)}
+.slot{background:rgba(246,196,83,.14);border-color:rgba(246,196,83,.7)}
+.wcard{border-top-color:rgba(255,255,255,.1)}
+.fc{background:radial-gradient(110% 60% at 50% 0%,rgba(124,144,255,.26),rgba(255,255,255,.05) 64%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 34px 60px -30px #000}
+.fc .w{font-size:4.1rem;font-weight:700;background:linear-gradient(180deg,#fff3c9,var(--gold) 55%,#e39a1c);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 18px rgba(246,196,83,.45));padding:0 .15em}
+.tr{color:var(--ink)} .hl{color:var(--gold)}
+.meter{background:rgba(255,255,255,.12);box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.meter i.run{box-shadow:0 0 16px rgba(246,196,83,.9)}
+.timer{font-family:var(--num);background:linear-gradient(180deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(246,196,83,.35))}
+nav.tabs{background:rgba(13,18,46,.72);border-color:rgba(255,255,255,.16);box-shadow:0 18px 40px -14px #000,inset 0 1px 0 rgba(255,255,255,.14)}
+.tab{color:var(--soft)}
+.tab[aria-current="page"]{background:linear-gradient(135deg,var(--p1),var(--p2));box-shadow:0 0 22px -4px rgba(106,123,255,.9),inset 0 1px 0 rgba(255,255,255,.25)}
+.cell{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 14px 22px -16px #000;color:var(--ink)}
+.cell .g{background:linear-gradient(180deg,#fff,#cfd8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cell .n{color:var(--soft)}
+.cell.m{box-shadow:inset 0 -3px 0 var(--gold),inset 0 1px 0 rgba(255,255,255,.14)} .cell.d{box-shadow:inset 0 -3px 0 var(--blue),inset 0 1px 0 rgba(255,255,255,.14)}
+.big{background:linear-gradient(180deg,#fff3c9,var(--gold) 50%,#e39a1c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(246,196,83,.5))}
+th{color:var(--gold)} th,td{border-bottom-color:rgba(255,255,255,.1)}
+textarea,input[type="text"],input[type="search"]{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);color:var(--ink)}
+dialog{background:linear-gradient(180deg,#0b1140,#070b1d 40%)}
+.bar{background:rgba(9,13,36,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom-color:rgba(255,255,255,.12)}
+canvas.trace{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.3)}
+.evo div{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+.tok{color:var(--soft)} .tok.k{color:var(--ink);border-bottom-color:var(--gold)} .tok.hit{background:rgba(246,196,83,.25);color:#fff;box-shadow:0 0 18px -4px rgba(246,196,83,.7)}
+.loadbar{background:rgba(9,13,36,.92);color:var(--soft);border-bottom-color:rgba(255,255,255,.12)}
+.line{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+.stage div{border-color:rgba(255,255,255,.14)}
+.badge{background:rgba(0,0,0,.25)}
+.stamp{color:var(--good);border-color:var(--good);text-shadow:0 0 18px rgba(74,222,154,.6);font-family:var(--num)}
+.score{font-family:var(--num)}
+.dial text,.stat b{font-family:var(--num)}
+/* hero */
+.hero{background:radial-gradient(90% 70% at 100% 0%,rgba(106,123,255,.75),transparent 60%),radial-gradient(70% 60% at 0% 100%,rgba(138,63,184,.7),transparent 62%),linear-gradient(160deg,#0b1140,#241c7a 70%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 30px 60px -28px #000,0 0 70px -20px rgba(106,123,255,.6);border-radius:28px}
+.hero::after{opacity:.09}
+.hero h1{font-size:2.05rem}
+.hw{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:12px 14px;border-radius:20px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.14)}
+.hwh{font-size:4.2rem;font-weight:900;line-height:1.15;padding:0 .1em;background:linear-gradient(180deg,#fff3c9,var(--gold) 55%,#e39a1c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(246,196,83,.6));animation:glow 3.6s ease-in-out infinite alternate}
+@keyframes glow{from{filter:drop-shadow(0 0 12px rgba(246,196,83,.35))}to{filter:drop-shadow(0 0 30px rgba(246,196,83,.8))}}
+.hwt{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.hwt .tr{font-size:1.15rem;color:#fff}.hwt .small{color:rgba(255,255,255,.8)}
+.hwt .play{margin-top:4px}
+.stat{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.fx.good{background:radial-gradient(circle at 50% 50%,rgba(74,222,154,.55),transparent 62%)}
+.fx.bad{background:radial-gradient(circle at 50% 50%,rgba(255,133,133,.5),transparent 62%)}
+.pals,.pal{display:none}
+.hwt .eyebrow{letter-spacing:.08em;font-size:.66rem}
+input[type="checkbox"]{accent-color:var(--gold);width:22px;height:22px}
+.btn:disabled{opacity:.4}
+
+/* ===== rev 14: the same design in daylight. Dawn-sky ground, white glass panels, colour tiles, amber Hebrew. The hero stays deep indigo as the one bold element. ===== */
+:root:not(#_){--paper:#f4f1fb;--card:rgba(255,255,255,.8);--solid:#ffffff;--ink:#171a3a;--soft:#555b80;--line:rgba(40,44,110,.14);--accent:#9c4f00;--accent-soft:rgba(242,168,29,.18);--blue:#3640bd;--blue-soft:rgba(95,109,255,.11);--gold:#f2a81d;--teal:#0b8a84;--good:#0f8550;--warn:#9a5b00;--bad:#c23434;--p1:#6472ff;--p2:#3a2fc4;--onGold:#221600;--shadow:60,50,140;color-scheme:light}
+html{background:#f4f1fb}
+body::before{background:radial-gradient(46% 34% at 8% 4%,rgba(255,186,140,.62),transparent 70%),radial-gradient(44% 32% at 96% 16%,rgba(176,154,255,.58),transparent 70%),radial-gradient(50% 36% at 76% 98%,rgba(128,204,255,.52),transparent 70%),radial-gradient(36% 26% at 12% 80%,rgba(255,222,140,.42),transparent 70%),linear-gradient(180deg,#fcf8ff,#f1f2ff 60%,#f8f4ff)}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.68));border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 26px 46px -28px rgba(60,50,140,.5),0 2px 6px -2px rgba(60,50,140,.12)}
+.btn{background:rgba(255,255,255,.8);border:1px solid rgba(40,44,110,.16);color:var(--ink);box-shadow:0 4px 10px -6px rgba(60,50,140,.35)}
+.btn.primary,:root[data-theme="dark"] .btn.primary{box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 14px 26px -10px rgba(95,109,255,.75);color:#fff}
+.btn.hit{background:linear-gradient(135deg,#27b877,#0d7a49);color:#fff;box-shadow:0 12px 24px -10px rgba(15,133,80,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.miss{background:rgba(194,52,52,.07);border-color:rgba(194,52,52,.55);color:var(--bad)}
+.chip{background:rgba(255,255,255,.8);border-color:rgba(40,44,110,.16);color:var(--ink)}
+.chip[aria-pressed="true"]{color:#fff}
+.play{background:linear-gradient(135deg,rgba(95,109,255,.2),#fff);border-color:rgba(95,109,255,.45);color:var(--ink)}
+.play.playing{background:linear-gradient(135deg,rgba(242,168,29,.5),#fff7e3);border-color:var(--gold)}
+.play.playing svg{color:#b85d00}
+.pic,:root[data-theme="dark"] .pic{box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -8px 14px -8px rgba(0,0,0,.22),0 10px 18px -8px color-mix(in srgb,var(--b) 70%,transparent)}
+.num{background:#fff;border-color:rgba(40,44,110,.16);color:var(--ink)}
+.num.done{color:#fff;background:linear-gradient(135deg,#27b877,#0d7a49)}
+.unit{background:linear-gradient(90deg,rgba(95,109,255,.18),rgba(176,154,255,.10) 60%,transparent)}
+.hook{background:rgba(95,109,255,.09);color:var(--ink)}
+.slot{background:rgba(242,168,29,.16);border-color:rgba(214,138,10,.8)}
+.wcard{border-top-color:rgba(40,44,110,.1)}
+.fc{background:radial-gradient(110% 60% at 50% 0%,rgba(140,150,255,.26),rgba(255,255,255,.86) 64%);border:1px solid #fff;box-shadow:inset 0 1px 0 #fff,0 36px 60px -34px rgba(60,50,140,.7)}
+.fc .w,.big,.hwh{background:linear-gradient(180deg,#f5a91c,#de7a0c 55%,#b4480a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fc .w{filter:drop-shadow(0 6px 14px rgba(242,150,29,.35))}
+.big{filter:drop-shadow(0 10px 22px rgba(242,150,29,.4))}
+.hwh{background:linear-gradient(180deg,#fff3c9,#f6c453 55%,#e39a1c);-webkit-background-clip:text;background-clip:text}
+.hl{color:#b65200}
+:root:not(#_) .pic{background:linear-gradient(145deg,var(--a),var(--b))}
+.hero .play{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.45)}
+.hero .play svg{color:#fff}
+.meter{background:rgba(40,44,110,.12);box-shadow:inset 0 1px 2px rgba(40,44,110,.2)}
+.timer{background:linear-gradient(180deg,var(--ink),var(--p1));-webkit-background-clip:text;background-clip:text;color:transparent;filter:none}
+nav.tabs{background:rgba(255,255,255,.8);border-color:#fff;box-shadow:0 18px 38px -14px rgba(60,50,140,.5),inset 0 1px 0 #fff}
+.tab[aria-current="page"]{color:#fff;box-shadow:0 10px 20px -8px rgba(95,109,255,.85),inset 0 1px 0 rgba(255,255,255,.25)}
+.cell{background:linear-gradient(180deg,#fff,rgba(255,255,255,.7));border-color:#fff;box-shadow:inset 0 1px 0 #fff,0 14px 22px -16px rgba(60,50,140,.55);color:var(--ink)}
+.cell .g{background:linear-gradient(180deg,#232a6e,#5a3fd0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cell.m{box-shadow:inset 0 -3px 0 var(--gold),0 14px 22px -16px rgba(60,50,140,.55)} .cell.d{box-shadow:inset 0 -3px 0 var(--p1),0 14px 22px -16px rgba(60,50,140,.55)}
+th,td{border-bottom-color:rgba(40,44,110,.1)}
+textarea,input[type="text"],input[type="search"]{background:rgba(255,255,255,.85);border:1px solid rgba(40,44,110,.18);color:var(--ink)}
+dialog{background:linear-gradient(180deg,#ece6ff,#f7f4ff 42%)}
+.bar{background:rgba(255,255,255,.86);border-bottom-color:rgba(40,44,110,.12)}
+canvas.trace{background:rgba(255,255,255,.75);border-color:rgba(40,44,110,.3)}
+.evo div{background:rgba(255,255,255,.7);border-color:rgba(40,44,110,.14)}
+.tok.k{color:var(--ink)} .tok.hit{background:rgba(242,168,29,.3);color:var(--ink);box-shadow:0 6px 14px -8px rgba(214,138,10,.8)}
+.loadbar{background:rgba(255,255,255,.94);border-bottom-color:rgba(40,44,110,.12)}
+.line{border-color:rgba(40,44,110,.25);background:rgba(255,255,255,.6)}
+.stage div{border-color:rgba(40,44,110,.14)}
+.badge{background:rgba(255,255,255,.7)}
+.stamp{text-shadow:none}
+.hero{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 30px 54px -26px rgba(58,47,196,.75),0 0 60px -24px rgba(95,109,255,.6)}
+.fx.good{background:radial-gradient(circle at 50% 50%,rgba(39,184,119,.5),transparent 62%)}
+.fx.bad{background:radial-gradient(circle at 50% 50%,rgba(194,52,52,.42),transparent 62%)}
+
+/* stroke demonstration */
+.sdrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.sdcell{flex:0 1 190px;background:rgba(255,255,255,.75);border:1px solid rgba(40,44,110,.14);border-radius:18px;padding:6px}
+.sd{width:100%;display:block}
+.sd .bl{stroke:rgba(40,44,110,.25);stroke-width:1;stroke-dasharray:3 4;fill:none}
+.sd .s{fill:none;stroke:var(--p1);stroke-width:8.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0;animation:sdraw 1s cubic-bezier(.4,0,.3,1) both}
+@keyframes sdraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.sd .n{animation:pop .3s both}
+.sd .n circle{fill:var(--gold)} .sd .n text{font:700 9.5px var(--body);text-anchor:middle;fill:#221600}
+.paper{margin-top:6px;padding:12px 14px;border-radius:16px;background:rgba(242,168,29,.14);border:1px dashed rgba(214,138,10,.7);display:flex;flex-direction:column;gap:6px}
+
+/* top bar, title screen */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:linear-gradient(120deg,#1b1f63,#2b2f8f);color:#fff;box-shadow:0 2px 14px rgba(20,22,80,.25)}
+.topbar .brand{display:flex;align-items:center;gap:9px;color:#fff;text-decoration:none;font:600 1.02rem var(--disp,serif);letter-spacing:.01em}
+.topbar .gear{color:#ffe2a6;font:600 .8rem var(--body);text-decoration:none;border:1px solid rgba(255,226,166,.5);border-radius:999px;padding:7px 13px;min-height:34px;display:flex;align-items:center}
+#gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:22px;overflow:auto;color:#fff;background:radial-gradient(120% 80% at 50% 0%,#3a3fb4 0%,#1b1f63 55%,#0f1140 100%);transition:opacity .45s}
+#gate[hidden]{display:none} #gate.out{opacity:0;pointer-events:none}
+.gin{max-width:420px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.glogo{width:min(58vw,230px);height:auto;filter:drop-shadow(0 18px 28px rgba(0,0,0,.45));animation:gfloat 5s ease-in-out infinite}
+@keyframes gfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+html[data-motion=off] .glogo{animation:none}
+.gey{font:500 1.5rem 'Frank Ruhl Libre',serif;color:#ffcf6b;direction:rtl}
+#gate h1{font:600 2rem/1.1 var(--disp,serif);color:#fff;margin:0}
+.gt{color:#dfe2ff;font-size:1.02rem;line-height:1.45;margin:0}
+.gs{color:#b9bdf0;font-size:.82rem;margin:0}
+#gate input{width:100%;max-width:300px;padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font:1rem var(--body);text-align:center}
+#gate input::placeholder{color:#c5c8f5}
+.gbtn{width:100%;max-width:300px;font-size:1.05rem;padding:15px}
+.card input[type=text]{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(40,44,110,.25);font:1rem var(--body);background:#fff;color:inherit}
+
+/* ===== rev 17: soft minimal. Warm paper, flat white cards, one calm blue, no glow, no gradients. ===== */
+:root:not(#_){--paper:#f7f6f2;--card:#ffffff;--solid:#ffffff;--ink:#23262d;--soft:#6c727d;--line:#eae8e1;--accent:#4a5bc4;--accent-soft:#eef0fb;--blue:#4a5bc4;--blue-soft:#eef0fb;--gold:#e9b765;--teal:#3f8f88;--good:#3d8f68;--warn:#a2752a;--bad:#c05656;--p1:#4f61cc;--p2:#4f61cc;--onGold:#3a2a08;--disp:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--num:"IBM Plex Sans",system-ui,sans-serif;color-scheme:light}
+html:not(#_){background:#f7f6f2}
+html:not(#_) body{background:#f7f6f2;color:var(--ink)}
+html:not(#_) body::before,html:not(#_) #sky{display:none}
+html:not(#_) h1{font-family:var(--disp);font-weight:600;font-size:1.7rem;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+html:not(#_) h2,html:not(#_) h3{font-family:var(--disp);font-weight:600;letter-spacing:-.01em}
+html:not(#_) .eyebrow{color:var(--soft);opacity:1;letter-spacing:.09em;font-weight:500}
+html:not(#_) .card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgba(35,38,45,.04)}
+html:not(#_) .btn{background:#fff;border:1px solid var(--line);color:var(--ink);box-shadow:none;border-radius:14px}
+html:not(#_) .btn.primary{background:var(--p1);border-color:var(--p1);color:#fff;box-shadow:none}
+html:not(#_) .btn.hit{background:var(--good);border-color:var(--good);color:#fff;box-shadow:none}
+html:not(#_) .btn.miss{background:#fbf1f1;border-color:#e6bcbc;color:var(--bad)}
+html:not(#_) .chip{background:#fff;border-color:var(--line);color:var(--ink);box-shadow:none}
+html:not(#_) .chip[aria-pressed="true"]{background:var(--p1);border-color:var(--p1);color:#fff}
+html:not(#_) .play{background:var(--accent-soft);border-color:transparent;color:var(--accent);box-shadow:none}
+html:not(#_) .play svg{color:var(--accent)}
+html:not(#_) .play.playing{background:#fbf0dc;border-color:transparent} html:not(#_) .play.playing svg{color:#a2752a}
+html:not(#_) .pic{background:color-mix(in srgb,var(--a) 20%,#fff);box-shadow:none;border:0;color:color-mix(in srgb,var(--b) 78%,#23262d)}
+html:not(#_) .pic svg{stroke:color-mix(in srgb,var(--b) 78%,#23262d);filter:none;stroke-width:1.7}
+html:not(#_) .num{background:#fff;border-color:var(--line);color:var(--ink);box-shadow:none}
+html:not(#_) .num.done{background:var(--good);border-color:var(--good);color:#fff}
+html:not(#_) .unit{background:none;border:0;border-radius:0;padding:18px 4px 2px 66px;min-height:60px;overflow:visible}
+.ub{position:absolute;left:4px;top:14px;width:52px;height:52px;background:url(media/badges.webp) 0 0/624px 52px no-repeat}
+html:not(#_) .hook{background:var(--accent-soft);color:var(--ink)}
+html:not(#_) .slot{background:#fbf3e3;border-color:#ecd5a8}
+html:not(#_) .fc{background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(35,38,45,.04)}
+html:not(#_) .fc .w,html:not(#_) .big,html:not(#_) .hwh{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink);filter:none}
+html:not(#_) .hl{color:var(--accent)}
+html:not(#_) .meter{background:#eeece6;box-shadow:none}
+html:not(#_) .timer{background:none;color:var(--ink);-webkit-background-clip:border-box;background-clip:border-box}
+html:not(#_) nav.tabs{background:rgba(255,255,255,.94);border:1px solid var(--line);box-shadow:0 6px 20px -12px rgba(35,38,45,.25)}
+html:not(#_) .tab{color:var(--soft)}
+html:not(#_) .tab[aria-current="page"]{background:var(--accent-soft);color:var(--accent);box-shadow:none}
+html:not(#_) .tab[aria-current="page"] .g{color:var(--accent)}
+html:not(#_) .cell{background:#fff;border:1px solid var(--line);box-shadow:none;color:var(--ink)}
+html:not(#_) .cell .g{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink)}
+html:not(#_) .cell.m{box-shadow:inset 0 -3px 0 var(--gold)} html:not(#_) .cell.d{box-shadow:inset 0 -3px 0 var(--p1)}
+html:not(#_) th{color:var(--soft)} html:not(#_) th,html:not(#_) td{border-bottom-color:var(--line)}
+html:not(#_) textarea,html:not(#_) input[type="text"],html:not(#_) input[type="search"]{background:#fff;border:1px solid var(--line);color:var(--ink)}
+html:not(#_) dialog{background:#f7f6f2}
+html:not(#_) .bar{background:rgba(247,246,242,.96);border-bottom-color:var(--line)}
+html:not(#_) canvas.trace{background:#fff;border-color:#d9d6cc}
+html:not(#_) .sdcell{background:#fff;border-color:var(--line)}
+html:not(#_) .paper{background:#fbf5e8;border:1px solid #ecdcb8}
+html:not(#_) .evo div,html:not(#_) .badge{background:#fff;border-color:var(--line)}
+html:not(#_) .tok.hit{background:#fbf0dc;box-shadow:none}
+html:not(#_) .loadbar{background:#fff;border-bottom-color:var(--line)}
+html:not(#_) .line{border-color:var(--line);background:#fff}
+/* hero becomes a calm tinted panel */
+html:not(#_) .hero{background:var(--accent-soft);color:var(--ink);border:0;box-shadow:none;border-radius:24px}
+html:not(#_) .hero::before,html:not(#_) .hero::after{display:none}
+html:not(#_) .hero h1{color:var(--ink);font-size:1.6rem}
+html:not(#_) .hero p{color:var(--soft)}
+html:not(#_) .hero .eyebrow{color:var(--accent)}
+html:not(#_) .hw{background:#fff;border:0}
+html:not(#_) .hero .play{background:var(--accent-soft);border-color:transparent} html:not(#_) .hero .play svg{color:var(--accent)}
+html:not(#_) .dial .trk{stroke:#fff} html:not(#_) .dial .arc{stroke:var(--p1)} html:not(#_) .dial text{fill:var(--ink);font-family:var(--num);font-weight:600}
+html:not(#_) .hero *{text-shadow:none}
+/* top bar and title screen */
+html:not(#_) .topbar{background:rgba(247,246,242,.94);color:var(--ink);box-shadow:none;border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+html:not(#_) .topbar .brand{color:var(--ink);font:600 1rem var(--disp);letter-spacing:-.01em}
+html:not(#_) .topbar .gear{color:var(--soft);border-color:var(--line);background:#fff}
+html:not(#_) #gate{background:#f7f6f2;color:var(--ink)}
+html:not(#_) #gate h1{color:var(--ink);font:600 1.8rem/1.15 var(--disp);letter-spacing:-.02em}
+html:not(#_) .glogo{filter:drop-shadow(0 16px 22px rgba(74,91,196,.22));width:min(50vw,200px)}
+html:not(#_) .gey{color:var(--accent)} html:not(#_) .gt{color:var(--soft)} html:not(#_) .gs{color:#666c77}
+.gc{font-size:.8rem;color:#6c727d;margin:8px 0 0;line-height:1.45;max-width:320px}
+html:not(#_) #gate input{background:#fff;border:1px solid var(--line);color:var(--ink)} html:not(#_) #gate input::placeholder{color:#737984}
+html:not(#_) .stat{background:#fff;border:0;backdrop-filter:none}
+html:not(#_) .stat b{color:var(--ink);font-weight:600} html:not(#_) .stat{color:var(--soft)}
+html:not(#_) .hero .tr{color:var(--ink)} html:not(#_) .hero .small{color:var(--soft)}
+html:not(#_) .btn.gold{background:var(--p1);border-color:var(--p1);color:#fff;box-shadow:none}
+html:not(#_) .btn.gold *{color:#fff}
+html:not(#_) .stat span{color:var(--soft)}
+:root:not(#_):not(#__) .pic{background:color-mix(in srgb,var(--a) 20%,#fff);box-shadow:none;color:color-mix(in srgb,var(--b) 78%,#23262d)}
+:root:not(#_):not(#__) .pic svg{stroke:color-mix(in srgb,var(--b) 78%,#23262d);filter:none}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f7f6f2"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Free Speech">
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<header class="topbar"><a class="brand" href="#lessons"><img src="media/logo-s.webp" alt="" width="34" height="34"><span>Free Speech in Hebrew</span></a><a class="gear" href="#settings" aria-label="Settings and about">Settings</a></header>
+<main id="app"></main>
+<div id="gate" hidden></div>
+<nav class="tabs" aria-label="Sections"><div class="in" id="tabs"></div></nav>
+<dialog id="dlg"></dialog>
+<script src="letters.js"></script>
+<script src="data.js"></script>
+<script src="icons.js"></script>
+<script src="lessons.js"></script>
+<script src="fsrs.js"></script>
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const h=(t,a={},...k)=>{const e=document.createElement(t);for(const[x,v]of Object.entries(a)){if(x==="class")e.className=v;else if(x==="html")e.innerHTML=v;else if(x.startsWith("on"))e.addEventListener(x.slice(2),v);else if(v!==false&&v!=null)e.setAttribute(x,v===true?"":v);}for(const c of k.flat(Infinity)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(c));}return e;};
+const W=Object.fromEntries((window.WORDS||[]).map(w=>[w.id,w]));
+const PIC=window.PIC||{};
+const today=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*60000)/864e5);
+const trHtml=t=>t.replace(/[A-Z]+/g,m=>'<span class="hl">'+m.toLowerCase()+'</span>');
+const ICON='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 7.5v9l7-4.5z" fill="currentColor"/></svg>';
+const short=id=>W[id].en.split(/[;,(]/)[0].trim();
+function picInner(id){const p=PIC[id];if(!p)return "·";if(p.startsWith("T:"))return p.slice(2);return '<svg viewBox="0 0 24 24" aria-hidden="true">'+p+"</svg>";}
+function pic(id,size){return h("span",{class:"pic g-"+(W[id]?W[id].g:"x")+(size?" "+size:""),role:"img","aria-label":W[id]?short(id):"",html:picInner(id)});}
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+
+/* ---------- state ---------- */
+const KEY="hebrew-flight-school-v1";
+const BLANK=()=>({voice:"std",name:"",welcomed:0,start:null,cards:{},letters:{},paper:{},tasks:{},lessons:{},log:{},ret:0.9,slow:false,newPerDay:8});
+let S=BLANK();
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s);}catch(e){}
+if(!S.lessons)S.lessons={};
+let SYNC=null;let remote=null,saveTimer=null,saving=false,dirty=false;
+function merge(a,b){const nw=(a.saved||0)>=(b.saved||0)?a:b,od=nw===a?b:a,o=Object.assign(BLANK(),od,nw);
+ o.cards={...(od.cards||{})};for(const[k,c]of Object.entries(nw.cards||{})){const p=o.cards[k];if(!p||(c.u||0)>=(p.u||0))o.cards[k]=c;}
+ o.lessons={};for(const k of new Set([...Object.keys(od.lessons||{}),...Object.keys(nw.lessons||{})]))o.lessons[k]={...(od.lessons||{})[k],...(nw.lessons||{})[k]};
+ o.letters={...(od.letters||{}),...(nw.letters||{})};o.name=nw.name||od.name||"";o.welcomed=Math.max(nw.welcomed||0,od.welcomed||0);o.paper={...(od.paper||{})};for(const[k,v]of Object.entries(nw.paper||{}))o.paper[k]=Math.max(v,o.paper[k]||0);o.log={...(od.log||{})};for(const[k,v]of Object.entries(nw.log||{}))o.log[k]=Math.max(v,o.log[k]||0);const st=[a.start,b.start].filter(x=>x!=null);o.start=st.length?Math.min(...st):null;return o;}
+function save(){S.saved=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(push,2500);}
+async function push(){if(!remote||saving||!dirty)return;saving=true;dirty=false;try{await remote.set({json:JSON.stringify(S),saved:S.saved||Date.now()});}catch(e){} saving=false;if(dirty)saveTimer=setTimeout(push,2500);}
+(async()=>{try{if(!window.claude||!window.claude.use)return;const[db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);if(!db||!user)return;const id=await user.id();if(!id)return;remote=db.doc("data/users/"+id+"/progress");SYNC=true;const snap=await remote.get();if(snap.exists){const r=JSON.parse(snap.data().json||"{}");const before=JSON.stringify(S),m=merge(S,r);S=m;setPal(S.pal);document.documentElement.dataset.motion=S.motion==="off"?"off":"on";const ch=JSON.stringify(m)!==before;if(ch&&!session)route();if(ch||JSON.stringify(m)!==JSON.stringify(Object.assign(BLANK(),r)))save();}else if(S.start)save();}catch(e){}})();
+
+/* ---------- audio: real recordings only ---------- */
+let packP=null;const urls={};
+let loadEl=null;
+function loadBar(f){if(!loadEl){loadEl=h("button",{class:"loadbar","aria-live":"polite"},h("span",{}),h("i",{}));document.body.append(loadEl);}
+ const s=loadEl.firstChild,i=loadEl.lastChild;loadEl.hidden=false;loadEl.onclick=null;
+ if(f<0){s.textContent="Recordings did not load. Tap to try again.";i.style.width="0";loadEl.onclick=()=>pack();}
+ else if(f>=1){loadEl.hidden=true;}
+ else{s.textContent="Loading recordings "+Math.round(f*100)+"%";i.style.width=(f*100)+"%";}}
+function pack(){if(!packP)packP=(async()=>{const r=await fetch("media/pack.mp3");if(!r.ok)throw 0;
+  if(!r.body||!r.body.getReader)return r.arrayBuffer();
+  const tot=Math.max(1,...Object.values(window.PACK||{}).map(p=>p[0]+p[1]));const rd=r.body.getReader(),parts=[];let n=0;
+  for(;;){const{done,value}=await rd.read();if(done)break;parts.push(value);n+=value.length;loadBar(Math.min(.99,n/tot));}
+  loadBar(1);const out=new Uint8Array(n);let o=0;for(const p of parts){out.set(p,o);o+=p.length;}return out.buffer;})().catch(()=>{packP=null;loadBar(-1);return null;});return packP;}
+pack();
+async function srcFor(id){if(urls[id])return urls[id];const buf=await pack(),p=(window.PACK||{})[id];if(!buf||!p)return null;return urls[id]=URL.createObjectURL(new Blob([buf.slice(p[0],p[0]+p[1])],{type:"audio/mpeg"}));}
+const player=new Audio();
+/* personal voice pack: recordings the learner supplies. Kept in this browser only, never part of the shared app. */
+let VP=null,VPN=0;
+function idb(){return new Promise((res,rej)=>{const r=indexedDB.open("fsh",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function vpPut(buf){const d=await idb();return new Promise((res,rej)=>{const x=d.transaction("kv","readwrite");if(buf)x.objectStore("kv").put(buf,"vp");else x.objectStore("kv").delete("vp");x.oncomplete=()=>res();x.onerror=()=>rej(x.error);});}
+function vpParse(buf){const n=new DataView(buf).getUint32(0,true);if(n<2||n>2e6)throw 0;const idx=JSON.parse(new TextDecoder().decode(new Uint8Array(buf,4,n)));const m={};let c=0;idx.forEach(e=>{if(e&&e.id&&W[e.id]&&e.len>0){m[e.id]=URL.createObjectURL(new Blob([buf.slice(4+n+e.off,4+n+e.off+e.len)],{type:"audio/mpeg"}));c++;}});if(!c)throw 0;if(VP)Object.values(VP).forEach(u=>URL.revokeObjectURL(u));VP=m;VPN=c;}
+(async()=>{try{const d=await idb();const buf=await new Promise((res,rej)=>{const q=d.transaction("kv").objectStore("kv").get("vp");q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});if(buf){vpParse(buf);if(location.hash==="#settings"&&!session)route();}}catch(e){}})();
+const srcAny=id=>(S.voice==="pack"&&VP&&VP[id])?Promise.resolve(VP[id]):srcFor(id);
+function playId(id,btn){const w=W[id];if(!w||!w.a)return Promise.resolve();return new Promise(res=>{const done=()=>{if(btn)btn.classList.remove("playing");res();};document.querySelectorAll(".play.playing").forEach(b=>b.classList.remove("playing"));if(btn)btn.classList.add("playing");srcAny(id).then(u=>{if(!u)return done();try{player.pause();player.src=u;player.playbackRate=S.slow?0.75:1;if("preservesPitch"in player)player.preservesPitch=true;player.onended=done;player.onerror=done;const p=player.play();if(p&&p.catch)p.catch(done);}catch(e){done();}},done);});}
+async function playSeq(ids){for(const id of ids){await playId(id);await new Promise(r=>setTimeout(r,180));}}
+function playBtn(id,opts={}){const w=W[id];if(!w)return null;if(!w.a)return h("span",{class:"row small"},h("span",{class:"heb",style:"font-size:1.25rem"},w.he),h("span",{class:"soft"},"no recording"));const b=h("button",{class:"play","aria-label":"Play "+w.tr.toLowerCase(),html:ICON+(opts.bare?"":'<span class="w"></span>')});if(!opts.bare)$(".w",b).textContent=w.he;b.addEventListener("click",e=>{e.stopPropagation();playId(id,b);});return b;}
+function wordRow(id){const w=W[id];if(!w)return null;return [pic(id),playBtn(id),h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{class:"small soft"},w.en))];}
+
+/* ---------- deck and spaced review ---------- */
+const GAP=[0,1,2,4,8,16,32,64];
+const ORDER=["basics","phrases","pronouns","people","world","describe","numbers","glue","verbs","scripture","roots","anchor"];
+const LWORDS=[];LESSONS.forEach(l=>l.words.forEach(id=>{if(W[id]&&W[id].a&&!LWORDS.includes(id))LWORDS.push(id);}));
+const DECK=[...LWORDS.map(id=>W[id]),...(window.WORDS||[]).filter(w=>w.a&&!LWORDS.includes(w.id)).sort((a,b)=>ORDER.indexOf(a.g)-ORDER.indexOf(b.g))];
+const due=()=>{const t=today();return DECK.filter(w=>S.cards[w.id]&&S.cards[w.id].d<=t);};
+const unseen=()=>DECK.filter(w=>!S.cards[w.id]&&!LWORDS.includes(w.id));
+/* scheduler: FSRS (ts-fsrs, MIT). Falls back to the old box ladder if the library did not load. */
+const FL=window.FSRSLIB;let sched=null;
+const mkSched=()=>{sched=FL?FL.fsrs(FL.generatorParameters({enable_fuzz:false,enable_short_term:false,request_retention:S.ret||0.9,maximum_interval:365})):null;};
+const dayDate=d=>new Date(d*864e5+432e5);
+function fcard(c,t){if(c.f){const f={...c.f};f.due=new Date(f.due);f.last_review=f.last_review?new Date(f.last_review):undefined;return f;}
+ const f=FL.createEmptyCard(dayDate(t));if(c.b>=1&&c.d!=null){const g=Math.max(1,GAP[Math.min(c.b,GAP.length-1)]||1);f.state=FL.State.Review;f.stability=g;f.difficulty=5;f.reps=c.b;f.scheduled_days=g;f.due=dayDate(c.d);f.last_review=dayDate(Math.min(t,c.d-g));}return f;}
+function recallNow(c){if(!FL||!c)return null;if(!sched)mkSched();try{const f=fcard(c,today());if(!f.last_review)return null;return FL.forgetting_curve(sched.parameters.w,Math.max(0,(dayDate(today())-f.last_review)/864e5),f.stability);}catch(e){return null;}}
+function grade(id,ok,rating){const t=today();const c=S.cards[id]||{b:0,n:t};const first=!c.f&&!(c.b>=1);if(!sched)mkSched();
+ if(sched){try{const o=sched.next(fcard(c,t),dayDate(t),rating||(ok?3:1)).card;const D=Math.floor(o.due/864e5);
+   c.f={due:+o.due,stability:o.stability,difficulty:o.difficulty,elapsed_days:o.elapsed_days,scheduled_days:o.scheduled_days,reps:o.reps,lapses:o.lapses,state:o.state,last_review:+o.last_review,learning_steps:o.learning_steps||0};
+   c.d=first?t+1:ok?Math.max(t+1,D):Math.min(D,t+1);c.b=Math.max(1,GAP.reduce((a,g,i)=>g<=o.stability?i:a,1));c.r=rating||(ok?3:1);}catch(e){sched=null;}}
+ if(!sched){c.b=ok?Math.min(GAP.length-1,(c.b||0)+1):1;c.d=t+(ok?GAP[c.b]:0);}
+ c.u=Date.now();S.cards[id]=c;S.log=S.log||{};S.log[t]=(S.log[t]||0)+1;save();}
+const known=()=>Object.values(S.cards).filter(c=>c.b>=3).length;
+const dayN=()=>S.start==null?0:today()-S.start+1;
+const lessonsDone=()=>LESSONS.filter((l,i)=>S.lessons[i]&&S.lessons[i].done).length;
+const nextLesson=()=>{const i=LESSONS.findIndex((l,i)=>!(S.lessons[i]&&S.lessons[i].done));return i<0?LESSONS.length:i;};
+const learnedIds=upto=>{const o=[];LESSONS.slice(0,upto+1).forEach(l=>l.words.forEach(id=>{if(W[id]&&!o.includes(id))o.push(id);}));return o;};
+
+/* ---------- drill engine ---------- */
+let session=null,qt=null;
+function startSession(items,title,back,onEnd){session={items,i:0,show:false,right:0,title,back:back||"#words",onEnd};route();window.scrollTo(0,0);}
+function options(w,pool){const seen=new Set([PIC[w.id],w.en]);const o=[];for(const x of shuffle(pool)){if(x.id===w.id||seen.has(PIC[x.id])||seen.has(x.en))continue;seen.add(PIC[x.id]);seen.add(x.en);o.push(x);if(o.length===3)break;}return shuffle([w,...o]);}
+function sessionView(){
+ const s=session;
+ if(s.i>=s.items.length){const r=s.right,n=s.items.length,back=s.back,cb=s.onEnd;session=null;if(cb)cb();return h("div",{class:"stack"},h("h1",{},"Drill complete"),h("div",{class:"card"},n?[h("div",{class:"stamp"},r===n?"COMPLETE":"SAVED"),h("div",{class:"score"},String(r),h("small",{}," / "+n)),h("p",{class:"small soft",style:"text-align:center"},"right on the first try")]:h("p",{},"Nothing to drill."),h("p",{class:"small soft"},"Words you missed come back sooner. That is the system doing its job."),h("a",{class:"btn primary",href:back,style:"text-align:center;text-decoration:none",onclick:()=>setTimeout(route,0)},"Continue")));}
+ const it=s.items[s.i],w=W[it.id];
+ const head=h("div",{class:"row",style:"justify-content:space-between"},h("span",{class:"eyebrow"},s.title+" · "+(s.i+1)+" of "+s.items.length),h("button",{class:"btn",onclick:()=>{const b=s.back;session=null;location.hash=b;route();}},"End"));
+ const next=ok=>{fx(ok);if(!it.free)grade(it.id,ok,!ok?1:it.mode!=="pic"?3:s.late?2:(s.rt&&s.rt<2000)?4:3);if(ok)s.right++;else if(s.items.length<60)s.items.push({id:it.id,mode:"pic",free:it.free});s.i++;s.show=false;s.late=false;s.t0=0;s.rt=0;route();};
+ if(it.mode==="find"||it.mode==="listen"){
+  const opts=options(w,it.pool||DECK);const pb=playBtn(w.id,{bare:true});setTimeout(()=>playId(w.id,pb),250);
+  const fb=h("p",{class:"small","aria-live":"polite"});
+  return h("div",{class:"stack"},head,h("div",{class:"card fc",style:"min-height:150px"},h("p",{class:"soft"},it.mode==="find"?"Read it, hear it, find its picture.":"Listen. Find its picture."),it.mode==="find"?h("div",{class:"w"},w.he):null,pb,fb),
+   h("div",{class:"stack"},opts.map(o=>h("button",{class:"btn opt",onclick:e=>{if(s.show)return;s.show=true;const ok=o.id===w.id;e.currentTarget.style.borderColor=ok?"var(--good)":"var(--bad)";fb.innerHTML='<span class="heb" style="font-size:1.5rem">'+w.he+"</span> "+trHtml(w.tr)+" = "+w.en;setTimeout(()=>next(ok),ok?800:2200);}},pic(o.id),h("span",{},short(o.id))))));
+ }
+ const isNew=it.mode==="new";const pb=playBtn(w.id,{bare:true});
+ if(it.mode==="pic"&&!s.show&&!s.t0)s.t0=Date.now();
+ clearTimeout(qt);if(it.mode==="pic"&&!s.show)qt=setTimeout(()=>{if(session===s&&s.items[s.i]===it&&!s.show){s.show=true;s.late=true;route();}},4000);
+ if(isNew||s.show)setTimeout(()=>playId(w.id,pb),250);
+ const hk=HOOK[it.id];
+ const front=h("div",{class:"card fc"+(s.show&&!isNew?" rev":"")},isNew?h("span",{class:"badge b-CHR"},"NEW WORD"):null,pic(w.id,"lg"),
+  (isNew||s.show)?[h("div",{class:"w"},w.he),pb,h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{style:"font-size:1.15rem;font-weight:600"},w.en)),hk?h("div",{class:"hook"},hk[0]):null]
+  :[h("div",{style:"font-size:1.15rem;font-weight:600"},w.en),h("p",{class:"soft small"},"Say it in Hebrew, out loud, before the bar runs out."),h("div",{class:"meter",style:"width:100%"},h("i",{class:"run"}))]);
+ const ctl=isNew?h("div",{class:"stack"},h("p",{class:"small soft",style:"text-align:center"},"Play it three times. Say it out loud each time."),h("button",{class:"btn primary",onclick:()=>{if(!S.cards[it.id]){S.cards[it.id]={b:1,d:today()+1,n:today()};save();}s.right++;s.i++;route();}},"Got it. Next"))
+  :!s.show?h("button",{class:"btn primary",onclick:()=>{s.late=false;s.rt=Date.now()-(s.t0||Date.now());s.show=true;route();}},"I said it. Check")
+  :h("div",{class:"row"},h("button",{class:"btn miss",style:"flex:1",onclick:()=>next(false)},"Missed it"),h("button",{class:"btn hit",style:"flex:1",onclick:()=>next(true)},s.late?"I did say it in time":"Said it right"));
+ return h("div",{class:"stack"},head,front,ctl);
+}
+const HOOK={};LESSONS.forEach(l=>Object.assign(HOOK,l.hook));
+
+/* ---------- diagrams ---------- */
+const stepsDia=()=>h("div",{html:'<svg class="dia" viewBox="0 0 340 150" role="img" aria-label="The four study steps: word-play, word-quiz, pattern-drill, free speech, 15 to 20 minutes a lesson"><g font-size="9"><g fill="var(--blue-soft)" stroke="var(--blue)"><rect x="4" y="10" width="76" height="62" rx="6"/><rect x="90" y="10" width="76" height="62" rx="6"/><rect x="176" y="10" width="76" height="62" rx="6"/></g><rect x="262" y="10" width="74" height="62" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><g text-anchor="middle"><text x="42" y="28" font-weight="500">STEP 1</text><text x="42" y="44">word-play</text><text x="42" y="58">hear + look</text><text x="128" y="28" font-weight="500">STEP 2</text><text x="128" y="44">word-quiz</text><text x="128" y="58">4 sec a word</text><text x="214" y="28" font-weight="500">STEP 3</text><text x="214" y="44">pattern-drill</text><text x="214" y="58">your own</text><text x="299" y="28" font-weight="500">STEP 4</text><text x="299" y="44">free speech</text><text x="299" y="58">no fixing</text></g><g stroke="currentColor" fill="none" stroke-width="1.2"><path d="M80 41h10M166 41h10M252 41h10"/><path d="M299 72v22H42V78" stroke-dasharray="3 3"/><path d="M38 84l4-6 4 6"/></g><text x="170" y="108" text-anchor="middle">next lesson: about 5 new words, one sample sentence</text><rect x="4" y="122" width="332" height="10" rx="5" fill="var(--line)"/><rect x="4" y="122" width="66" height="10" rx="5" fill="var(--blue)"/><rect x="70" y="122" width="83" height="10" fill="var(--blue)" opacity=".75"/><rect x="153" y="122" width="100" height="10" fill="var(--blue)" opacity=".5"/><rect x="253" y="122" width="83" height="10" rx="5" fill="var(--accent)"/><text x="170" y="146" text-anchor="middle">15 to 20 minutes, never shortened</text></g></svg>'});
+function ladderDia(){const r=[["A","ask for things",2],["A","tell a story",5],["B","I, you, he",6],["B","not",7],["B","I have",8],["B","where, when",9],["B","describing words",10],["C","she, and women",12],["C","of (shel)",14],["D","numbers and time",18],["E","past, he only",22],["F","faith words",24],["G","with, or, because; he has",28],["H","to, from, on",33],["I","days of the week",37],["J","more describing words; we, they",41],["K","more he-stories",44],["L","faith words II",48]];const later=["feminine verb forms","plurals","the, and, in, to","past for I and you","future"];const n=r.length+later.length,H=n*17+24;let s='<svg class="dia" viewBox="0 0 340 '+H+'" role="img" aria-label="Sequencing ladder: one new form at a time, from requests up to the past tense"><g font-size="9"><path d="M60 8V'+(H-8)+'M130 8V'+(H-8)+'" stroke="var(--line)" stroke-width="3"/>';const done=lessonsDone();[...r,...later.map(x=>["later",x,99])].forEach((x,i)=>{const y=H-16-i*17,isL=x[0]==="later",ok=done>=x[2];s+='<path d="M60 '+y+'H130" stroke="'+(ok?"var(--good)":isL?"var(--line)":"var(--accent)")+'" stroke-width="3"'+(isL?' stroke-dasharray="4 3"':"")+'/><text x="52" y="'+(y+3)+'" text-anchor="end">'+(isL?"later":"unit "+x[0])+'</text><text x="140" y="'+(y+3)+'"'+(isL?' opacity=".6"':"")+">"+x[1]+"</text>";});return h("div",{html:s+"</g></svg>"});}
+function routeDia(){const n=LESSONS.length,nx=nextLesson(),rows=Math.ceil(n/6);let s='<svg class="dia" viewBox="0 0 340 '+(rows*38+10)+'" role="img" aria-label="Route map of the lessons"><g font-size="10" text-anchor="middle">';for(let r=0;r<rows;r++){const y=24+r*38;s+='<path d="M20 '+y+'H320" stroke="var(--line)" stroke-width="2" stroke-dasharray="2 5"/>';if(r<rows-1)s+='<path d="M'+(r%2?20:320)+" "+y+'v38" stroke="var(--line)" stroke-width="2" stroke-dasharray="2 5"/>';}for(let i=0;i<n;i++){const row=Math.floor(i/6),c=i%6,col=row%2?5-c:c,x=20+col*60,y=24+row*38,d=S.lessons[i]&&S.lessons[i].done;s+='<a href="#lesson-'+(i+1)+'"><circle'+(i===nx?' class="nx"':"")+' cx="'+x+'" cy="'+y+'" r="13" fill="'+(d?"var(--good)":i===nx?"var(--accent-soft)":"var(--card)")+'" stroke="'+(d?"var(--good)":i===nx?"var(--accent)":"var(--line)")+'" stroke-width="2"/><text x="'+x+'" y="'+(y+4)+'" fill="'+(d?"#fff":"currentColor")+'">'+(i+1)+"</text></a>";}return h("div",{html:s+"</g></svg>"});}
+const glyphDia=()=>h("div",{html:'<svg class="dia" viewBox="0 0 340 92" role="img" aria-label="The word shesh, six, drawn as two hands of three fingers, beside the Hebrew letters"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M30 20v34a12 12 0 0 0 12 12h14a12 12 0 0 0 12-12V20M49 20v30"/><path d="M92 20v34a12 12 0 0 0 12 12h14a12 12 0 0 0 12-12V20M111 20v30"/></g><g fill="var(--accent)"><circle cx="30" cy="16" r="5"/><circle cx="49" cy="16" r="5"/><circle cx="68" cy="16" r="5"/><circle cx="92" cy="16" r="5"/><circle cx="111" cy="16" r="5"/><circle cx="130" cy="16" r="5"/></g><text x="165" y="48" font-size="18">=</text><text x="250" y="60" text-anchor="middle" style="font-family:\'Frank Ruhl Libre\',serif;font-size:58px">שֵׁשׁ</text><text x="80" y="86" text-anchor="middle" font-size="9">3 fingers + 3 fingers</text><text x="250" y="86" text-anchor="middle" font-size="9">shesh = six</text></svg>'});
+function rootDia(r){const ids=r.w.filter(id=>W[id]&&W[id].a).slice(0,6),n=ids.length;if(!n)return null;const cx=170,cy=92;let s='<svg class="dia rootsvg" viewBox="0 0 340 184" role="img" aria-label="Words that grow from the root '+r.r+'">';const pts=ids.map((id,i)=>{const a=-Math.PI/2+i*2*Math.PI/n;return[cx+125*Math.cos(a),cy+66*Math.sin(a),id];});pts.forEach(p=>{s+='<path d="M'+cx+" "+cy+"L"+p[0].toFixed(0)+" "+p[1].toFixed(0)+'" stroke="var(--line)" stroke-width="2"/>';});s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="44" ry="24" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><text class="rt" x="'+cx+'" y="'+(cy+7)+'" text-anchor="middle" direction="rtl">'+r.r+"</text>";pts.forEach(p=>{const x=p[0],y=p[1],id=p[2],pc=PIC[id]||"";s+='<g class="n" data-id="'+id+'"><rect x="'+(x-34).toFixed(0)+'" y="'+(y-19).toFixed(0)+'" width="68" height="38" rx="8" fill="var(--card)" stroke="var(--blue)"/>'+(pc.startsWith("T:")?'<text x="'+(x-20).toFixed(0)+'" y="'+(y+4).toFixed(0)+'" text-anchor="middle" font-size="11">'+pc.slice(2)+"</text>":'<svg x="'+(x-30).toFixed(0)+'" y="'+(y-10).toFixed(0)+'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+pc+"</svg>")+'<text x="'+(x-6).toFixed(0)+'" y="'+(y-2).toFixed(0)+'">'+W[id].tr.toLowerCase().slice(0,9)+'</text><text x="'+(x-6).toFixed(0)+'" y="'+(y+10).toFixed(0)+'" opacity=".65">'+short(id).slice(0,9)+"</text></g>";});const d=h("div",{html:s+"</svg>"});d.querySelectorAll("g.n").forEach(g=>g.addEventListener("click",()=>playId(g.dataset.id)));return d;}
+
+/* ---------- views ---------- */
+const V={};
+V.lessons=()=>{
+ const nx=nextLesson(),nd=due().length;
+ return h("div",{class:"stack"},
+  heroBlock(nx,nd),
+  h("div",{class:"card"},h("h3",{},"Route"),routeDia(),h("p",{class:"small soft"},LESSONS.length+" short lessons in "+UNITS.length+" units, based on Alana Shuster's teaching method. Every word has a picture and a real recording of an Israeli speaker.")),
+  h("div",{class:"card"},h("h3",{},"How every lesson runs"),stepsDia(),h("p",{class:"small soft"},"The method's own rule: do every step, in order, every time. Steps 2 and 4 matter most.")),
+  flightLog(),
+  talkathon(),
+  UNITS.map(u=>{const idx=LESSONS.map((l,i)=>i).filter(i=>LESSONS[i].u===u[0]),all=idx.every(i=>S.lessons[i]&&S.lessons[i].done);
+   const cards=idx.map(i=>{const l=LESSONS[i],st=S.lessons[i]||{},d=st.done;return h("a",{class:"card lcard",href:"#lesson-"+(i+1)},h("span",{class:"num"+(d?" done":i===nx?" next":"")},String(i+1)),h("div",{},h("h3",{},l.t),h("div",{class:"small soft"},l.goal),h("div",{class:"pics",style:"margin-top:6px"},l.words.filter(id=>W[id]).map(id=>pic(id,"sm")))),h("span",{class:"small soft"},d?"done":[1,2,3,4].filter(k=>st["s"+k]).length+"/4"));});
+   return [h("div",{class:"unit"},h("i",{class:"ub",style:"background-position:"+(-52*Math.max(0,"ABCDEFGHIJKL".indexOf(u[0])))+"px 0","aria-hidden":"true"}),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
+  h("a",{class:"card lcard",href:"#read"},h("span",{class:"num"},String(LESSONS.length+1)),h("div",{},h("h3",{},"Skip-read Genesis 1:1-5"),h("div",{class:"small soft"},"The method's reading strategy on the first verses of the Bible."),h("div",{class:"pics",style:"margin-top:6px"},["bereshit","elohim","shamayim","erets","or","yom","layla"].map(id=>pic(id,"sm")))),h("span",{class:"small soft"},"read")),
+  h("a",{class:"card lcard",href:"#forms"},h("span",{class:"num"},String(LESSONS.length+2)),h("div",{},h("h3",{},"Forms workshop: she, they, I did"),h("div",{class:"small soft"},"The next rungs of the ladder, as a reference sheet. No built-in recordings exist for these forms, so each one links out to native speakers.")),h("span",{class:"small soft"},"ref")));
+};
+function flightLog(){const t=today(),lg=S.log||{},wk=8,dow=new Date().getDay();const start=t-dow-(wk-1)*7;let flown=0,s='<svg class="dia" viewBox="0 0 340 '+(7*13+22)+'" role="img" aria-label="Practice log: days studied in the last eight weeks"><g font-size="8">';
+ ["S","M","T","W","T","F","S"].forEach((d,i)=>{s+='<text x="6" y="'+(i*13+22)+'" opacity=".6">'+d+"</text>";});
+ for(let w=0;w<wk;w++)for(let d=0;d<7;d++){const day=start+w*7+d;if(day>t)continue;const n=lg[day]||0;if(n)flown++;const op=n?(n<10?.35:n<30?.65:1):0;s+='<rect x="'+(22+w*38)+'" y="'+(d*13+13)+'" width="34" height="10" rx="2" fill="'+(n?"var(--accent)":"none")+'" fill-opacity="'+op+'" stroke="'+(day===t?"var(--ink)":"var(--line)")+'"><title>'+n+" answers</title></rect>";}
+ return h("div",{class:"card"},h("h3",{},"Practice log"),h("div",{html:s+"</g></svg>"}),h("p",{class:"small soft"},flown?flown+" day"+(flown>1?"s":"")+" studied in the last eight weeks. Darker means more answers that day. There is no streak to protect: a missed day costs the day and nothing more.":"Each day you answer quiz cards, a square fills in. There is no streak to protect: a missed day costs the day and nothing more."));}
+function heroBlock(nx,nd){const tot=LESSONS.length,dn=lessonsDone(),C=263.9,to=(C*(1-dn/tot)).toFixed(1),l=LESSONS[Math.min(nx,tot-1)],g=W[l.words[0]]?W[l.words[0]].he:"א";
+ const dial='<svg class="dial" viewBox="0 0 100 100" role="img" aria-label="'+dn+" of "+tot+' lessons done"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:color-mix(in srgb,var(--gold) 55%,#fff)"/><stop offset="1" style="stop-color:var(--gold)"/></linearGradient></defs><circle class="trk" cx="50" cy="50" r="42"/><circle class="arc" cx="50" cy="50" r="42" style="--to:'+to+'"/><text x="50" y="52" font-size="30">'+dn+'</text><text x="50" y="68" font-size="11" opacity=".75">of '+tot+"</text></svg>";
+ return h("div",{class:"hero","data-g":g},
+  h("div",{},h("div",{class:"eyebrow"},"Free Speech in Hebrew"+(S.start!=null?" · day "+dayN():"")),h("h1",{},"Speak first, one form at a time")),
+  (()=>{const id=l.words[0],w=W[id];if(!w)return null;const pb=playBtn(id,{bare:true});return h("div",{class:"hw"},h("div",{class:"hwh heb"},w.he),h("div",{class:"hwt"},h("span",{class:"eyebrow"},nx<tot?"First word of lesson "+(nx+1):"A word you own"),h("span",{class:"tr",html:trHtml(w.tr)}),h("span",{class:"small"},w.en),pb));})(),
+  h("div",{class:"hrow"},h("div",{html:dial}),h("div",{class:"stats"},h("div",{class:"stat"},h("b",{},String(known())),h("span",{},"holding")),h("div",{class:"stat"},h("b",{},String(nd)),h("span",{},"due")),h("div",{class:"stat"},h("b",{},String(Object.keys(S.log||{}).length)),h("span",{},"days")))),
+  nx<tot?h("a",{class:"btn gold",href:"#lesson-"+(nx+1),onclick:()=>{if(S.start==null){S.start=today();save();}}},h("span",{class:"btn-sub"},(dn?"Continue":"Start")+" · "+l.t),h("b",{class:"btn-main"},"LESSON "+(nx+1))):h("a",{class:"btn gold",href:"#read"},h("span",{},"All lessons done"),h("b",{},"READ GENESIS")),
+  nd?h("button",{class:"btn",style:"background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:#fff",onclick:()=>startSession(due().map((w,i)=>({id:w.id,mode:i%2?"find":"pic"})),"Review","#lessons")},"Review "+nd+" due words first"):null);}
+function fx(ok){if(document.documentElement.dataset.motion==="off")return;const e=h("div",{class:"fx "+(ok?"good":"bad"),html:'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22"/><path d="'+(ok?"M14 25l7 7 13-15":"M16 16l16 16M32 16L16 32")+'"/></svg>'});document.body.append(e);setTimeout(()=>e.remove(),600);}
+document.documentElement.dataset.motion=S.motion==="off"?"off":"on";
+(()=>{const cv=$("#sky");if(!cv||!cv.getContext)return;const c=cv.getContext("2d");let W_=0,H_=0,st=[],sh=null,last=0;
+ const size=()=>{const d=Math.min(2,window.devicePixelRatio||1);W_=innerWidth;H_=innerHeight;cv.width=W_*d;cv.height=H_*d;c.setTransform(d,0,0,d,0,0);st=Array.from({length:Math.round(W_*H_/4200)},()=>({x:Math.random()*W_,y:Math.random()*H_,r:Math.random()*1.2+.25,p:Math.random()*6.3,s:Math.random()*.9+.3,g:Math.random()<.14}));};
+ const draw=t=>{c.clearRect(0,0,W_,H_);for(const s of st){const a=.35+.5*Math.abs(Math.sin(s.p+t*.0009*s.s));c.globalAlpha=a*.6;c.fillStyle=s.g?"#f0a020":"#7d88ff";c.beginPath();c.arc(s.x,s.y,s.r,0,6.3);c.fill();}
+  if(sh){sh.t+=1;const k=sh.t/16,x=sh.x+sh.dx*k,y=sh.y+sh.dy*k;const g=c.createLinearGradient(x,y,x-sh.dx*.35,y-sh.dy*.35);g.addColorStop(0,"rgba(95,109,255,.75)");g.addColorStop(1,"rgba(95,109,255,0)");c.globalAlpha=1-k;c.strokeStyle=g;c.lineWidth=1.6;c.beginPath();c.moveTo(x,y);c.lineTo(x-sh.dx*.35,y-sh.dy*.35);c.stroke();if(k>=1)sh=null;}c.globalAlpha=1;};
+ const loop=t=>{if(document.documentElement.dataset.motion!=="off"&&!document.hidden&&t-last>70){last=t;if(!sh&&Math.random()<.006)sh={x:Math.random()*W_*.8,y:Math.random()*H_*.4,dx:160+Math.random()*120,dy:60+Math.random()*60,t:0};draw(t);}requestAnimationFrame(loop);};
+ size();draw(0);addEventListener("resize",()=>{size();draw(0);});requestAnimationFrame(loop);})();
+const PALS=[["indigo","Indigo and gold","#1b2270","#f0ac2e"],["olive","Olive grove: green and brass","#1f4a2c","#d9a934"],["sea","Coast: teal and coral","#0a6c74","#ff8a66"],["wine","Manuscript: wine and gold leaf","#5e1424","#d4a640"],["graphite","Graphite and cyan","#1b2430","#2fc6f0"]];
+const setPal=p=>{delete document.documentElement.dataset.pal;};setPal(S.pal);
+const palPicker=()=>h("div",{class:"pals",role:"group","aria-label":"Colour palette"},PALS.map(([id,name,c1,c2])=>h("button",{class:"pal","aria-pressed":String((S.pal||"indigo")===id),"aria-label":name,title:name,style:"background:linear-gradient(135deg,"+c1+" 0 55%,"+c2+" 55%)",onclick:()=>{S.pal=id;setPal(id);save();route();}})),h("span",{class:"small soft"},(PALS.find(p=>p[0]===(S.pal||"indigo"))||PALS[0])[1]));
+let ftimer=null,talkId=null,micStream=null,micOff=false;const fround={};
+function recBtn(id){const b=h("button",{class:"chip","aria-label":"Record yourself saying "+W[id].tr},"Record me");
+ b.onclick=async()=>{if(micOff||b.disabled)return;try{if(!navigator.mediaDevices||!window.MediaRecorder)throw 0;if(!micStream)micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+   const rec=new MediaRecorder(micStream),parts=[];rec.ondataavailable=e=>parts.push(e.data);
+   rec.onstop=async()=>{b.textContent="Model, then you";await playId(id);const a=new Audio(URL.createObjectURL(new Blob(parts,{type:rec.mimeType})));a.onended=()=>{b.textContent="Record me";b.disabled=false;};a.play().catch(()=>{b.textContent="Record me";b.disabled=false;});};
+   b.disabled=true;b.textContent="Say it now";rec.start();setTimeout(()=>rec.stop(),2500);
+  }catch(e){micOff=true;document.querySelectorAll(".recnote").forEach(x=>x.textContent="The microphone is blocked on this page. Use your phone's voice recorder instead: record yourself, then play the model right after and compare.");b.disabled=true;}};
+ return b;}
+function mixedPatterns(n){const pool=shuffle(LESSONS.slice(0,n).map((l,i)=>i)).slice(0,3);if(pool.length<2)return null;
+ return h("div",{class:"card"},h("h3",{},"Mixed patterns"),h("p",{class:"small soft"},"Added from research: old patterns shuffled in with the new one hold better than each drilled alone. Read the cue, say it in Hebrew, then tap to check."),
+  pool.map(i=>{const sm=LESSONS[i].sample,out=h("div",{class:"small"});return h("button",{class:"btn opt",onclick:()=>{out.innerHTML='<span class="tr">'+sm.map(id=>trHtml(W[id].tr)).join(" ")+"</span>";playSeq(sm);}},h("span",{class:"pics"},sm.map(id=>pic(id,"sm"))),h("span",{},h("span",{},sm.map(short).join(" · ")),out));}));}
+function talkathon(){const own=learnedIds(Math.max(0,nextLesson()-1)).filter(id=>W[id]&&W[id].a);const box=h("div",{class:"card"});const draw=()=>{if(!nextLesson()||!own.length){box.replaceChildren(h("h3",{},"Talkathon"),h("p",{class:"small soft"},"Opens after your first lesson. The tool picks one of your words and you say three or four sentences with it."));return;}if(!talkId||!own.includes(talkId))talkId=own[Math.floor(Math.random()*own.length)];box.replaceChildren(h("h3",{},"Talkathon"),h("p",{class:"small soft"},"From the course itself: take a word at random and say three or four sentences that use it. No stopping, no fixing."),h("div",{class:"wcard"},pic(talkId,"md"),h("div",{},h("div",{class:"row"},playBtn(talkId)),h("div",{class:"small soft"},W[talkId].en))),h("button",{class:"btn",onclick:()=>{talkId=own[Math.floor(Math.random()*own.length)];draw();}},"Next word"));};draw();return box;}
+function lessonView(n){
+ const l=LESSONS[n];if(!l)return V.lessons();
+ const st=S.lessons[n]||(S.lessons[n]={});const words=l.words.filter(id=>W[id]&&W[id].a);
+ const mark=(k,v=1)=>{st[k]=v;S.lessons[n]=st;if(S.start==null)S.start=today();save();};
+ const stepCard=(k,title,min,...body)=>h("div",{class:"card step"+(st["s"+k]?" ok":"")},h("div",{class:"steph"},h("h3",{},"Step "+k+": "+title),h("span",{class:"eyebrow"},(st["s"+k]?"done · ":"")+min+" min")),body);
+ // step 3 bench
+ let line=[];const ln=h("div",{class:"line"}),gl=h("div",{class:"small"});
+ const pal=learnedIds(n).filter(id=>W[id].a);
+ const draw=()=>{ln.replaceChildren(...line.map((id,i)=>h("button",{class:"chip","aria-label":"Remove "+W[id].tr,onclick:()=>{line.splice(i,1);draw();}},W[id].he)));if(!line.length)ln.append(h("span",{class:"soft small",style:"direction:ltr"},"Tap the sample, or tap words below."));gl.innerHTML=line.length?'<span class="tr">'+line.map(id=>trHtml(W[id].tr)).join(" ")+'</span><br><span class="soft">Word for word: '+line.map(short).join(" · ")+"</span>":"";};
+ draw();
+ // step 4 timer
+ const RND=[120,90,60],fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");const rd=()=>Math.min(2,fround[n]||0);
+ let left=RND[rd()];const tm=h("div",{class:"timer","aria-live":"off"},fmt(left));const tb=h("button",{class:"btn primary"},(fround[n]||0)>=3?"All three rounds done. Go again":"Start round "+(rd()+1)+" of 3 ("+fmt(RND[rd()])+")");
+ clearInterval(ftimer);
+ tb.onclick=()=>{clearInterval(ftimer);if((fround[n]||0)>=3)fround[n]=0;left=RND[rd()];tm.textContent=fmt(left);tb.textContent="Restart this round";ftimer=setInterval(()=>{left--;tm.textContent=fmt(left);if(left<=0){clearInterval(ftimer);fround[n]=(fround[n]||0)+1;mark("s4");route();}},1000);};
+ const t0=today(),dueOld=n?learnedIds(n-1).filter(id=>W[id].a&&S.cards[id]&&S.cards[id].d<=t0).sort((a,b)=>S.cards[a].b-S.cards[b].b).slice(0,12):[];
+ const mixOld=n?shuffle(learnedIds(n-1).filter(id=>W[id].a&&!words.includes(id))).sort((a,b)=>((S.cards[a]||{}).b||0)-((S.cards[b]||{}).b||0)).slice(0,4):[];
+ const spotWords=ch=>learnedIds(n).filter(id=>W[id].a&&W[id].he.normalize("NFD").includes(ch)).slice(0,3);
+ return h("div",{class:"stack"},
+  h("div",{class:"row",style:"justify-content:space-between"},h("a",{class:"btn",href:"#lessons",style:"text-decoration:none"},"All lessons"),h("span",{class:"eyebrow"},"Unit "+l.u+" · lesson "+(n+1)+" of "+LESSONS.length)),
+  h("div",{class:"hero slim","data-g":W[l.words[0]]?W[l.words[0]].he:""},h("div",{class:"eyebrow"},"Unit "+l.u+" · lesson "+(n+1)),h("h1",{},l.t),h("p",{},l.goal)),
+  dueOld.length?h("div",{class:"card step"},h("div",{class:"steph"},h("h3",{},"Warm-up: relearn "+dueOld.length+" word"+(dueOld.length>1?"s":"")),h("span",{class:"eyebrow"},"2 min")),h("p",{class:"small soft"},"Added from research: words from earlier lessons that are due today. Get each one right once before you start. Doing this on separate days is what makes words last."),h("div",{class:"pics"},dueOld.slice(0,12).map(id=>pic(id,"sm"))),h("button",{class:"btn primary",onclick:()=>startSession(shuffle(dueOld).map(id=>({id,mode:"pic"})),"Warm-up relearn","#lesson-"+(n+1))},"Start warm-up")):null,
+  stepCard(1,"Word-play",3,h("p",{class:"small soft"},"Tap each word. Listen, picture it, read the silly line, and say the word out loud twice. Silly is the point: it sticks."),
+   words.map(id=>{const w=W[id],hk=l.hook[id];return h("div",{class:"wcard"},pic(id,"md"),h("div",{class:"stack",style:"gap:6px"},h("div",{class:"row"},playBtn(id),h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{class:"small soft"},w.en)),recBtn(id)),hk?h("div",{class:"hook"},hk[0],hk[1]?h("span",{class:"badge b-TRAD",style:"margin:0 0 0 6px;display:inline-block"},"bar-Lev"):null):null));}),
+   h("p",{class:"small soft recnote"},"Record me: say the word when the button says so. You then hear the Israeli speaker and yourself back to back. People tend to rate their own accent too kindly while speaking, so listen afterwards."),
+   h("button",{class:"btn"+(st.s1?"":" primary"),onclick:()=>{mark("s1");route();}},st.s1?"Step 1 finished":"I said every word out loud")),
+  stepCard(2,"Word-Quiz",5,h("p",{class:"small soft"},"You are cued by the picture and the English and must say the Hebrew within four seconds, the standard the method sets. Keep going until every word comes instantly. Then you match each written word to its picture."+(mixOld.length?" A few older words are mixed in on purpose.":"")),
+   h("div",{class:"row"},h("button",{class:"btn primary",onclick:()=>startSession([...shuffle([...words,...mixOld]).map(id=>({id,mode:"pic"})),...shuffle(words).map(id=>({id,mode:"find",pool:pal.map(i=>W[i])}))],"Lesson "+(n+1)+" · word-quiz","#lesson-"+(n+1),()=>mark("s2"))},st.s2?"Run it again":"Start the drill"))),
+  stepCard(3,"Pattern-Drill",5,h("p",{},l.rule),
+   h("div",{class:"slots"},l.slots.map((s,i)=>[i?h("span",{class:"arrow"},"+"):null,h("span",{class:"slot"},s)])),
+   h("div",{class:"eyebrow"},"The one sample. Tap, listen, say it without looking."),
+   h("button",{class:"btn opt",onclick:()=>{line=l.sample.slice();draw();playSeq(l.sample);}},h("span",{class:"pics"},l.sample.map(id=>pic(id,"sm"))),h("span",{},h("span",{class:"tr",html:l.sample.map(id=>trHtml(W[id].tr)).join(" ")}),h("span",{class:"small soft",style:"display:block"},l.sample.map(short).join(" · ")))),
+   h("p",{class:"small soft"},"The method gives one sample on purpose. Making the rest is your job."),
+   h("div",{class:"eyebrow"},"Your turn. Make your own until they come easily."),ln,gl,
+   h("div",{class:"row"},h("button",{class:"btn",onclick:()=>playSeq(line)},"Play word by word"),h("button",{class:"btn",onclick:()=>{line=[];draw();}},"Clear")),
+   h("div",{class:"row",style:"direction:rtl;justify-content:flex-start"},pal.map(id=>h("button",{class:"chip",style:"direction:ltr;display:inline-flex;gap:6px;align-items:center",onclick:()=>{line.push(id);draw();playId(id);}},pic(id,"sm"),h("span",{class:"heb",style:"font-size:1.1rem"},W[id].he)))),
+   h("button",{class:"btn"+(st.s3?"":" primary"),onclick:()=>{mark("s3");route();}},st.s3?"Step 3 finished":"My own sentences come easily")),
+  mixedPatterns(n),
+  stepCard(4,"Free-Speech",5,h("p",{},l.talk),l.loud?h("div",{class:"hook"},"Noisy Restaurant, from the course itself: say each order loud enough to be heard across a busy room. If it was not loud enough, say it again, louder."):null,h("p",{class:"small soft"},"Rules of free speech: talk out loud, keep going, use only words you own, and do not correct yourself. Mistakes here are allowed. Stopping is the only error."),h("p",{class:"small soft"},"Added from research: three rounds on the same topic, 2:00, then 1:30, then 1:00. Round 1 signs off the step. Saying the same thing again in less time is what builds speed."),
+   tm,tb,h("div",{class:"eyebrow"},"Picture prompts: every word you own so far"),h("div",{class:"pics"},pal.map(id=>{const b=h("button",{class:"pic g-"+(W[id]?W[id].g:"x"),style:"border:0;cursor:pointer","aria-label":short(id),html:picInner(id)});b.onclick=()=>playId(id);return b;}))),
+  h("div",{class:"card"},h("h3",{},"Letter spotting"),h("p",{class:"small soft"},"In this method you meet letters inside words you can already say. Names and the full alphabet come after. Tap the letter to watch how it is written, trace it, then write it five times on paper."),
+   l.spot.map(ch=>{const L=LETTERS.find(x=>x.ch===ch||x.fin===ch),ws=spotWords(ch);return h("div",{class:"wcard"},h("button",{class:"pic md heb",style:"border:0;cursor:pointer;font-size:2.2rem;font-weight:400","aria-label":"Open letter "+(L?L.name:ch),onclick:()=>{if(L)openLetter(LETTERS.indexOf(L));}},ch),h("div",{},h("div",{},L?(L.fin===ch?"End-of-word form of "+L.name:L.name)+": "+L.sound:""),h("div",{class:"row",style:"margin-top:6px"},ws.map(id=>playBtn(id)))));})),
+  h("button",{class:"btn "+(st.done?"amber":"primary"),disabled:!(st.s1&&st.s2&&st.s3&&st.s4)&&!st.done,onclick:()=>{if(st.done)delete st.done;else st.done=1;S.lessons[n]=st;save();location.hash="#lessons";}},st.done?"Lesson complete. Tap to reopen.":(st.s1&&st.s2&&st.s3&&st.s4)?"Finish lesson "+(n+1):"Finish all four steps to finish"),
+  h("p",{class:"small soft"},"One lesson a day is the pace. Each unit of four or five lessons is about a week. Review with the Words tab before each new lesson."));
+}
+/* forms workshop */
+const fv=(he,tr)=>h("a",{class:"fcell",href:"https://forvo.com/word/"+encodeURIComponent(he)+"/#he",target:"_blank",rel:"noopener","aria-label":"Hear "+tr.toLowerCase()+" on Forvo"},h("span",{class:"heb"},he),h("span",{class:"tr",html:trHtml(tr)}));
+const own=(id)=>h("span",{class:"fcell"},playBtn(id,{bare:true}),h("span",{class:"tr",html:trHtml(W[id].tr)}));
+const formsDia=()=>h("div",{html:'<svg class="dia" viewBox="0 0 340 118" role="img" aria-label="How one word grows three forms: plain for he, plus a or et for she, plus im for a group"><g font-size="10" text-anchor="middle"><rect x="120" y="6" width="100" height="30" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="170" y="20">plain form</text><text x="170" y="31" opacity=".7">for he</text><path d="M150 36L70 74M170 36V74M190 36L270 74" stroke="var(--line)" stroke-width="2" fill="none"/><rect x="14" y="74" width="100" height="36" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="64" y="89">+ a  or  + et</text><text x="64" y="102" opacity=".7">for she</text><rect x="120" y="74" width="100" height="36" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="170" y="89">+ im</text><text x="170" y="102" opacity=".7">for a group</text><rect x="226" y="74" width="100" height="36" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="276" y="89">past: + ti, + ta</text><text x="276" y="102" opacity=".7">I did, you did</text></g></svg>'});
+const ftbl=(head,rows)=>h("div",{class:"scroll"},h("table",{class:"ftbl"},h("thead",{},h("tr",{},head.map(x=>h("th",{},x)))),h("tbody",{},rows.map(r=>h("tr",{},h("td",{},h("div",{class:"small soft"},r[0]),W[r[1]]?own(r[1]):null),r.slice(2).map(c=>h("td",{},fv(c[0],c[1]))))))));
+V.forms=()=>h("div",{class:"stack"},
+ h("div",{class:"row",style:"justify-content:space-between"},h("a",{class:"btn",href:"#lessons",style:"text-decoration:none"},"All lessons"),h("span",{class:"eyebrow"},"Reference sheet")),
+ h("div",{},h("h1",{},"Forms workshop"),h("p",{class:"soft"},"What comes after lesson 48: she, they, and I did.")),
+ h("div",{class:"card"},h("h3",{},"Read this first"),h("p",{class:"small"},"I searched two open libraries of native Hebrew recordings, about 5,000 clips, for some 90 of these forms and found three. So this page has no built-in sound for them. The first column plays the form you already own. Every other cell opens Forvo, a site where native speakers record words, in a new tab. A few forms may not be recorded there."),h("p",{class:"small soft"},"How to use it: learn a row only after its plain form is automatic. Take one column at a time, never the whole table, which is the method's own rule."),formsDia()),
+ h("div",{class:"card"},h("h3",{},"1. What she does, what they do"),h("p",{class:"small soft"},"Present tense. The plain form you know serves I, you and he for a man."),
+  ftbl(["He (yours)","She","Group"],[["eats","okhelv",["אוכלת","oKHElet"],["אוכלים","okhLIM"]],["sits","yoshev",["יושבת","yoSHEvet"],["יושבים","yoshVIM"]],["comes","ba",["באה","baA"],["באים","baIM"]],["lives","gar",["גרה","gaRA"],["גרים","gaRIM"]],["runs","rats",["רצה","raTSA"],["רצים","raTSIM"]],["travels","nosea",["נוסעת","noSAat"],["נוסעים","nosIM"]],["bakes","ofe",["אופה","oFA"],["אופים","oFIM"]],["builds","bone",["בונה","boNA"],["בונים","boNIM"]],["guards","shomer",["שומרת","shoMEret"],["שומרים","shomRIM"]],["says","omer",["אומרת","oMEret"],["אומרים","omRIM"]]])),
+ h("div",{class:"card"},h("h3",{},"2. Describing a she-word or a group"),h("p",{class:"small soft"},"The describing word copies the thing it describes: uga tova, a good cake."),
+  ftbl(["Plain (yours)","She-word","Group"],[["good","tov",["טובה","toVA"],["טובים","toVIM"]],["big","gadol",["גדולה","gdoLA"],["גדולים","gdoLIM"]],["small","katan",["קטנה","ktaNA"],["קטנים","ktaNIM"]],["new","khadash",["חדשה","khadaSHA"],["חדשים","khadaSHIM"]],["hot","kham",["חמה","khaMA"],["חמים","khaMIM"]],["cold","kar",["קרה","kaRA"],["קרים","kaRIM"]],["beautiful","yafe",["יפה","yaFA"],["יפים","yaFIM"]],["happy","sameakh",["שמחה","smeKHA"],["שמחים","smeKHIM"]],["hard","kashe",["קשה","kaSHA"],["קשים","kaSHIM"]],["strong","khazak",["חזקה","khazaKA"],["חזקים","khazaKIM"]],["sweet","matok",["מתוקה","metuKA"],["מתוקים","metuKIM"]]])),
+ h("div",{class:"card"},h("h3",{},"3. I did, you did"),h("p",{class:"small soft"},"Past tense. Add -ti for I, -ta for you (a man). The word for I or you can be dropped, because the ending already says it."),
+  ftbl(["He did (yours)","I did","You did (man)"],[["was","haya",["הייתי","haYIti"],["היית","haYIta"]],["walked","halakh",["הלכתי","haLAKHti"],["הלכת","haLAKHta"]],["said","amar",["אמרתי","aMARti"],["אמרת","aMARta"]],["saw","raa",["ראיתי","raIti"],["ראית","raIta"]],["loved","ahav",["אהבתי","aHAVti"],["אהבת","aHAVta"]],["gave","natan",["נתתי","naTAti"],["נתת","naTAta"]],["made","asa",["עשיתי","aSIti"],["עשית","aSIta"]],["drank","shata",["שתיתי","shaTIti"],["שתית","shaTIta"]],["wanted","ratsa",["רציתי","raTSIti"],["רצית","raTSIta"]],["spoke","diber",["דיברתי","diBARti"],["דיברת","diBARta"]],["learned","lamad",["למדתי","laMADti"],["למדת","laMADta"]]])),
+ h("div",{class:"card"},h("h3",{},"4. The four one-letter words"),h("p",{class:"small soft"},"Hebrew glues its smallest words onto the front of the next word. You have met their full-size cousins el and min."),
+  tbl(["Letter","Means","Example","Says"],[[h("span",{class:"heb",style:"font-size:1.4rem"},"ה"),"the",fv("הבית","haBAyit"),"the house"],[h("span",{class:"heb",style:"font-size:1.4rem"},"ו"),"and",fv("ולחם","veLEkhem"),"and bread"],[h("span",{class:"heb",style:"font-size:1.4rem"},"ב"),"in, at",fv("בבית","baBAyit"),"in the house"],[h("span",{class:"heb",style:"font-size:1.4rem"},"ל"),"to, for",fv("לירושלים","lirushaLAyim"),"to Jerusalem"]]),
+  h("p",{class:"small soft"},"The first verse of the Bible uses three of them: be-reshit, ha-shamayim, ve-et ha-arets.")),
+ h("p",{class:"small soft"},"Forms here are written without vowel points, the way Israelis write, so that the links match how the words are filed. The spellings and stress marks are mine; check anything that matters with a teacher."));
+/* letters */
+/* stroke models for block handwriting: 100 x 100 grid, body between y=22 and y=80 */
+const STROKES={"א":[[[26,22],[76,80]],[[72,20],[70,34],[58,44]],[[42,50],[30,62],[26,80]]],"ב":[[[26,22],[70,22],[70,78]],[[20,78],[80,78]]],"ג":[[[42,22],[60,22],[64,80]],[[61,58],[48,66],[34,80]]],"ד":[[[20,22],[80,22]],[[68,22],[68,80]]],"ה":[[[22,22],[75,22],[75,80]],[[28,44],[28,80]]],"ו":[[[42,22],[56,22],[56,80]]],"ז":[[[36,22],[68,22]],[[54,22],[50,40],[52,80]]],"ח":[[[25,22],[75,22],[75,80]],[[25,22],[25,80]]],"ט":[[[28,22],[28,66],[40,80],[62,80],[75,66],[75,34],[66,22],[54,24],[50,36]]],"י":[[[44,22],[58,22],[56,44]]],"כ":[[[28,22],[58,22],[72,34],[72,66],[58,78],[28,78]]],"ך":[[[25,22],[70,22],[70,100]]],"ל":[[[30,2],[30,24],[70,24],[70,44],[44,80]]],"מ":[[[34,30],[42,22],[66,22],[76,34],[76,78],[46,78]],[[34,22],[30,50],[22,80]]],"ם":[[[25,22],[75,22],[75,78]],[[25,22],[25,78],[75,78]]],"נ":[[[40,22],[60,22],[60,78],[32,78]]],"ן":[[[44,22],[56,22],[56,100]]],"ס":[[[30,24],[62,22],[76,36],[74,64],[58,80],[40,78],[26,62],[28,24]]],"ע":[[[72,22],[68,56],[52,74],[28,80]],[[36,22],[40,48],[50,70]]],"פ":[[[30,22],[60,22],[74,34],[74,66],[60,78],[28,78]],[[30,22],[30,46],[48,46]]],"ף":[[[28,22],[70,22],[70,100]],[[28,22],[28,46],[46,46]]],"צ":[[[30,22],[52,50],[68,72],[68,80],[24,80]],[[72,22],[66,40],[54,52]]],"ץ":[[[32,22],[40,40],[52,50],[52,100]],[[72,22],[66,40],[52,50]]],"ק":[[[25,22],[62,22],[76,34],[74,54],[52,66]],[[32,44],[32,100]]],"ר":[[[22,22],[60,22],[72,32],[72,80]]],"ש":[[[78,22],[76,62],[62,80],[38,80],[22,64]],[[22,22],[22,64]],[[50,22],[48,50],[40,72]]],"ת":[[[24,22],[75,22],[75,80]],[[34,22],[34,68],[22,80]]]};
+const sPts=p=>{if(p.length===2)return "M"+p[0]+" L"+p[1];let d="M"+p[0]+" L"+[(p[0][0]+p[1][0])/2,(p[0][1]+p[1][1])/2];for(let i=1;i<p.length-1;i++)d+=" Q"+p[i]+" "+[(p[i][0]+p[i+1][0])/2,(p[i][1]+p[i+1][1])/2];return d+" L"+p[p.length-1];};
+const sDots=st=>{const out=[];st.forEach(p=>{let x=p[0][0],y=p[0][1];while(out.some(o=>Math.abs(o[0]-x)<11&&Math.abs(o[1]-y)<11))y+=13;out.push([x,y]);});return out;};
+function strokeSvg(ch){const st=STROKES[ch];if(!st)return "";const dots=sDots(st);let s='<svg class="sd" viewBox="-8 -10 116 124" role="img" aria-label="How to write '+ch+" in "+st.length+' stroke'+(st.length>1?"s":"")+'"><path class="bl" d="M-4 80H104"/>';
+ st.forEach((p,i)=>{s+='<path class="s" pathLength="1" style="animation-delay:'+(0.5+i*1.15)+'s" d="'+sPts(p)+'"/>';});
+ dots.forEach((d,i)=>{s+='<g class="n" style="animation-delay:'+(0.2+i*1.15)+'s"><circle cx="'+d[0]+'" cy="'+d[1]+'" r="7"/><text x="'+d[0]+'" y="'+(d[1]+3.4)+'">'+(i+1)+"</text></g>";});return s+"</svg>";}
+function strokeDemo(chars){const box=h("div",{class:"sdrow"});const draw=()=>{box.innerHTML=chars.filter(c=>STROKES[c]).map(c=>'<div class="sdcell">'+strokeSvg(c)+"</div>").join("");};draw();return h("div",{},box,h("button",{class:"btn",onclick:draw},"Show me again"));}
+function paperBox(ch,name){S.paper=S.paper||{};const t=today(),last=S.paper[ch];const note=h("span",{class:"small soft"},last==null?"Not yet written on paper.":last===t?"Written on paper today.":"Last on paper "+(t-last)+" day"+(t-last>1?"s":"")+" ago.");
+ return h("div",{class:"paper"},h("div",{class:"eyebrow"},"Now with a pen"),h("p",{class:"small"},"Screens are practice. Paper is the goal. Write a row of ten "+name+"s on lined paper, saying the name each time. Then write one word you know that contains it."),
+  h("label",{class:"row small"},h("input",{type:"checkbox",checked:last===t,onchange:e=>{if(e.target.checked)S.paper[ch]=t;else delete S.paper[ch];save();note.textContent=e.target.checked?"Written on paper today.":"Not yet written on paper.";}}),"I wrote it on paper today"),note);}
+V.letters=()=>h("div",{class:"stack"},
+ h("div",{},h("div",{class:"eyebrow"},"Stage 1 · tooling"),h("h1",{},"The alefbet")),
+ h("p",{class:"soft small"},"Hebrew reads right to left, so alef is at the top right. Tap a letter. An amber underline marks the three \"mother\" letters of Sefer Yetzirah and a blue one marks the seven \"doubles\"."),
+ h("div",{class:"grid"},LETTERS.map((l,i)=>h("button",{class:"cell "+(S.letters[l.ch]?"done ":"")+(l.cls==="mother"?"m":l.cls==="double"?"d":""),onclick:()=>openLetter(i)},h("span",{class:"g"},l.ch+(l.fin?" "+l.fin:"")),h("span",{class:"n"},l.name+" · "+l.val)))),
+ (()=>{S.paper=S.paper||{};const n=LETTERS.filter(l=>S.paper[l.ch]!=null).length;return h("div",{class:"card"},h("h3",{},"Pen and paper"),h("p",{class:"small"},"The goal is to write Hebrew by hand, on paper. Each letter sheet shows the pen strokes in order, lets you trace and then write from memory, and ends by sending you to paper. The tool cannot check paper, so the tick box is on your honour."),
+  h("div",{class:"meter"},h("i",{style:"width:"+(n/22*100)+"%"})),h("p",{class:"small soft"},n+" of 22 letters written on paper so far."),
+  h("p",{class:"small"},"Why paper: in a 2021 study, adults learning a new alphabet with pen and paper learned the letters faster, and read new words better, than adults who typed or only looked."),
+  h("a",{class:"btn primary",href:"writing-practice.pdf",target:"_blank",rel:"noopener",style:"text-decoration:none;text-align:center"},"Open the printable practice sheets (PDF)"),
+  h("p",{class:"small soft"},"Five pages: every letter with its strokes numbered, ghost letters to trace, and empty boxes. If the link does not open inside the app, the same file is in our chat."));})(),
+ h("div",{class:"card"},h("h3",{},"How to read the evidence tags"),
+  [["DOC","Documented by inscriptions or plain history."],["DEB","Scholars disagree. Treat as a best guess."],["TEXT","You can see it in the Bible text itself."],["TRAD","Jewish tradition. The source is named."],["CHR","A Christian reading or connection."],["POP","Popular teaching that scholars do not accept as history."]].map(([b,t])=>h("div",{class:"note"},h("span",{class:"badge b-"+b},b),h("span",{class:"small"},t))),
+  h("p",{class:"small soft"},"One caution. You will find books that \"decode\" Bible words by adding up letter pictures, for example father = \"strength of the house\". The pictures are real history. Reading whole words that way is not accepted by linguists, and its best-known teacher calls it suggestive, not proof. Enjoy it as a memory aid.")),
+ h("div",{class:"card"},h("h3",{},"Vowel marks (nikud)"),h("p",{class:"small soft"},"Hebrew letters are consonants. The dots and dashes are the vowels. Israeli Hebrew has five vowel sounds. Everyday Israeli writing leaves the marks out. Bibles, prayer books and children's books keep them. Shown here on the letter bet."),
+  h("div",{class:"scroll"},h("table",{},h("thead",{},h("tr",{},h("th",{},"Mark"),h("th",{},"Name"),h("th",{},"Sound"),h("th",{},"Like"))),h("tbody",{},VOWELS.map(v=>h("tr",{},h("td",{class:"heb",style:"font-size:1.8rem;line-height:1.1"},v[0]),h("td",{},v[1]),h("td",{class:"tr"},v[2]),h("td",{class:"small soft"},v[3]))))))),
+ h("div",{class:"card"},h("h3",{},"Look-alike pairs"),LOOKALIKES.map(p=>h("div",{class:"note"},h("span",{class:"heb",style:"font-size:1.9rem;line-height:1"},p[0]+" "+p[1]),h("span",{class:"small"},p[2])))),
+ gematria());
+function openLetter(i){
+ const l=LETTERS[i],d=$("#dlg");let layer="origin";
+ const layers=[["origin","Origins"],["jewish","Jewish tradition"],["christian","Christian readings"],["more","More"]];
+ const body=h("div",{class:"card"});
+ const drawLayer=()=>{body.replaceChildren(...l[layer].map(([b,t])=>h("div",{class:"note"},h("span",{class:"badge b-"+b},b),h("span",{},t))));seg.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===layer));};
+ const seg=h("div",{class:"seg"},layers.map(([k,n])=>h("button",{class:"chip","data-k":k,onclick:()=>{layer=k;drawLayer();}},n)));
+ const cv=h("canvas",{class:"trace",width:520,height:520,"aria-label":"Trace the letter with your finger"});
+ let ghost=true,target=l.ch;const X=x=>x*4.3+45,Y=y=>y*4.3+38;
+ const paint=()=>{const c=cv.getContext("2d");c.clearRect(0,0,520,520);c.strokeStyle="rgba(120,130,200,.35)";c.lineWidth=2;c.setLineDash([6,8]);c.beginPath();c.moveTo(20,Y(80));c.lineTo(500,Y(80));c.stroke();c.setLineDash([]);if(!ghost)return;const st=STROKES[target]||[];
+  c.strokeStyle="rgba(100,114,255,.22)";c.lineWidth=40;c.lineCap="round";c.lineJoin="round";st.forEach(p=>{c.beginPath();c.moveTo(X(p[0][0]),Y(p[0][1]));if(p.length===2)c.lineTo(X(p[1][0]),Y(p[1][1]));else{c.lineTo(X((p[0][0]+p[1][0])/2),Y((p[0][1]+p[1][1])/2));for(let i=1;i<p.length-1;i++)c.quadraticCurveTo(X(p[i][0]),Y(p[i][1]),X((p[i][0]+p[i+1][0])/2),Y((p[i][1]+p[i+1][1])/2));c.lineTo(X(p[p.length-1][0]),Y(p[p.length-1][1]));}c.stroke();});
+  sDots(st).forEach((d,i)=>{c.fillStyle="#f2a81d";c.beginPath();c.arc(X(d[0]),Y(d[1]),17,0,6.3);c.fill();c.fillStyle="#221600";c.font="700 22px sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(String(i+1),X(d[0]),Y(d[1])+1);});};
+ let drawing=false;const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*520/r.width,(e.clientY-r.top)*520/r.height];};
+ cv.addEventListener("pointerdown",e=>{drawing=true;cv.setPointerCapture(e.pointerId);const c=cv.getContext("2d");c.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue("--accent");c.lineWidth=22;c.lineCap="round";c.lineJoin="round";c.beginPath();c.moveTo(...pos(e));});
+ cv.addEventListener("pointermove",e=>{if(!drawing)return;const c=cv.getContext("2d");c.lineTo(...pos(e));c.stroke();});
+ cv.addEventListener("pointerup",()=>drawing=false);
+ const cls={mother:"Mother letter (Sefer Yetzirah)",double:"Double letter (Sefer Yetzirah)",simple:"Simple letter (Sefer Yetzirah)"}[l.cls];
+ d.replaceChildren(
+  h("div",{class:"bar"},h("button",{class:"btn",onclick:()=>{d.close();route();}},"Close"),h("span",{class:"eyebrow"},"Letter "+(i+1)+" of 22"),h("div",{class:"row"},h("button",{class:"btn",disabled:i===0,onclick:()=>openLetter(i-1)},"Prev"),h("button",{class:"btn",disabled:i===21,onclick:()=>openLetter(i+1)},"Next"))),
+  h("div",{class:"sheet"},
+   h("div",{class:"row",style:"justify-content:space-between;align-items:flex-end"},h("div",{},h("h1",{},l.name),h("div",{class:"soft small"},"Value "+l.val+" · "+cls),l.fin?h("div",{class:"soft small"},"End-of-word form: ",h("span",{class:"heb",style:"font-size:1.4rem"},l.fin)):null),h("div",{class:"big"},l.ch)),
+   h("div",{class:"card"},h("div",{},h("span",{class:"eyebrow"},"Sound today "),h("div",{},l.sound)),h("div",{},h("span",{class:"eyebrow"},"Older sound "),h("div",{class:"small soft"},l.old)),
+    h("div",{class:"wl"},l.anchors.filter(a=>W[a]).map(wordRow).flat())),
+   h("div",{class:"card"},h("h3",{},"From picture to letter"),
+    h("div",{class:"evo"},
+     h("div",{},h("span",{class:"s",html:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="'+l.svg+'"/></svg>'}),h("span",{class:"c"},"picture c. 1800 BC")),
+     h("div",{},h("span",{class:"s paleo"},String.fromCodePoint(0x10900+i)),h("span",{class:"c"},"old Hebrew c. 900 BC")),
+     h("div",{},h("span",{class:"s heb"},l.ch),h("span",{class:"c"},"square script c. 300 BC")),
+     h("div",{},h("span",{class:"s"},l.gr.split(" ")[0]),h("span",{class:"c"},"Greek "+(l.gr.split(" ").slice(1).join(" ")))),
+     h("div",{},h("span",{class:"s",style:l.la.length>4?"font-size:1rem":""},l.la==="none"?"-":l.la),h("span",{class:"c"},"Latin"))),
+    h("p",{class:"small soft"},"Picture: "+l.pic+". ",h("span",{class:"badge b-"+(l.conf==="solid"?"DOC":"DEB"),style:"margin:0"},l.conf==="solid"?"DOC":"DEB")," The first drawing is my simplified sketch, not a tracing of an inscription.")),
+   seg,body,
+   h("div",{class:"card"},h("h3",{},"Trace it"),h("p",{class:"small soft"},"Watch the pen first. The numbers show where each stroke starts; the line shows which way it goes."),strokeDemo([l.ch].concat(l.fin?[l.fin]:[])),
+     h("p",{class:"small soft"},"These are block letters, the kind printed in books and taught first. The habit to build: start at the top, draw top bars left to right, draw down-strokes downward. Hebrew has no single official stroke order, so a teacher may show a small variation. Everyday Israeli handwriting is a separate cursive script, for later."),
+     h("div",{class:"eyebrow"},"Your turn: trace, then from memory"),
+     l.fin?h("div",{class:"seg"},[[l.ch,l.name],[l.fin,"End-of-word form"]].map(([c,n])=>h("button",{class:"chip","aria-pressed":String(c===l.ch),onclick:e=>{target=c;e.currentTarget.parentNode.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));e.currentTarget.setAttribute("aria-pressed","true");paint();}},c+"  "+n))):null,
+     h("p",{class:"small soft"},"Start each stroke on its numbered dot. Trace it three times, then hide the outline and write it from memory. Works with a finger, a stylus or a mouse."),cv,h("div",{class:"row"},h("button",{class:"btn",onclick:paint},"Clear"),h("button",{class:"btn",onclick:e=>{ghost=!ghost;e.currentTarget.textContent=ghost?"Hide outline: write from memory":"Show outline";paint();}},"Hide outline: write from memory")),
+     paperBox(l.ch,l.name)),
+   h("button",{class:"btn "+(S.letters[l.ch]?"amber":"primary"),onclick:e=>{if(S.letters[l.ch])delete S.letters[l.ch];else S.letters[l.ch]=1;save();openLetter(i);}},S.letters[l.ch]?"Marked as learned. Tap to undo.":"Mark this letter as learned")));
+ drawLayer();if(!d.open)d.showModal();d.scrollTop=0;
+ if(document.fonts&&document.fonts.load)document.fonts.load("400 100px 'Frank Ruhl Libre'",l.ch).then(paint,paint);else paint();
+}
+function gematria(){
+ const VAL={};LETTERS.forEach(l=>{VAL[l.ch]=l.val;if(l.fin)VAL[l.fin]=l.val;});
+ let txt="אהבה";const out=h("div",{class:"out"}),sum=h("div",{class:"tr",style:"text-align:center"});
+ const draw=()=>{out.textContent=txt||" ";const parts=[...txt].filter(c=>VAL[c]);sum.textContent=parts.length?parts.map(c=>VAL[c]).join(" + ")+" = "+parts.reduce((a,c)=>a+VAL[c],0):"Tap letters to add them up";};
+ const keys="אבגדהוזחטיכלמנסעפצקרשתךםןףץ";
+ const ex=[["חי","alive"],["אהבה","love"],["אחד","one"],["יהוה","the Name"],["אמת","truth"],["שלום","peace"],["משיח","messiah"],["נחש","snake"]];
+ const c=h("div",{class:"card"},h("h3",{},"Letter-number calculator (gematria)"),h("p",{class:"small soft"},"Every letter is also a number. That is how Hebrew wrote numbers before digits, and Jewish calendars still do. Tradition looks for words with equal totals. Love (13) plus one (13) equals the Name (26). Messiah and snake both come to 358, which both Jewish and Christian writers have commented on."),
+  out,sum,h("div",{class:"kb"},[...keys].map(k=>h("button",{"aria-label":"Add "+k,onclick:()=>{txt+=k;draw();}},k))),
+  h("div",{class:"row"},h("button",{class:"btn",onclick:()=>{txt=[...txt].slice(0,-1).join("");draw();}},"Delete"),h("button",{class:"btn",onclick:()=>{txt="";draw();}},"Clear")),
+  h("div",{class:"seg"},ex.map(([w,e])=>h("button",{class:"chip",onclick:()=>{txt=w;draw();}},h("span",{class:"heb"},w)," "+e))));
+ draw();return c;}
+
+
+/* words */
+let browse="basics",q="";
+function schedPanel(){const t=today(),ids=Object.keys(S.cards).filter(id=>W[id]);
+ const rows=ids.map(id=>{const c=S.cards[id];return [id,recallNow(c),c.f?c.f.stability:null,c.f?c.f.difficulty:null,c.d-t];}).filter(r=>r[1]!=null).sort((p,q)=>p[1]-q[1]).slice(0,6);
+ const fc=Array(14).fill(0);ids.forEach(id=>{const k=Math.max(0,S.cards[id].d-t);if(k<14)fc[k]++;});const mx=Math.max(1,...fc);
+ let s='<svg class="dia" viewBox="0 0 340 78" role="img" aria-label="Reviews coming due over the next 14 days"><g font-size="8" text-anchor="middle">';fc.forEach((n,i)=>{const hgt=Math.round(n/mx*44);s+='<rect x="'+(8+i*23.5)+'" y="'+(52-hgt)+'" width="18" height="'+Math.max(1,hgt)+'" rx="2" fill="'+(i?"var(--blue)":"var(--accent)")+'"/><text x="'+(17+i*23.5)+'" y="64">'+(i?"+"+i:"now")+'</text>'+(n?'<text x="'+(17+i*23.5)+'" y="'+(48-hgt)+'">'+n+"</text>":"");});s+="</g></svg>";
+ return h("div",{class:"card"},h("h3",{},"How the scheduler sees you"),
+  h("p",{class:"small"},FL?"Reviews are timed by FSRS, the open scheduler used in Anki. For each word it tracks stability (how many days until your chance of recalling it drops to the target) and difficulty (1 easy to 10 hard).":"The scheduler library did not load, so reviews are using the simple 1, 2, 4, 8 day ladder."),
+  tbl(["Your answer","Grade","Effect"],[["Missed it","Again","Back tomorrow at the latest, stability cut"],["Right, after the 4-second bar","Hard","Short step forward"],["Right, in time","Good","Normal step forward"],["Any first answer on a new word","","Always back the next day, whatever the grade"],["Right, under 2 seconds","Easy","Long step forward"]]),
+  h("div",{class:"eyebrow"},"Reviews coming due"),h("div",{html:s}),
+  rows.length?[h("div",{class:"eyebrow"},"Shakiest words right now"),tbl(["Word","Recall","Stable","Diff.","Due"],rows.map(r=>[h("span",{class:"row"},pic(r[0],"sm"),h("span",{class:"tr",html:trHtml(W[r[0]].tr)})),Math.round(r[1]*100)+"%",r[2]!=null?(r[2]<10?r[2].toFixed(1):Math.round(r[2]))+" d":"new",r[3]!=null?r[3].toFixed(1):"",r[4]<=0?"now":"+"+r[4]+"d"]))]:h("p",{class:"small soft"},"Your shakiest words will be listed here once you have graded some."),
+  h("div",{class:"eyebrow"},"Target recall"),h("div",{class:"seg"},[[.85,"85%: fewer reviews"],[.9,"90%: standard"],[.95,"95%: more reviews"]].map(([v,n])=>h("button",{class:"chip","aria-pressed":String((S.ret||.9)===v),onclick:()=>{S.ret=v;mkSched();save();route();}},n))),
+  h("p",{class:"small soft"},"The settings are the published defaults, not tuned to your own history. Tuning needs a few hundred of your answers first."),
+  h("button",{class:"btn",onclick:e=>{const esc=x=>'"'+String(x).replace(/"/g,'""')+'"';const csv=["hebrew,sound,english,group,stability_days,difficulty,due_in_days"].concat((window.WORDS||[]).map(w=>{const c=S.cards[w.id];return [esc(w.he),esc(w.tr),esc(w.en),w.g,c&&c.f?c.f.stability.toFixed(2):"",c&&c.f?c.f.difficulty.toFixed(2):"",c?c.d-t:""].join(",");})).join("\n");const box=$("#csv");box.hidden=false;box.value=csv;box.focus();box.select();try{const a=h("a",{href:URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"})),download:"hebrew-flight-school-words.csv"});document.body.append(a);a.click();a.remove();}catch(err){}}},"Export word list and progress (CSV)"),
+  h("textarea",{id:"csv",hidden:true,readonly:true,"aria-label":"CSV export. Copy this text if no file was downloaded.",style:"height:90px;font:.7rem var(--mono)"}));}
+V.words=()=>{
+ const nd=due().length,un=unseen();
+ const groups=[["basics","Basics"],["phrases","Phrases"],["pronouns","Pronouns"],["people","People"],["world","World"],["describe","Describing"],["numbers","Numbers"],["glue","Small words"],["verbs","Verbs"],["scripture","Faith words"],["roots","Root words"],["anchor","Letter words"]];
+ const list=h("div",{class:"wl"});
+ const drawList=()=>{const ws=(window.WORDS||[]).filter(w=>w.a&&(q?(w.en.toLowerCase().includes(q)||w.tr.toLowerCase().includes(q)||w.he.includes(q)):w.g===browse));list.replaceChildren(...ws.map(w=>wordRow(w.id)).flat());if(!ws.length)list.append(h("span",{class:"soft small"},"No match."));};
+ const seg=h("div",{class:"seg"},groups.map(([k,n])=>h("button",{class:"chip","aria-pressed":String(k===browse),onclick:e=>{browse=k;q="";seg.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed","false"));e.currentTarget.setAttribute("aria-pressed","true");drawList();}},n)));
+ drawList();
+ const tile=(n,t)=>h("div",{},h("div",{style:"font-size:1.6rem;font-weight:600"},String(n)),h("div",{class:"small soft"},t));
+ return h("div",{class:"stack"},
+  h("div",{},h("div",{class:"eyebrow"},"Review and the word bank"),h("h1",{},"Words")),
+  h("div",{class:"card"},
+   h("div",{class:"row",style:"justify-content:space-between"},tile(nd,"due for review"),tile(Object.keys(S.cards).length,"in your deck"),tile(known(),"holding steady")),
+   h("div",{class:"row"},[5,10,18].map(m=>h("button",{class:"btn",disabled:!nd&&!(nextLesson()>=LESSONS.length&&un.length),onclick:()=>{const cap=m*5,dd=due().map(w=>[recallNow(S.cards[w.id])??0,w]).sort((p,q)=>p[0]-q[0]).slice(0,cap).map((x,i)=>({id:x[1].id,mode:i%3===2?"find":"pic"}));const room=Math.floor((cap-dd.length)/2),nw=nextLesson()>=LESSONS.length?un.slice(0,Math.min(S.newPerDay,room)).map(w=>({id:w.id,mode:"new"})):[];startSession([...dd,...nw],m+"-minute session","#words");}},"I have "+m+" min"))),
+   h("div",{class:"row"},h("button",{class:"btn primary",disabled:!nd,onclick:()=>startSession(due().map((w,i)=>({id:w.id,mode:i%2?"find":"pic"})),"Review","#words")},nd?"Review "+nd+" words":"Nothing due today"),
+    h("button",{class:"btn",disabled:!un.length,onclick:()=>startSession(un.slice(0,S.newPerDay).map(w=>({id:w.id,mode:"new"})),"New words","#words")},"Learn "+Math.min(un.length,S.newPerDay)+" extra words"),
+    h("button",{class:"btn",onclick:()=>{const pool=DECK.filter(w=>S.cards[w.id]);const src=pool.length>=8?pool:DECK.slice(0,30);startSession(shuffle(src).slice(0,10).map(w=>({id:w.id,mode:"listen",free:1,pool:src})),"Listening","#words");}},"Listening drill")),
+   h("label",{class:"row small"},h("input",{type:"checkbox",id:"slow",checked:S.slow,onchange:e=>{S.slow=e.target.checked;save();}}),"Play at 75% speed (same recording, pitch kept)"),
+   h("p",{class:"small soft"},"Lesson words enter your deck in step 2 of each lesson. Extra words are for after the lessons, or when you want more. A timed session takes your shakiest due words first.")),
+  schedPanel(),
+  h("div",{class:"card"},h("h3",{},"Browse and listen"),h("input",{type:"search",id:"find",placeholder:"Search English or Hebrew",style:"font:inherit;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)",oninput:e=>{q=e.target.value.trim().toLowerCase();drawList();}}),seg,
+   h("p",{class:"small soft"},"The part in ",h("span",{class:"hl"},"amber")," is the stressed syllable. \"kh\" is the rough sound in Bach."),list),
+  tutor());
+};
+function tutor(){
+ const box=h("div",{class:"card",hidden:true},h("h3",{},"Ask the tutor"),h("p",{class:"small soft"},"Type a question, or a Hebrew sentence you tried, and Claude will answer in plain words. The tutor writes text only. For sound, rely on the recordings."));
+ const ta=h("textarea",{id:"ask",placeholder:"Example: why does shalom mean both hello and peace?"}),out=h("div",{class:"small",style:"white-space:pre-wrap"});
+ const go=h("button",{class:"btn primary"},"Ask");box.append(ta,go,out);
+ if(window.claude&&window.claude.use)window.claude.use("sample").then(sample=>{if(!sample)return;box.hidden=false;go.onclick=async()=>{const t=ta.value.trim();if(!t)return;const own=learnedIds(Math.max(0,nextLesson()-1)).filter(id=>W[id]).slice(0,260).map(id=>W[id].tr.toLowerCase());go.disabled=true;out.textContent="Thinking...";try{const r=await sample("You are a patient Hebrew tutor for an adult English-speaking beginner who is learning Modern Hebrew first and Biblical Hebrew second. Answer in plain, warm English, under 150 words, no emojis. Write Hebrew with vowel marks and add a simple transliteration using kh for the rough throat sound and CAPITALS for the stressed syllable. If he wrote Hebrew, correct at most one mistake. Separate documented history from tradition when it comes up."+(own.length?" He has learned only these Hebrew words so far: "+own.join(", ")+". When you give example sentences, build them from these words where you can, keep verbs in the plain masculine singular form, and say so if you must use a word outside the list.":"")+"\n\nLearner: "+t,{onText:({text})=>{out.textContent=text;}});out.textContent=r.text;}catch(e){out.textContent=e&&e.code==="rate_limited"?"The tutor is busy. Try again in a minute.":"The tutor is not available right now.";if(e&&e.code==="not_granted")box.hidden=true;}go.disabled=false;};}).catch(()=>{});
+ return box;}
+
+
+/* roots */
+V.roots=()=>h("div",{class:"stack"},
+ h("div",{},h("div",{class:"eyebrow"},"After the lessons"),h("h1",{},"Roots: the engine of Hebrew")),
+ h("div",{class:"card"},h("p",{},"Most Hebrew words are built on a root of three consonants. The root carries the idea. Vowels and add-on letters turn it into a noun, a verb, a place, a person. SDSU teaches this as its own course. It works the same in modern speech and in the Bible."),
+  h("div",{html:'<svg class="dia" viewBox="0 0 340 120" role="img" aria-label="The root k-t-v poured into five moulds makes five words"><g font-size="9"><rect x="4" y="44" width="70" height="32" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="39" y="58" text-anchor="middle" font-weight="500">root</text><text x="39" y="70" text-anchor="middle">k - t - v</text>'+[["CaCaC","katav","he wrote"],["CoCeC","kotev","writes"],["liCCoC","likhtov","to write"],["miCCaC","mikhtav","a letter"],["CCiC","ktiv","spelling"]].map((r,i)=>{const y=6+i*23;return '<path d="M74 60C100 60 100 '+(y+9)+" 124 "+(y+9)+'" fill="none" stroke="var(--line)" stroke-width="1.5"/><rect x="124" y="'+y+'" width="58" height="18" rx="4" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="153" y="'+(y+12)+'" text-anchor="middle">'+r[0]+'</text><text x="192" y="'+(y+12)+'" font-weight="500">'+r[1]+'</text><text x="246" y="'+(y+12)+'" opacity=".7">'+r[2]+"</text>";}).join("")+"</g></svg>"}),
+  h("p",{class:"small soft"},"C stands for a root consonant. The mould stays the same from root to root.")),
+ ROOTS.map(r=>h("div",{class:"card root-map"},h("div",{class:"root-head"},h("h3",{},r.en),h("span",{class:"r"},r.r)),rootDia(r),
+  h("div",{class:"wl"},r.w.filter(id=>W[id]&&W[id].a).map(wordRow).flat()),
+  h("div",{},h("div",{class:"eyebrow"},"Same root, no recording in this tool"),[...r.w.filter(id=>W[id]&&!W[id].a).map(id=>[W[id].he,W[id].tr,W[id].en]),...r.x].map(x=>h("div",{class:"row small",style:"gap:8px;margin-top:4px"},h("span",{class:"heb",style:"font-size:1.2rem"},x[0]),h("span",{class:"tr",html:trHtml(x[1])}),h("span",{class:"soft"},x[2])))))));
+
+/* skip-reading */
+V.read=()=>{
+ const hits=new Set();let reveal=false,said=false;const total=GENESIS.flat().length,knowable=GENESIS.flat().filter(t=>t[1]&&W[t[1]]&&W[t[1]].a).length;
+ const info=h("div",{class:"card","aria-live":"polite"},h("p",{class:"soft small"},"Tap any word with a dotted underline."));
+ const count=h("p",{class:"small"});
+ const body=h("div",{class:"card"});
+ const draw=()=>{count.textContent="Words you can anchor on: "+knowable+" of "+total+". You have tapped "+hits.size+".";body.replaceChildren(...GENESIS.map((v,vi)=>h("div",{class:"verse"},h("span",{class:"eyebrow",style:"direction:ltr;align-self:center"},"1:"+(vi+1)),v.map((t,ti)=>{const k=t[1]&&W[t[1]]&&W[t[1]].a,key=vi+"-"+ti;const b=h("button",{class:"tok"+(k?" k":"")+(hits.has(key)?" hit":""),disabled:!k&&!reveal},t[0],(hits.has(key)||reveal)?h("small",{},t[2]):null);if(k)b.onclick=()=>{hits.add(key);playId(t[1]);info.replaceChildren(h("div",{class:"wcard"},pic(t[1],"md"),h("div",{},h("div",{class:"heb",style:"font-size:1.6rem"},t[0]),h("div",{},"Here: ",h("strong",{},t[2])),h("div",{class:"small soft"},"Built on the word you know: "+W[t[1]].tr.toLowerCase()+" ("+short(t[1])+"). You hear the modern base word, not the exact Bible form."))));draw();};return b;}))));};
+ draw();
+ return h("div",{class:"stack"},
+  h("div",{class:"row",style:"justify-content:space-between"},h("a",{class:"btn",href:"#lessons",style:"text-decoration:none"},"All lessons"),h("span",{class:"eyebrow"},"Reading practice")),
+  h("div",{},h("h1",{},"Skip-read Genesis 1:1-5"),h("p",{class:"soft"},"The method's reading strategy: do not decode letter by letter. Find the words you know, skip the rest, and guess the sentence. Unknown words are called zips.")),
+  h("div",{class:"card"},h("div",{html:'<svg class="dia" viewBox="0 0 340 60" role="img" aria-label="Skip-reading in three moves: circle known words, guess one sentence, then check the zips"><g font-size="9" text-anchor="middle"><rect x="4" y="8" width="100" height="40" rx="6" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="120" y="8" width="100" height="40" rx="6" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="236" y="8" width="100" height="40" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="54" y="25">1. tap words</text><text x="54" y="38">you know</text><text x="170" y="25">2. say one</text><text x="170" y="38">sentence</text><text x="286" y="25">3. reveal zips</text><text x="286" y="38">and compare</text><path d="M104 28h16M220 28h16" stroke="currentColor"/></g></svg>'}),count),
+  info,body,
+  h("label",{class:"row small card"},h("input",{type:"checkbox",onchange:e=>{said=e.target.checked;$("#rev").disabled=!said;}}),"I said my one-sentence guess for each verse out loud."),
+  h("button",{class:"btn primary",id:"rev",disabled:true,onclick:e=>{reveal=!reveal;e.currentTarget.textContent=reveal?"Hide the zips":"Reveal every word";draw();}},"Reveal every word"),
+  h("p",{class:"small soft"},"The order the method sets: find known words, guess a summary, read closely, and study vocabulary last. Its texts are chosen so that half the words or fewer are known."),
+  h("p",{class:"small soft"},"Notice how many words start with ve- or va- (and) and ha- (the). Biblical storytelling chains verbs with \"and\". Text: the traditional Hebrew (Masoretic) text. The plain-English glosses are mine."));
+};
+
+/* method */
+const tbl=(head,rows)=>h("div",{class:"scroll"},h("table",{},h("thead",{},h("tr",{},head.map(x=>h("th",{},x)))),h("tbody",{},rows.map(r=>h("tr",{},r.map(c=>h("td",{},c)))))));
+const src=(u,t)=>h("a",{href:u,target:"_blank",rel:"noopener"},t);
+V.method=()=>h("div",{class:"stack"},
+ h("div",{},h("div",{class:"eyebrow"},"What the research found"),h("h1",{},"The method and the plan")),
+ h("div",{class:"card"},h("h3",{},"Who built it"),
+  tbl(["Person","Role"],[
+   ["Alana Shuster, PhD","Teaches Beginning and Intermediate Hebrew and an advanced practicum at UC San Diego. Lecturer and Hebrew program advisor at San Diego State. Author of the course book \"Free Speech in Hebrew, Level 1\" (Cognella, 2018)."],
+   ["Zev bar-Lev","Linguistics professor at San Diego State since 1979. Designed the method from 1984 on and named it Sheltered Initiation Language Learning. Also made the picture-word \"glyphs\", the \"Hebrew Today\" school course, and the key-letter theory."],
+       ["The second professor","Most likely bar-Lev himself: he and Shuster share one department at San Diego State, and his 2002 paper quotes her as \"Hebrew teacher, SDSU and UCSD\". The only UC San Diego professor in his papers is Tracy Terrell, whose Natural Approach he argues against. I found no other collaborator in print."]]),
+  h("p",{class:"small soft"},"Sources: ",src("https://jewishstudies.ucsd.edu/undergraduate/hebrew.html","UCSD Hebrew program"),", ",src("https://linguistics.sdsu.edu/languages-and-esl-composition/hebrew","SDSU Hebrew program"),", ",src("https://languagebazaar.sdsu.edu/Biography.html","bar-Lev biography"),".")),
+ h("div",{class:"card"},h("h3",{},"UCSD's eight points, and where each lives here"),
+  tbl(["Her program promises","In this tool"],[
+   ["Confident, continuous, creative speech","Step 4 of every lesson: Free-Speech, plus the Talkathon"],
+   ["Words, not memorized sentences","Step 1 and 2: single words with pictures"],
+   ["Simple sentence patterns","Step 3: one sample sentence, then your own"],
+   ["Sequencing built for acquisition",UNITS.length+" units. One grammar idea per unit, as the papers prescribe"],
+   ["Shortcuts that widen what you can say","Tag questions (\"..., ken?\"), yesh li for \"I have\""],
+   ["Study steps and games","Four steps, Noisy Restaurant, Talkathon, find-the-word"],
+   ["Associations","The silly line under every lesson word"],
+   ["Comprehension strategies","Last lesson: skip-reading Genesis"]])),
+ h("div",{class:"card"},h("h3",{},"The four study steps"),stepsDia(),
+     tbl(["Step","What you do","Standard"],[["1 Word-play","Hear the word, picture the silly link, say it aloud twice","A few minutes"],["2 Word-Quiz","Say each word from its picture or the English","Instantly: four seconds a word at most"],["3 Pattern-Drill","Make your own sentences on the one sample","Until they come easily"],["4 Free-Speech","Talk on a set topic with no correction","Mistakes are collected, never corrected on the spot"]]),
+   h("p",{class:"small"},"A lesson is about five words and one sample sentence and takes 15 to 20 minutes. Four or five lessons make a unit, roughly a week, and a unit carries one grammar idea, two at most. Lesson 1 in his Hebrew course is te, basar, pri, vakasha with the Noisy Restaurant game, and this tool starts the same way."),
+  h("p",{class:"small soft"},"Source: bar-Lev, ",src("https://files.eric.ed.gov/fulltext/ED476268.pdf","\"A Heretical Method for Teaching Foreign Languages\" (2002)"),", read in full. Also his ",src("https://files.eric.ed.gov/fulltext/ED322708.pdf","1990 mini-course paper"),".")),
+ h("div",{class:"card"},h("h3",{},"The sequencing ladder"),h("p",{class:"small"},"The heart of the method. Grammar comes one form at a time, never as a table. First a stage with no word changes at all, which he calls pre-language. Then the plain form before the marked one: masculine before feminine, singular before plural. No whole topic lists either: never one to ten in one lesson, and clock time starts with 3, 6, 9 and 12."),ladderDia(),
+  h("p",{class:"small soft"},"Why: if you learn two forms together you mix them. He reports classroom trials where teaching is/am/are first lowered accuracy. One Hebrew exception he makes: \"you\" for a man and for a woman are taught together. This tool holds the woman's form back until a teacher or the course book, which is my caution, not his rule. Source: ",src("https://files.eric.ed.gov/fulltext/ED476268.pdf","bar-Lev 2002"),".")),
+ h("div",{class:"card"},h("h3",{},"When to correct yourself"),
+  tbl(["Moment","Rule"],[["Learning a word (steps 1-2)","Check against the recording. Fix it once and move on."],["Pattern-Drill (step 3)","Compare with the one sample. One fix per sentence."],["Free speech (step 4)","Never. Keep talking."]])),
+ h("div",{class:"card"},h("h3",{},"How reading is taught"),
+  h("div",{html:'<svg class="dia" viewBox="0 0 340 58" role="img" aria-label="Reading route: picture word, whole written word, letters inside known words, letter names last"><g font-size="8.5" text-anchor="middle"><g fill="var(--blue-soft)" stroke="var(--blue)"><rect x="2" y="8" width="76" height="40" rx="6"/><rect x="88" y="8" width="76" height="40" rx="6"/><rect x="174" y="8" width="76" height="40" rx="6"/></g><rect x="260" y="8" width="78" height="40" rx="6" fill="var(--card)" stroke="var(--line)" stroke-dasharray="4 3"/><text x="40" y="26">picture</text><text x="40" y="38">for the word</text><text x="126" y="26">whole written</text><text x="126" y="38">word by shape</text><text x="212" y="26">letters inside</text><text x="212" y="38">words you say</text><text x="299" y="26">letter names</text><text x="299" y="38">come last</text><path d="M78 28h10M164 28h10M250 28h10" stroke="currentColor"/></g></svg>'}),
+  h("p",{class:"small"},"Meaning comes before decoding. bar-Lev draws \"glyphs\": pictures shaped like the written word. His own example is six:"),glyphDia(),
+  h("p",{class:"small"},"Letters get picture hooks too. His examples: a finger over a smile for sh, and a dot under a letter that says \"eeek\" for the i vowel. Students use letters long before they learn their names."),
+  h("p",{class:"small soft"},"In this tool: lesson pictures, the find-the-word drill, letter spotting at the end of each lesson, and the Letters tab for the full history. The word pictures here are standard icons, not his glyphs, which are in his books.")),
+ h("div",{class:"card"},h("h3",{},"Old way and this way"),
+  tbl(["","Usual course","San Diego method"],[["Starts with","Alphabet","Speaking"],["Unit of learning","Dialogues","Single words"],["Grammar","Tables","One form at a time"],["Mistakes","Corrected at once","Prevented by order, ignored in free speech"],["Reading","Sound out letters","Find known words, guess, check"]])),
+ h("div",{class:"card"},h("h3",{},"Key-letters"),h("p",{class:"small"},"bar-Lev also proposes that each consonant carries a faint meaning inside roots, and uses the first consonant of an unknown word as a clue for guessing it. SDSU teaches roots with it."),
+  tbl(["Letters","Meaning 1","Meaning 2"],[["M, W","pull, master","mix together"],["H, K, Q","cut","collect"],["L, N","lift, focus","lock, negate"],["Sh, Z","spread, shower","shine, identify"],["Ts, R","jut out, reach","exit"],["S, G","spin, roll","seal, guard"],["D, T","drop, press down","decide, teach"],["B, P","bulge, push forward","break, separate"]]),
+  h("p",{class:"small soft"},h("span",{class:"badge b-DEB",style:"margin:0 6px 0 0;display:inline-block"},"DEB"),"His own working hypothesis, in his words. In the 2003 paper there are 16 Hebrew key-letters; the first strong consonant of a root hints at the meaning, and the weak letters alef, he, vav, yod, nun and ayin are skipped. Mainstream linguists do not hold that single letters carry meaning. Useful as a memory hook. Source: bar-Lev, \"Hebrew Key-Letters\", Shofar 21(4), 2003, read in full.")),
+ h("div",{class:"card"},h("h3",{},"How strong is the evidence"),
+     tbl(["Source","What it reports","Kind of evidence"],[["1983 paper","About 300 people took trial mini-lessons, about 100 in Hebrew. Some 30 early ones failed; after changes, more than 9 in 10 succeeded","His own count, then he stopped keeping statistics"],["1990 paper","A few hundred students; continuous speech at about 30 words a minute after roughly 10 class hours","He calls it \"purely anecdotal\""],["2002 paper","Classroom trials of teaching order","His own classes, no outside check"],["Blair, in a 1991 teacher-training textbook","Praise for the approach","Expert opinion"],["Feike, SDSU master's thesis, 2011","Studies the method's sequencing","Same department"]]),
+   h("p",{class:"small"},"I found no independent controlled study. Treat the method as well reasoned and well liked by students, not as proven."),
+  h("p",{class:"small"},"One thing I added that is not part of their method: spaced review on a 1, 2, 4, 8 day schedule. That rests on ",src("https://www.psychologicalscience.org/news/releases/which-study-strategies-make-the-grade.html","a large review of study methods"),", where self-testing and spread-out practice came out on top."),
+  h("p",{class:"small soft"},"Sources: ",src("https://files.eric.ed.gov/fulltext/ED476268.pdf","bar-Lev 2002"),", ",src("https://files.eric.ed.gov/fulltext/ED322708.pdf","bar-Lev 1990"),", ",src("https://journals.uc.edu/index.php/vl/article/download/5372/4236","bar-Lev, \"Hebrew Hieroglyphics\" (1983)"),".")),
+ h("div",{class:"card"},h("h3",{},"Motion and effects"),h("p",{class:"small"},"Card flips, the answer flash, button shine and the moving star field."+(matchMedia("(prefers-reduced-motion: reduce)").matches?" Your phone is set to reduce motion, which would normally switch all of this off. You asked for more life in the screen, so it is on here. This switch is the way to turn it off.":"")),h("div",{class:"seg"},[["on","On"],["off","Off"]].map(([v,n])=>h("button",{class:"chip","aria-pressed":String((S.motion||"on")===v),onclick:()=>{S.motion=v;document.documentElement.dataset.motion=v;save();route();}},n)))),
+ inspection(),
+ h("div",{class:"card"},h("h3",{},"Upgrades from wider research"),h("p",{class:"small"},"The method's own evidence is thin, so I checked it against the wider learning research. Each addition below is marked \"Added from research\" where it appears."),
+   tbl(["Upgrade","Where","Evidence","Strength"],[
+    ["Warm-up relearn","Top of each lesson",src("https://journals.sagepub.com/doi/full/10.1177/09637214221100484","Successive relearning: recall to success, again on later days"),"Strong. Many studies, real classrooms"],
+    ["Older words mixed into the quiz, Mixed patterns","Step 2, after step 3",src("https://sc-pan.github.io/pdf/PRKL_2024.pdf","Interleaved practice in language grammar"),"Good for grammar. Less tested on beginners"],
+    ["Three shrinking rounds","Step 4",src("https://www.lrdc.pitt.edu/perfettilab/pubpdfs/de%20Jong%20Language%20Learning.pdf","The 4/3/2 fluency task"),"Good, but tested on higher-level learners with longer talks. Scaled down here"],
+    ["Trace, then write from memory","Letters tab",src("https://pmc.ncbi.nlm.nih.gov/articles/PMC8641140","Handwriting vs typing vs watching, Arabic letters, 42 adults"),"One solid study, small sample, pen on paper"],
+    ["FSRS review scheduler","Words tab",src("https://github.com/open-spaced-repetition/ts-fsrs","ts-fsrs, the open scheduler also used in Anki"),"Widely used. Runs here on default settings, not tuned to you"],
+    ["Record me","Step 1",src("https://pmc.ncbi.nlm.nih.gov/articles/PMC7006902","Learners rate their own accent too kindly"),"Modest. Small studies"]]),
+   h("div",{class:"eyebrow"},"Checked and left as it was"),
+   tbl(["Question","What the research says","Decision"],[
+    ["Do the silly word-plays last?",h("span",{},"On their own they fade faster than plain rehearsal. Paired with self-testing they hold up well. ",src("https://link.springer.com/10.3758/s13421-019-00936-2","Miyatsu and McDaniel 2019")),"Kept, because every word-play here is followed by a quiz and spaced relearning"],
+    ["Does saying it aloud matter?",h("span",{},"Yes. Words said aloud were remembered better up to two weeks later. ",src("https://cris.iucc.ac.il/en/publications/the-effect-of-vocal-production-on-vocabulary-learning-in-a-second/","Icht and Mama 2022")),"Kept. The method already insists on it"],
+    ["Is he right to avoid topic lists?",h("span",{},"Mostly. Related words learned together get confused more, though total learning is about equal. ",src("https://www.cambridge.org/core/product/F58BA8D70385603B9C42E408BFCB8A10","Nakata and Suzuki 2019")),"Kept his rule. My family lessons (12, 13) do cluster, so the mixed quiz matters most there"],
+    ["Several voices per word?",h("span",{},"Hearing many speakers helps the ear, a small but real gain. ",src("https://pubs.asha.org/doi/10.1044/2021_JSLHR-21-00181","Zhang et al. 2021")),"Not added. Only 9 of the 119 lesson words have a second recording available. Nine speakers across the set give some variety"]])),
+  h("div",{class:"card"},h("h3",{},"Honest numbers"),
+  h("p",{class:"small"},"The U.S. Foreign Service Institute lists Hebrew at about 1,100 class hours to professional ability. At 30 to 45 minutes a day that is years. What 12 weeks can do:"),
+  tbl(["By","You can"],[["Week 5","Lessons 1 to 24 at one a day: about 120 words. Order food, tell short stories in present and past about a man, name a family, give prices and times. Recognize most letters inside those words."],["Week 10","All 48 lessons: about 240 words. Give reasons, say where things are, travel, name the days, compare things. See the root inside new words."],["Week 12","Hold a short, slow conversation. Skip-read a Bible passage and catch the gist."],["Month 6 to 12","With a class or speaking partner: everyday conversation, and slow Bible reading with a dictionary."]])),
+ h("div",{class:"card"},h("h3",{},"Daily session, 35 minutes"),
+  h("div",{html:'<svg class="dia" viewBox="0 0 350 62" role="img" aria-label="Five minutes review, twenty minutes lesson, five minutes letters, five minutes reading aloud"><g font-size="9" text-anchor="middle"><rect x="0" y="8" width="50" height="30" rx="4" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="52" y="8" width="198" height="30" rx="4" fill="var(--accent-soft)" stroke="var(--accent)"/><rect x="252" y="8" width="48" height="30" rx="4" fill="var(--blue-soft)" stroke="var(--blue)"/><rect x="302" y="8" width="48" height="30" rx="4" fill="var(--blue-soft)" stroke="var(--blue)"/><text x="25" y="27">5</text><text x="151" y="27">20</text><text x="276" y="27">5</text><text x="326" y="27">5</text><text x="25" y="52">review</text><text x="151" y="52">one lesson, all four steps</text><text x="276" y="52">a letter</text><text x="326" y="52">words</text></g></svg>'}),
+  tbl(["Weeks","Work"],[["1 to 5","Lessons 1 to 24, one a day, five or six days a week. Talkathon on the off day. Genesis skip-reading at the end."],["6 to 10","Lessons 25 to 48, same pace. Start the Letters tab from alef, one letter a day, traced by hand."],["7 on","Alongside the lessons: Roots tab, one family a day."],["11 on","New forms one at a time with a teacher or audio course: feminine, plural, past for I and you. Read Genesis 1 and the Shema aloud."]])),
+ h("div",{class:"card"},h("h3",{},"Crossing to Biblical Hebrew"),
+  tbl(["","Modern","Biblical"],[["Word order","Subject, then verb","Often verb first"],["Storytelling","Plain past tense","\"And\" + verb chains"],["Vowel marks","Left out","Always printed"],["Sound","As in this tool","Read today with Israeli sounds. The ancient sounds differed."]]),
+  h("p",{class:"small"},"SDSU's own program does the same thing: all speaking is modern, and many reading texts are ancient.")),
+ h("div",{class:"card"},h("h3",{},"Outside equipment"),
+  [["Her class","Beginning Hebrew runs each fall at UC San Diego (open to non-students through Extension) and at San Diego State. Nothing in this tool replaces a room where you have to talk.","https://jewishstudies.ucsd.edu/undergraduate/hebrew.html"],
+   ["Language Bazaar","A web app built on the same method, with picture cards, gestures and games. The first lessons are free.","https://languagebazaar.org"],
+   ["Her course book","\"Free Speech in Hebrew, Level 1\" has the real study steps, word-plays and sequence. If you buy one thing, buy this.","https://store.cognella.com/60284-1a-021"],
+   ["Aleph with Beth","Free Biblical Hebrew videos taught in Hebrew with pictures.","https://freehebrew.online"],
+   ["Forvo","Native recordings of almost any word missing here.","https://forvo.com/languages/he/"],
+   ["Sefaria","Hebrew Bible and Talmud with English side by side.","https://www.sefaria.org"]
+  ].map(([t,d,u])=>h("div",{class:"note",style:"grid-template-columns:1fr"},h("div",{},src(u,t),h("div",{class:"small"},d))))),
+ h("div",{class:"card"},h("h3",{},"What is theirs and what is mine"),
+  tbl(["Theirs","Mine"],[["The four steps and their names, five words and one sample per lesson, lesson 1, the order of forms, Noisy Restaurant, Talkathon, skip-reading order, the word-plays tagged \"bar-Lev\", most of the word stock (from his 2002 word list)","Which words go in which lesson after lesson 1, every other word-play, the pictures, the letter history, the faith unit, and everything marked \"Added from research\""]]),
+  h("p",{class:"small soft"},"I have read his papers but not the course books. My lesson order follows the published rules and word list but will not match the books lesson for lesson.")),
+ h("div",{class:"card"},h("h3",{},"Recordings and pictures"),h("p",{class:"small"},"All "+DECK.length+" recordings are Israeli volunteers reading for Lingua Libre, a Wikimedia project. They are converted to MP3 with the volume evened out and nothing else changed. Licences: CC0, CC BY 4.0, CC BY-SA 4.0. Speakers: "+(window.CREDITS||[]).map(c=>c[0]+" ("+c[1]+", "+c[2]+")").join("; ")+"."),
+  h("p",{class:"small"},"Word pictures: Tabler Icons (MIT licence), plus a few I drew. Letter history sources are listed in each letter's notes. I have not checked every Talmud page number against the original.")),
+ h("div",{class:"card"},h("h3",{},"Reset"),h("button",{class:"btn",onclick:e=>{if(e.currentTarget.dataset.sure){S=BLANK();save();location.hash="#lessons";route();}else{e.currentTarget.dataset.sure=1;e.currentTarget.textContent="Tap again to erase all progress";}}},"Start over")));
+
+/* ---------- routing ---------- */
+
+/* title screen, shown once per launch; first run asks for a name */
+const CONTACT={name:"Joshua Stoltz",email:"josh.stoltz43@gmail.com",phone:"760-802-4437"};
+function gate(){const g=$("#gate");if(!g)return;if(/[?&]nogate/.test(location.search))return;let seen=false;try{seen=sessionStorage.getItem("hfs-gate")==="1";}catch(e){}
+ if(seen&&S.welcomed)return;const first=!S.welcomed;const nx=nextLesson(),dn=lessonsDone();
+ const inp=h("input",{type:"text",maxlength:"24",autocomplete:"given-name",placeholder:"Your first name (optional)",value:S.name||"","aria-label":"Your first name, optional"});
+ const stat=h("p",{class:"gs"},"Checking where your progress is saved…");
+ const tell=()=>{stat.textContent=SYNC?"Signed in. Your progress follows you to your other devices.":"Your progress is saved on this device. To move it to another device, use Save a backup file in Settings.";};setTimeout(tell,2500);setTimeout(tell,9000);
+ const go=()=>{if(first){S.name=inp.value.trim().slice(0,24);S.welcomed=Date.now();save();}try{sessionStorage.setItem("hfs-gate","1");}catch(e){}g.classList.add("out");setTimeout(()=>{g.hidden=true;g.replaceChildren();},450);if(first)location.hash="#lesson-1";else route();};
+ g.replaceChildren(h("div",{class:"gin"},
+  h("img",{class:"glogo",src:"media/logo.webp",alt:"Free Speech in Hebrew logo: a speech bubble holding the letter alef",width:"220",height:"220"}),
+  h("div",{class:"gey"},"עִבְרִית"),
+  h("h1",{},"Free Speech in Hebrew"),
+  h("p",{class:"gt"},first?"Speak first. Read second. Five new words a lesson, real voices, about half an hour a day.":"Welcome back"+(S.name?", "+S.name:"")+". "+dn+" of "+LESSONS.length+" lessons done."),
+  first?inp:null,
+  h("button",{class:"btn primary gbtn",onclick:go},first?"Start lesson 1":(dn>=LESSONS.length?"Open the course":"Continue to lesson "+(nx+1))),
+  first?h("p",{class:"gs"},"No password and no sign-up form. Lesson 1 takes about ten minutes."):null,
+  h("p",{class:"gc"},"An unofficial study companion to the course book Free Speech in Hebrew by Alana Shuster, PhD. Built by Joshua Stoltz."),
+  stat));g.classList.remove("out");g.hidden=false;}
+V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"","aria-label":"Your first name",placeholder:"Your first name",onchange:e=>{S.name=e.target.value.trim().slice(0,24);save();}});
+ const msg=h("p",{class:"small soft","aria-live":"polite"},"");
+ const file=h("input",{type:"file",accept:"application/json,.json",hidden:true,onchange:e=>{const f=e.target.files[0];if(!f)return;f.text().then(x=>{const r=JSON.parse(x);if(!r||typeof r.cards!=="object")throw 0;S=merge(S,r);save();msg.textContent="Restored and merged with what was already here.";}).catch(()=>{msg.textContent="That file is not a Free Speech in Hebrew backup.";});}});
+ return h("div",{class:"stack"},
+  h("div",{},h("div",{class:"eyebrow"},"Your file"),h("h1",{},"Settings and about")),
+  h("div",{class:"card"},h("h3",{},"You"),h("p",{class:"small soft"},"Used only to greet you on the title screen."),nm),
+  h("div",{class:"card"},h("h3",{},"Where your progress lives"),tbl(["Situation","What happens"],[["Signed in to Claude",SYNC?"This is you right now. Progress is stored privately with your account and follows you to any device.":"Progress is stored privately with your account and follows you to any device."],["Not signed in",SYNC?"Progress stays on the one device and browser.":"This is you right now, or the check has not finished. Progress stays on this device and browser."],["Someone you shared it with","They get their own separate progress. Nobody, including the person who shared it, can see anyone else's."]]),
+   h("div",{class:"row"},h("button",{class:"btn",onclick:()=>{try{const a=h("a",{href:URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"})),download:"hebrew-flight-school-backup.json"});document.body.appendChild(a);a.click();a.remove();msg.textContent="Backup file saved to your downloads.";}catch(e){msg.textContent="This browser would not save a file.";}}},"Save a backup file"),h("button",{class:"btn",onclick:()=>file.click()},"Restore from a backup"),file),msg),
+  (()=>{const vm=h("p",{class:"small soft","aria-live":"polite"},VP?"A voice pack with "+VPN+" words is loaded on this device.":"No voice pack is loaded.");
+   const seg=h("div",{class:"seg"});const draw=()=>seg.replaceChildren(...[["std","Built-in voices"],["pack","My voice pack"]].map(([k,n])=>h("button",{class:"chip","aria-pressed":String((S.voice||"std")===k),disabled:k==="pack"&&!VP,onclick:()=>{S.voice=k;save();draw();}},n)));draw();
+   const vf=h("input",{type:"file",accept:".fsh,.bin,application/octet-stream",hidden:true,onchange:e=>{const f=e.target.files[0];if(!f)return;f.arrayBuffer().then(async b=>{vpParse(b);try{await vpPut(b);}catch(x){}S.voice="pack";save();vm.textContent="Loaded "+VPN+" words. Words the pack does not cover use the built-in voice.";draw();}).catch(()=>{vm.textContent="That file is not a voice pack for this app.";});}});
+   return h("div",{class:"card"},h("h3",{},"Voices"),h("p",{class:"small"},"The built-in recordings are volunteer native speakers, mostly men. A voice pack is a file of recordings you have the right to use, for example a woman you know reading the word list. It stays in this browser on this device. It is not sent anywhere and it is not included when you share the app."),seg,
+    h("div",{class:"row"},h("button",{class:"btn",onclick:()=>vf.click()},"Load a voice pack file"),VP?h("button",{class:"btn",onclick:async()=>{try{await vpPut(null);}catch(x){}VP=null;VPN=0;S.voice="std";save();route();}},"Remove the pack"):null,vf),vm);})(),
+  h("div",{class:"card"},h("h3",{},"Sound check"),h("p",{class:"small"},"Tap the button. You should hear a person say shalom. If you hear nothing, check the silent switch and the media volume."),h("button",{class:"btn primary",onclick:()=>playId("shalom")},"Play shalom")),
+  h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
+  h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
+  h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 18. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+const TABS=[["lessons","Lessons","טוס"],["words","Words","מילים"],["letters","Letters","אב"],["roots","Roots","שרש"],["method","Method","דרך"]];
+function route(){let k=(location.hash||"#lessons").slice(1);if(k==="today")k="lessons";if(k==="plan")k="method";let view,tab=k;
+ if(session){view=sessionView();tab=(session?session.back:location.hash).slice(1).startsWith("lesson")||k.startsWith("lesson")?"lessons":"words";}
+ else{const m=k.match(/^lesson-(\d+)$/);if(m){view=lessonView(+m[1]-1);tab="lessons";}else if(k==="read"){view=V.read();tab="lessons";}else if(k==="forms"){view=V.forms();tab="lessons";}else{if(!V[k])k=tab="lessons";clearInterval(ftimer);view=V[k]();}}
+ $("#app").replaceChildren(view);
+ $("#tabs").replaceChildren(...TABS.map(([id,n,g])=>h("button",{class:"tab","aria-current":id===tab?"page":false,onclick:()=>{session=null;if(location.hash==="#"+id)route();else location.hash="#"+id;window.scrollTo(0,0);}},h("span",{class:"g","aria-hidden":"true"},g),n)));}
+/* self-inspection: the tool checks the device it runs on and saves the result with your progress */
+const DG={rev:9,at:Date.now(),ua:(navigator.userAgent||"").slice(0,180),view:innerWidth+"x"+innerHeight+" @"+(window.devicePixelRatio||1),touch:navigator.maxTouchPoints||0,dark:matchMedia("(prefers-color-scheme: dark)").matches,calm:matchMedia("(prefers-reduced-motion: reduce)").matches,fsrs:!!FL,rec:!!(navigator.mediaDevices&&window.MediaRecorder),store:(()=>{try{localStorage.setItem("hfs-t","1");localStorage.removeItem("hfs-t");return true;}catch(e){return false;}})(),errs:[]};
+let dgT=null;const dset=(k,v)=>{if(JSON.stringify(DG[k])===JSON.stringify(v))return;DG[k]=v;clearTimeout(dgT);dgT=setTimeout(()=>{S.diag=DG;if(S.start!=null)save();if(location.hash==="#method")route();},1500);};
+window.addEventListener("error",e=>{if(DG.errs.length<4){DG.errs.push(String(e.message||e.type).slice(0,120));dset("errn",DG.errs.length);}});
+window.addEventListener("unhandledrejection",e=>{if(DG.errs.length<4){DG.errs.push(("promise: "+(e.reason&&e.reason.message||e.reason)).slice(0,120));dset("errn",DG.errs.length);}});
+(()=>{const op=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){const r=op.apply(this,arguments);if(r&&r.then)r.then(()=>dset("play","ok"),e=>dset("play","blocked: "+e.name));return r;};})();
+{const t0=Date.now();pack().then(b=>dset("pack",b?{ok:true,kb:Math.round(b.byteLength/1024),ms:Date.now()-t0}:{ok:false,ms:Date.now()-t0}));}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>dset("fonts",{hebrew:document.fonts.check('16px "Frank Ruhl Libre"'),text:document.fonts.check('16px "IBM Plex Sans"')})).catch(()=>{});
+if(navigator.permissions&&navigator.permissions.query)navigator.permissions.query({name:"microphone"}).then(p=>dset("mic",p.state)).catch(()=>dset("mic","cannot tell"));else dset("mic","cannot tell");
+setTimeout(()=>dset("sync",!!remote),4000);
+function inspection(){const d=Object.assign({},S.diag||{},DG),ok=v=>h("span",{class:"badge "+(v===true?"b-DOC":v===false?"b-POP":"b-DEB")},v===true?"pass":v===false?"FAIL":"not yet");
+ const rows=[["Recordings downloaded",d.pack?d.pack.ok:null,d.pack?(d.pack.ok?d.pack.kb+" KB in "+(d.pack.ms/1000).toFixed(1)+" s":"download failed"):"waiting"],
+  ["Sound plays",d.play?d.play==="ok":null,d.play||"tap any word once"],
+  ["Hebrew typeface loaded",d.fonts?d.fonts.hebrew:null,d.fonts?(d.fonts.hebrew?"Frank Ruhl Libre":"using the phone's own Hebrew font"):"waiting"],
+  ["Progress saved on this device",d.store,d.store?"":"private mode or storage blocked"],
+  ["Progress backed up to your account",d.sync==null?null:d.sync,d.sync?"":"will keep working on this device only"],
+  ["Review scheduler",d.fsrs,d.fsrs?"FSRS":"fallback ladder"],
+  ["Microphone for Record me",d.mic==="granted"?true:d.mic==="denied"?false:null,d.rec?(d.mic||"waiting"):"not supported here"],
+  ["Program errors",!(d.errs&&d.errs.length),d.errs&&d.errs.length?d.errs.join(" | "):"none"]];
+ return h("div",{class:"card"},h("h3",{},"Device check"),h("p",{class:"small"},"The tool checks the device it is running on every time it opens. Nothing here needs you to do anything except tap one word so the sound check can run."),
+  tbl(["Check","Result","Detail"],rows.map(r=>[r[0],ok(r[1]),r[2]])),
+  h("p",{class:"small soft"},"Screen "+d.view+(d.touch?", touch":"")+(d.dark?", dark mode":"")+". These results are saved with your progress, in your private account storage, so that Claude can read them when you ask it to check on the tool. Nothing else about your device is recorded."));}
+const enter=()=>{document.body.classList.add("enter");clearTimeout(enter.t);enter.t=setTimeout(()=>document.body.classList.remove("enter"),900);};
+window.addEventListener("hashchange",()=>{session=null;enter();route();window.scrollTo(0,0);});enter();route();gate();
+</script>
+</body>
+</html>
