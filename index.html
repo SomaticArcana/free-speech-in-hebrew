@@ -569,6 +569,24 @@ html:not(#_) :focus-visible{outline-color:var(--p1)}
 .sw i{width:34px;height:34px;border-radius:50%;display:block}
 .sw[aria-pressed="true"]{border:2.5px solid var(--ink)}
 .sw[data-k="blue"] i{background:#4f61cc}.sw[data-k="sea"] i{background:#1f7a78}.sw[data-k="garden"] i{background:#3c7a50}.sw[data-k="clay"] i{background:#b84a33}.sw[data-k="plum"] i{background:#7a4a9e}.sw[data-k="sun"] i{background:#f2c02e}
+
+/* rev 23: right-now panel, vocabulary bar, earned badges, reading aids, tour */
+.now{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.nowwhy{margin:0;color:var(--soft)}
+html:not(#_) .btn.quiet{background:transparent;border:0;color:var(--accent);text-decoration:underline;text-underline-offset:3px;padding:8px 4px;min-height:44px;font-weight:500;text-align:center;box-shadow:none}
+.vbar{display:flex;height:18px;border-radius:9px;overflow:hidden;background:#eeece6;margin:4px 0 10px;gap:2px}
+.vbar i{display:block;min-width:4px}
+.v4{background:var(--p1)}.v3{background:color-mix(in srgb,var(--p1) 62%,#fff)}.v2{background:color-mix(in srgb,var(--p1) 34%,#fff)}.v1{background:#e9b765}.v0{background:#e3e0d6}
+.vk{display:inline-flex;align-items:center;gap:7px;background:none!important}
+.vk::before{content:"";width:12px;height:12px;border-radius:3px;display:inline-block}
+.vk.v4::before{background:var(--p1)}.vk.v3::before{background:color-mix(in srgb,var(--p1) 62%,#fff)}.vk.v2::before{background:color-mix(in srgb,var(--p1) 34%,#fff)}.vk.v1::before{background:#e9b765}.vk.v0::before{background:#e3e0d6}
+.unit .ub{filter:grayscale(1) opacity(.45)}
+.unit.earned .ub{filter:hue-rotate(var(--hue))}
+.unit.earned::after{content:"earned";position:absolute;left:6px;top:68px;font:600 .62rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--good)}
+.rootchip{display:inline-flex;align-items:center;gap:5px;margin-top:3px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);font-size:.74rem;color:var(--soft);text-decoration:none;background:#fff}
+.rootchip .heb{font-size:.95rem!important;color:var(--ink)}
+html[data-tr="off"] .tr,html[data-tr="off"] .hwt .tr{display:none}
+.tdots{display:flex;gap:8px;justify-content:center}.tdots i{width:9px;height:9px;border-radius:50%;background:#d5d2c8;display:block}.tdots i.on{background:var(--p1);width:22px;border-radius:5px}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f7f6f2"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Free Speech">
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
@@ -602,7 +620,7 @@ const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1])
 
 /* ---------- state ---------- */
 const KEY="hebrew-flight-school-v1";
-const BLANK=()=>({theme:"blue",big:0,voice:"std",name:"",welcomed:0,start:null,cards:{},letters:{},paper:{},tasks:{},lessons:{},log:{},ret:0.9,slow:false,newPerDay:8});
+const BLANK=()=>({trOff:0,nikOff:0,theme:"blue",big:0,voice:"std",name:"",welcomed:0,start:null,cards:{},letters:{},paper:{},tasks:{},lessons:{},log:{},ret:0.9,slow:false,newPerDay:8});
 let S=BLANK();
 try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s);}catch(e){}
 if(!S.lessons)S.lessons={};
@@ -613,7 +631,7 @@ function merge(a,b){const nw=(a.saved||0)>=(b.saved||0)?a:b,od=nw===a?b:a,o=Obje
  o.letters={...(od.letters||{}),...(nw.letters||{})};o.name=nw.name||od.name||"";o.welcomed=Math.max(nw.welcomed||0,od.welcomed||0);o.paper={...(od.paper||{})};for(const[k,v]of Object.entries(nw.paper||{}))o.paper[k]=Math.max(v,o.paper[k]||0);o.log={...(od.log||{})};for(const[k,v]of Object.entries(nw.log||{}))o.log[k]=Math.max(v,o.log[k]||0);const st=[a.start,b.start].filter(x=>x!=null);o.start=st.length?Math.min(...st):null;return o;}
 function save(){S.saved=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(push,2500);}
 async function push(){if(!remote||saving||!dirty)return;saving=true;dirty=false;try{await remote.set({json:JSON.stringify(S),saved:S.saved||Date.now()});}catch(e){} saving=false;if(dirty)saveTimer=setTimeout(push,2500);}
-(async()=>{try{if(!window.claude||!window.claude.use)return;const[db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);if(!db||!user)return;const id=await user.id();if(!id)return;remote=db.doc("data/users/"+id+"/progress");SYNC=true;const snap=await remote.get();if(snap.exists){const r=JSON.parse(snap.data().json||"{}");const before=JSON.stringify(S),m=merge(S,r);S=m;setPal(S.pal);applyBig();applyTheme();document.documentElement.dataset.motion=S.motion==="off"?"off":"on";const ch=JSON.stringify(m)!==before;if(ch&&!session)route();if(ch||JSON.stringify(m)!==JSON.stringify(Object.assign(BLANK(),r)))save();}else if(S.start)save();}catch(e){}})();
+(async()=>{try{if(!window.claude||!window.claude.use)return;const[db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);if(!db||!user)return;const id=await user.id();if(!id)return;remote=db.doc("data/users/"+id+"/progress");SYNC=true;const snap=await remote.get();if(snap.exists){const r=JSON.parse(snap.data().json||"{}");const before=JSON.stringify(S),m=merge(S,r);S=m;setPal(S.pal);applyBig();applyTheme();applyAids();document.documentElement.dataset.motion=S.motion==="off"?"off":"on";const ch=JSON.stringify(m)!==before;if(ch&&!session)route();if(ch||JSON.stringify(m)!==JSON.stringify(Object.assign(BLANK(),r)))save();}else if(S.start)save();}catch(e){}})();
 
 /* ---------- audio: real recordings only ---------- */
 let packP=null;const urls={};
@@ -641,7 +659,7 @@ const srcAny=id=>(S.voice==="pack"&&VP&&VP[id])?Promise.resolve(VP[id]):srcFor(i
 function playId(id,btn){const w=W[id];if(!w||!w.a)return Promise.resolve();return new Promise(res=>{const done=()=>{if(btn)btn.classList.remove("playing");res();};document.querySelectorAll(".play.playing").forEach(b=>b.classList.remove("playing"));if(btn)btn.classList.add("playing");srcAny(id).then(u=>{if(!u)return done();try{player.pause();player.src=u;player.playbackRate=S.slow?0.75:1;if("preservesPitch"in player)player.preservesPitch=true;player.onended=done;player.onerror=done;const p=player.play();if(p&&p.catch)p.catch(done);}catch(e){done();}},done);});}
 async function playSeq(ids){for(const id of ids){await playId(id);await new Promise(r=>setTimeout(r,180));}}
 function playBtn(id,opts={}){const w=W[id];if(!w)return null;if(!w.a)return h("span",{class:"row small"},h("span",{class:"heb",style:"font-size:1.25rem"},w.he),h("span",{class:"soft"},"no recording"));const b=h("button",{class:"play","aria-label":"Play "+w.tr.toLowerCase(),html:ICON+(opts.bare?"":'<span class="w"></span>')});if(!opts.bare)$(".w",b).textContent=w.he;b.addEventListener("click",e=>{e.stopPropagation();playId(id,b);});return b;}
-function wordRow(id){const w=W[id];if(!w)return null;return [pic(id),playBtn(id),h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{class:"small soft"},w.en))];}
+function wordRow(id){const w=W[id];if(!w)return null;return [pic(id),playBtn(id),h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{class:"small soft"},w.en),rootChip(id))];}
 
 /* ---------- deck and spaced review ---------- */
 const GAP=[0,1,2,4,8,16,32,64];
@@ -719,7 +737,7 @@ V.lessons=()=>{
   talkathon(),
   UNITS.map(u=>{const idx=LESSONS.map((l,i)=>i).filter(i=>LESSONS[i].u===u[0]),all=idx.every(i=>S.lessons[i]&&S.lessons[i].done);
    const cards=idx.map(i=>{const l=LESSONS[i],st=S.lessons[i]||{},d=st.done;return h("a",{class:"card lcard",href:"#lesson-"+(i+1)},h("span",{class:"num"+(d?" done":i===nx?" next":"")},String(i+1)),h("div",{},h("h3",{},l.t),h("div",{class:"small soft"},l.goal),h("div",{class:"pics",style:"margin-top:6px"},l.words.filter(id=>W[id]).map(id=>pic(id,"sm")))),h("span",{class:"small soft"},d?"done":[1,2,3,4].filter(k=>st["s"+k]).length+"/4"));});
-   return [h("div",{class:"unit"},h("i",{class:"ub",style:"background-position:"+(-52*Math.max(0,"ABCDEFGHIJKL".indexOf(u[0])))+"px 0","aria-hidden":"true"}),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
+   return [h("div",{class:"unit"+(all?" earned":"")},h("i",{class:"ub",style:"background-position:"+(-52*Math.max(0,"ABCDEFGHIJKL".indexOf(u[0])))+"px 0","aria-hidden":"true"}),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
   h("a",{class:"card lcard",href:"#read"},h("span",{class:"num"},String(LESSONS.length+1)),h("div",{},h("h3",{},"Skip-read Genesis 1:1-5"),h("div",{class:"small soft"},"The method's reading strategy on the first verses of the Bible."),h("div",{class:"pics",style:"margin-top:6px"},["bereshit","elohim","shamayim","erets","or","yom","layla"].map(id=>pic(id,"sm")))),h("span",{class:"small soft"},"read")),
   h("a",{class:"card lcard",href:"#forms"},h("span",{class:"num"},String(LESSONS.length+2)),h("div",{},h("h3",{},"Forms workshop: she, they, I did"),h("div",{class:"small soft"},"The next rungs of the ladder, as a reference sheet. No built-in recordings exist for these forms, so each one links out to native speakers.")),h("span",{class:"small soft"},"ref")));
 };
@@ -733,8 +751,19 @@ function heroBlock(nx,nd){const tot=LESSONS.length,dn=lessonsDone(),C=263.9,to=(
   h("div",{},h("div",{class:"eyebrow"},"Free Speech in Hebrew"+(S.start!=null?" · day "+dayN():"")),h("h1",{},"Speak first, one form at a time")),
   (()=>{const id=l.words[0],w=W[id];if(!w)return null;const pb=playBtn(id,{bare:true});return h("div",{class:"hw"},h("div",{class:"hwh heb"},w.he),h("div",{class:"hwt"},h("span",{class:"eyebrow"},nx<tot?"First word of lesson "+(nx+1):"A word you own"),h("span",{class:"tr",html:trHtml(w.tr)}),h("span",{class:"small"},w.en),pb));})(),
   h("div",{class:"hrow"},h("div",{html:dial}),h("div",{class:"stats"},h("div",{class:"stat"},h("b",{},String(known())),h("span",{},"holding")),h("div",{class:"stat"},h("b",{},String(nd)),h("span",{},"due")),h("div",{class:"stat"},h("b",{},String(Object.keys(S.log||{}).length)),h("span",{},"days")))),
-  nx<tot?h("a",{class:"btn gold",href:"#lesson-"+(nx+1),onclick:()=>{if(S.start==null){S.start=today();save();}}},h("span",{class:"btn-sub"},(dn?"Continue":"Start")+" · "+l.t),h("b",{class:"btn-main"},"LESSON "+(nx+1))):h("a",{class:"btn gold",href:"#read"},h("span",{},"All lessons done"),h("b",{},"READ GENESIS")),
-  nd?h("button",{class:"btn",style:"background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:#fff",onclick:()=>startSession(due().map((w,i)=>({id:w.id,mode:i%2?"find":"pic"})),"Review","#lessons")},"Review "+nd+" due words first"):null);}
+  rightNow(nx,nd,tot,dn,l));}
+function rightNow(nx,nd,tot,dn,l){const t=today(),doneToday=Object.values(S.lessons).some(s=>s&&s.dd===t),mins=Math.max(1,Math.round(nd*6/60));
+ const start=()=>{if(S.start==null){S.start=today();save();}};
+ const rev=()=>startSession(due().map((w,i)=>({id:w.id,mode:i%2?"find":"pic"})),"Review","#lessons");
+ const big=(sub,main,attrs)=>h(attrs.href?"a":"button",Object.assign({class:"btn gold"},attrs),h("span",{class:"btn-sub"},sub),h("b",{class:"btn-main"},main));
+ let primary,second=null,why;
+ if(nd){primary=big("About "+mins+" min","REVIEW "+nd+" WORD"+(nd>1?"S":""),{onclick:rev});why="Review comes first. It is what makes words stay.";
+  if(nx<tot&&!doneToday)second=h("a",{class:"btn quiet",href:"#lesson-"+(nx+1),onclick:start},"Then lesson "+(nx+1)+": "+l.t);}
+ else if(nx<tot&&!doneToday){primary=big((dn?"Continue":"Start")+" · "+l.t,"LESSON "+(nx+1),{href:"#lesson-"+(nx+1),onclick:start});why=dn?"Nothing is due. Time for one new lesson.":"Lesson 1 takes about ten minutes.";}
+ else if(nx<tot){primary=big("Two minutes, out loud","FREE SPEECH",{onclick:()=>{const e=document.getElementById("talk");if(e)e.scrollIntoView({behavior:"smooth",block:"start"});}});why="Today's lesson is done and nothing is due. One lesson a day is plenty. Say a few sentences aloud, or write today's letters on paper.";
+  second=h("a",{class:"btn quiet",href:"#lesson-"+(nx+1),onclick:start},"I want another lesson anyway");}
+ else{primary=big("All lessons done","READ GENESIS",{href:"#read"});why="Keep the reviews going. They will get rarer as the words settle.";}
+ return h("div",{class:"now"},h("div",{class:"eyebrow"},"Right now"),primary,h("p",{class:"small nowwhy"},why),second);}
 function fx(ok){if(document.documentElement.dataset.motion==="off")return;const e=h("div",{class:"fx "+(ok?"good":"bad"),html:'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22"/><path d="'+(ok?"M14 25l7 7 13-15":"M16 16l16 16M32 16L16 32")+'"/></svg>'});document.body.append(e);setTimeout(()=>e.remove(),600);}
 document.documentElement.dataset.motion=S.motion==="off"?"off":"on";
 (()=>{const cv=$("#sky");if(!cv||!cv.getContext)return;const c=cv.getContext("2d");let W_=0,H_=0,st=[],sh=null,last=0;
@@ -757,7 +786,7 @@ function recBtn(id){const b=h("button",{class:"chip","aria-label":"Record yourse
 function mixedPatterns(n){const pool=shuffle(LESSONS.slice(0,n).map((l,i)=>i)).slice(0,3);if(pool.length<2)return null;
  return h("div",{class:"card"},h("h3",{},"Mixed patterns"),h("p",{class:"small soft"},"Added from research: old patterns shuffled in with the new one hold better than each drilled alone. Read the cue, say it in Hebrew, then tap to check."),
   pool.map(i=>{const sm=LESSONS[i].sample,out=h("div",{class:"small"});return h("button",{class:"btn opt",onclick:()=>{out.innerHTML='<span class="tr">'+sm.map(id=>trHtml(W[id].tr)).join(" ")+"</span>";playSeq(sm);}},h("span",{class:"pics"},sm.map(id=>pic(id,"sm"))),h("span",{},h("span",{},sm.map(short).join(" · ")),out));}));}
-function talkathon(){const own=learnedIds(Math.max(0,nextLesson()-1)).filter(id=>W[id]&&W[id].a);const box=h("div",{class:"card"});const draw=()=>{if(!nextLesson()||!own.length){box.replaceChildren(h("h3",{},"Talkathon"),h("p",{class:"small soft"},"Opens after your first lesson. The tool picks one of your words and you say three or four sentences with it."));return;}if(!talkId||!own.includes(talkId))talkId=own[Math.floor(Math.random()*own.length)];box.replaceChildren(h("h3",{},"Talkathon"),h("p",{class:"small soft"},"From the course itself: take a word at random and say three or four sentences that use it. No stopping, no fixing."),h("div",{class:"wcard"},pic(talkId,"md"),h("div",{},h("div",{class:"row"},playBtn(talkId)),h("div",{class:"small soft"},W[talkId].en))),h("button",{class:"btn",onclick:()=>{talkId=own[Math.floor(Math.random()*own.length)];draw();}},"Next word"));};draw();return box;}
+function talkathon(){const own=learnedIds(Math.max(0,nextLesson()-1)).filter(id=>W[id]&&W[id].a);const box=h("div",{class:"card",id:"talk"});const draw=()=>{if(!nextLesson()||!own.length){box.replaceChildren(h("h3",{},"Talkathon"),h("p",{class:"small soft"},"Opens after your first lesson. The tool picks one of your words and you say three or four sentences with it."));return;}if(!talkId||!own.includes(talkId))talkId=own[Math.floor(Math.random()*own.length)];box.replaceChildren(h("h3",{},"Talkathon"),h("p",{class:"small soft"},"From the course itself: take a word at random and say three or four sentences that use it. No stopping, no fixing."),h("div",{class:"wcard"},pic(talkId,"md"),h("div",{},h("div",{class:"row"},playBtn(talkId)),h("div",{class:"small soft"},W[talkId].en))),h("button",{class:"btn",onclick:()=>{talkId=own[Math.floor(Math.random()*own.length)];draw();}},"Next word"));};draw();return box;}
 function lessonView(n){
  const l=LESSONS[n];if(!l)return V.lessons();
  const st=S.lessons[n]||(S.lessons[n]={});const words=l.words.filter(id=>W[id]&&W[id].a);
@@ -781,7 +810,7 @@ function lessonView(n){
   h("div",{class:"hero slim","data-g":W[l.words[0]]?W[l.words[0]].he:""},h("div",{class:"eyebrow"},"Unit "+l.u+" · lesson "+(n+1)),h("h1",{},l.t),h("p",{},l.goal)),
   dueOld.length?h("div",{class:"card step"},h("div",{class:"steph"},h("h3",{},"Warm-up: relearn "+dueOld.length+" word"+(dueOld.length>1?"s":"")),h("span",{class:"eyebrow"},"2 min")),h("p",{class:"small soft"},"Added from research: words from earlier lessons that are due today. Get each one right once before you start. Doing this on separate days is what makes words last."),h("div",{class:"pics"},dueOld.slice(0,12).map(id=>pic(id,"sm"))),h("button",{class:"btn primary",onclick:()=>startSession(shuffle(dueOld).map(id=>({id,mode:"pic"})),"Warm-up relearn","#lesson-"+(n+1))},"Start warm-up")):null,
   stepCard(1,"Word-play",3,h("p",{class:"small soft"},"Tap each word. Listen, picture it, read the silly line, and say the word out loud twice. Silly is the point: it sticks."),
-   words.map(id=>{const w=W[id],hk=l.hook[id];return h("div",{class:"wcard"},pic(id,"md"),h("div",{class:"stack",style:"gap:6px"},h("div",{class:"row"},playBtn(id),h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{class:"small soft"},w.en)),recBtn(id)),hk?h("div",{class:"hook"},hk[0],hk[1]?h("span",{class:"badge b-TRAD",style:"margin:0 0 0 6px;display:inline-block"},"bar-Lev"):null):null));}),
+   words.map(id=>{const w=W[id],hk=l.hook[id];return h("div",{class:"wcard"},pic(id,"md"),h("div",{class:"stack",style:"gap:6px"},h("div",{class:"row"},playBtn(id),h("div",{},h("div",{class:"tr",html:trHtml(w.tr)}),h("div",{class:"small soft"},w.en),rootChip(id)),recBtn(id)),hk?h("div",{class:"hook"},hk[0],hk[1]?h("span",{class:"badge b-TRAD",style:"margin:0 0 0 6px;display:inline-block"},"bar-Lev"):null):null));}),
    h("p",{class:"small soft recnote"},"Record me: say the word when the button says so. You then hear the Israeli speaker and yourself back to back. People tend to rate their own accent too kindly while speaking, so listen afterwards."),
    h("button",{class:"btn"+(st.s1?"":" primary"),onclick:()=>{mark("s1");route();}},st.s1?"Step 1 finished":"I said every word out loud")),
   stepCard(2,"Word-Quiz",5,h("p",{class:"small soft"},"You are cued by the picture and the English and must say the Hebrew within four seconds, the standard the method sets. Keep going until every word comes instantly. Then you match each written word to its picture."+(mixOld.length?" A few older words are mixed in on purpose.":"")),
@@ -800,7 +829,7 @@ function lessonView(n){
    tm,tb,h("div",{class:"eyebrow"},"Picture prompts: every word you own so far"),h("div",{class:"pics"},pal.map(id=>{const b=h("button",{class:"pic g-"+(W[id]?W[id].g:"x"),style:"border:0;cursor:pointer","aria-label":short(id),html:picInner(id)});b.onclick=()=>playId(id);return b;}))),
   h("div",{class:"card"},h("h3",{},"Letter spotting"),h("p",{class:"small soft"},"In this method you meet letters inside words you can already say. Names and the full alphabet come after. Tap the letter to watch how it is written, trace it, then write it five times on paper."),
    l.spot.map(ch=>{const L=LETTERS.find(x=>x.ch===ch||x.fin===ch),ws=spotWords(ch);return h("div",{class:"wcard"},h("button",{class:"pic md heb",style:"border:0;cursor:pointer;font-size:2.2rem;font-weight:400","aria-label":"Open letter "+(L?L.name:ch),onclick:()=>{if(L)openLetter(LETTERS.indexOf(L));}},ch),h("div",{},h("div",{},L?(L.fin===ch?"End-of-word form of "+L.name:L.name)+": "+L.sound:""),h("div",{class:"row",style:"margin-top:6px"},ws.map(id=>playBtn(id)))));})),
-  h("button",{class:"btn "+(st.done?"amber":"primary"),disabled:!(st.s1&&st.s2&&st.s3&&st.s4)&&!st.done,onclick:()=>{if(st.done)delete st.done;else st.done=1;S.lessons[n]=st;save();location.hash="#lessons";}},st.done?"Lesson complete. Tap to reopen.":(st.s1&&st.s2&&st.s3&&st.s4)?"Finish lesson "+(n+1):"Finish all four steps to finish"),
+  h("button",{class:"btn "+(st.done?"amber":"primary"),disabled:!(st.s1&&st.s2&&st.s3&&st.s4)&&!st.done,onclick:()=>{if(st.done){delete st.done;delete st.dd;}else{st.done=1;st.dd=today();}S.lessons[n]=st;save();location.hash="#lessons";}},st.done?"Lesson complete. Tap to reopen.":(st.s1&&st.s2&&st.s3&&st.s4)?"Finish lesson "+(n+1):"Finish all four steps to finish"),
   h("p",{class:"small soft"},"One lesson a day is the pace. Each unit of four or five lessons is about a week. Review with the Words tab before each new lesson."));
 }
 /* forms workshop */
@@ -929,6 +958,7 @@ V.words=()=>{
  const tile=(n,t)=>h("div",{},h("div",{style:"font-size:1.6rem;font-weight:600"},String(n)),h("div",{class:"small soft"},t));
  return h("div",{class:"stack"},
   h("div",{},h("div",{class:"eyebrow"},"Review and the word bank"),h("h1",{},"Words")),
+  vocabCard(),weakCard(),
   h("div",{class:"card"},
    h("div",{class:"row",style:"justify-content:space-between"},tile(nd,"due for review"),tile(Object.keys(S.cards).length,"in your deck"),tile(known(),"holding steady")),
    h("div",{class:"row"},[5,10,18].map(m=>h("button",{class:"btn",disabled:!nd&&!(nextLesson()>=LESSONS.length&&un.length),onclick:()=>{const cap=m*5,dd=due().map(w=>[recallNow(S.cards[w.id])??0,w]).sort((p,q)=>p[0]-q[0]).slice(0,cap).map((x,i)=>({id:x[1].id,mode:i%3===2?"find":"pic"}));const room=Math.floor((cap-dd.length)/2),nw=nextLesson()>=LESSONS.length?un.slice(0,Math.min(S.newPerDay,room)).map(w=>({id:w.id,mode:"new"})):[];startSession([...dd,...nw],m+"-minute session","#words");}},"I have "+m+" min"))),
@@ -1069,20 +1099,22 @@ V.method=()=>h("div",{class:"stack"},
 const CONTACT={name:"Joshua Stoltz",email:"josh.stoltz43@gmail.com",phone:"760-802-4437"};
 const THEMES=[["blue","Blue"],["sea","Sea teal"],["garden","Garden green"],["clay","Clay coral"],["plum","Plum"],["sun","Sunflower"]];
 const applyTheme=()=>{const k=THEMES.some(x=>x[0]===S.theme)?S.theme:"blue";document.documentElement.dataset.theme=k;};applyTheme();
+applyAids();
 const applyBig=()=>{document.documentElement.style.fontSize=S.big?"118%":"";};applyBig();
 function gate(){const g=$("#gate");if(!g)return;if(/[?&]nogate/.test(location.search))return;let seen=false;try{seen=sessionStorage.getItem("hfs-gate")==="1";}catch(e){}
  if(seen&&S.welcomed)return;const first=!S.welcomed;const nx=nextLesson(),dn=lessonsDone();
  const inp=h("input",{type:"text",maxlength:"24",autocomplete:"given-name",placeholder:"Your first name (optional)",value:S.name||"","aria-label":"Your first name, optional"});
  const stat=h("p",{class:"gs"},"Checking where your progress is saved…");
  const tell=()=>{stat.textContent=SYNC?"Signed in. Your progress follows you to your other devices.":"Your progress is saved on this device. To move it to another device, use Save a backup file in Settings.";};setTimeout(tell,2500);setTimeout(tell,9000);
- const go=()=>{if(first){S.name=inp.value.trim().slice(0,24);S.welcomed=Date.now();save();}try{sessionStorage.setItem("hfs-gate","1");}catch(e){}g.classList.add("out");setTimeout(()=>{g.hidden=true;g.replaceChildren();},450);if(first)location.hash="#lesson-1";else route();};
+ const close=()=>{try{sessionStorage.setItem("hfs-gate","1");}catch(e){}g.classList.add("out");setTimeout(()=>{g.hidden=true;g.replaceChildren();},450);};
+ const go=()=>{if(first){S.name=inp.value.trim().slice(0,24);S.welcomed=Date.now();save();tour(()=>{close();location.hash="#lesson-1";});}else{close();route();}};
  g.replaceChildren(h("div",{class:"gin"},
   h("img",{class:"glogo",src:"media/logo.webp",alt:"Free Speech in Hebrew logo: a speech bubble holding the letter alef",width:"220",height:"220"}),
   h("div",{class:"gey"},"עִבְרִית"),
   h("h1",{},"Free Speech in Hebrew"),
   h("p",{class:"gt"},first?"Speak first. Read second. Five new words a lesson, real voices, about half an hour a day.":"Welcome back"+(S.name?", "+S.name:"")+". "+dn+" of "+LESSONS.length+" lessons done."),
   first?inp:null,
-  h("button",{class:"btn primary gbtn",onclick:go},first?"Start lesson 1":(dn>=LESSONS.length?"Open the course":"Continue to lesson "+(nx+1))),
+  h("button",{class:"btn primary gbtn",onclick:go},first?"Begin":(dn>=LESSONS.length?"Open the course":"Continue")),
   first?h("p",{class:"gs"},"No password and no sign-up form. Lesson 1 takes about ten minutes. The Guide button at the top explains how to study."):null,
   h("p",{class:"gc"},"An unofficial study companion to the course book Free Speech in Hebrew by Alana Shuster, PhD. Built by Joshua Stoltz."),
   stat));g.classList.remove("out");g.hidden=false;}
@@ -1093,6 +1125,8 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{},h("div",{class:"eyebrow"},"Your file"),h("h1",{},"Settings and about")),
   h("div",{class:"card"},h("h3",{},"You"),h("p",{class:"small soft"},"Used only to greet you on the title screen."),nm),
   (()=>{const seg=h("div",{class:"swatches"});const draw=()=>seg.replaceChildren(...THEMES.map(([k,n])=>h("button",{class:"sw","data-k":k,"aria-pressed":String((S.theme||"blue")===k),onclick:()=>{S.theme=k;save();applyTheme();draw();}},h("i",{}),h("span",{},n))));draw();return h("div",{class:"card"},h("h3",{},"Colour"),h("p",{class:"small soft"},"Pick the look you like. It changes straight away and is remembered on this device."),seg);})(),
+  (()=>{const mk=(key,on,off)=>{const seg=h("div",{class:"seg"});const draw=()=>seg.replaceChildren(...[[0,on],[1,off]].map(([k,n])=>h("button",{class:"chip","aria-pressed":String((S[key]?1:0)===k),onclick:()=>{S[key]=k;save();applyAids();draw();}},n)));draw();return seg;};
+   return h("div",{class:"card"},h("h3",{},"Reading aids"),h("p",{class:"small soft"},"Start with both on. When reading feels easy, turn the English letters off. Later, turn the vowel dots off to read the way Israelis do."),h("div",{class:"eyebrow"},"English letters under the Hebrew"),mk("trOff","Show","Hide"),h("div",{class:"eyebrow"},"Vowel dots"),mk("nikOff","Show","Hide"),h("p",{class:"small soft"},"Hiding the dots takes effect on the next screen you open."));})(),
   (()=>{const seg=h("div",{class:"seg"});const draw=()=>seg.replaceChildren(...[[0,"Normal text"],[1,"Larger text"]].map(([k,n])=>h("button",{class:"chip","aria-pressed":String((S.big?1:0)===k),onclick:()=>{S.big=k;save();applyBig();draw();}},n)));draw();return h("div",{class:"card"},h("h3",{},"Text size"),h("p",{class:"small soft"},"Makes all the text and buttons bigger."),seg);})(),
   h("div",{class:"card"},h("h3",{},"Where your progress lives"),tbl(["Situation","What happens"],[["Signed in to Claude",SYNC?"This is you right now. Progress is stored privately with your account and follows you to any device.":"Progress is stored privately with your account and follows you to any device."],["Not signed in",SYNC?"Progress stays on the one device and browser.":"This is you right now, or the check has not finished. Progress stays on this device and browser."],["Someone you shared it with","They get their own separate progress. Nobody, including the person who shared it, can see anyone else's."]]),
    h("div",{class:"row"},h("button",{class:"btn",onclick:()=>{try{const a=h("a",{href:URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"})),download:"hebrew-flight-school-backup.json"});document.body.appendChild(a);a.click();a.remove();msg.textContent="Backup file saved to your downloads.";}catch(e){msg.textContent="This browser would not save a file.";}}},"Save a backup file"),h("button",{class:"btn",onclick:()=>file.click()},"Restore from a backup"),file),msg),
@@ -1105,8 +1139,30 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 22. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 23. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
 
+
+/* which root a word belongs to */
+const ROOT_OF={};ROOTS.forEach(r=>(r.w||[]).forEach(id=>{ROOT_OF[id]=r;}));
+const rootChip=id=>ROOT_OF[id]?h("a",{class:"rootchip",href:"#roots",title:"Root: "+ROOT_OF[id].en},h("span",{class:"heb",lang:"he",dir:"rtl"},ROOT_OF[id].r)," ",ROOT_OF[id].en):null;
+/* vocabulary stages, from the review schedule */
+function vocab(){const ids=[...new Set(LWORDS)].filter(id=>W[id]);let fresh=0,learning=0,holding=0,solid=0;ids.forEach(id=>{const c=S.cards[id];if(!c)return;const st=c.f?c.f.stability:0;if(st>=21)solid++;else if(c.b>=3)holding++;else if(c.b>=2||(c.f&&c.f.reps>1))learning++;else fresh++;});return {total:ids.length,fresh,learning,holding,solid,met:fresh+learning+holding+solid};}
+function vocabCard(){const v=vocab();const seg=(n,c,l)=>n?'<i class="'+c+'" style="flex:'+n+'" title="'+l+": "+n+'"></i>':"";
+ return h("div",{class:"card"},h("h3",{},"Your words"),h("div",{class:"vbar",role:"img","aria-label":v.solid+" solid, "+v.holding+" holding, "+v.learning+" learning, "+v.fresh+" new, "+(v.total-v.met)+" not met yet",html:seg(v.solid,"v4","Solid")+seg(v.holding,"v3","Holding")+seg(v.learning,"v2","Learning")+seg(v.fresh,"v1","New")+seg(v.total-v.met,"v0","Not met yet")}),
+  tbl(["Stage","Words","What it means"],[[h("span",{class:"vk v4"},"Solid"),String(v.solid),"You still knew it after three weeks or more"],[h("span",{class:"vk v3"},"Holding"),String(v.holding),"Right several times, a week or more apart"],[h("span",{class:"vk v2"},"Learning"),String(v.learning),"Right once or twice so far"],[h("span",{class:"vk v1"},"New"),String(v.fresh),"Met in a lesson, not yet proven"],[h("span",{class:"vk v0"},"Not met yet"),String(v.total-v.met),"Waiting in later lessons"]]));}
+function weakList(){return Object.keys(S.cards).filter(id=>W[id]&&W[id].a).map(id=>{const c=S.cards[id],f=c.f||{};return {id,lap:f.lapses||0,st:f.stability||0,r:c.r||3};}).filter(x=>x.lap>0||x.r<=2).sort((a,b)=>b.lap-a.lap||a.r-b.r||a.st-b.st);}
+function weakCard(){const wk=weakList();if(!wk.length)return h("div",{class:"card"},h("h3",{},"Weak spots"),h("p",{class:"small soft"},"Nothing here yet. When you miss a word or answer slowly, it shows up here so you can drill it."));
+ const top=wk.slice(0,10);return h("div",{class:"card"},h("h3",{},"Weak spots"),h("p",{class:"small soft"},"The words you miss or answer slowly most often. A short drill on just these helps more than a general review."),
+  h("div",{class:"wl"},top.slice(0,5).map(x=>wordRow(x.id)).flat()),
+  h("button",{class:"btn primary",onclick:()=>startSession(shuffle(top).map((x,i)=>({id:x.id,mode:i%3===2?"listen":"pic",free:i%3===2?1:0,pool:top.map(y=>W[y.id])})),"Weak spots","#words")},"Drill my "+top.length+" shakiest word"+(top.length>1?"s":"")));}
+/* reading aids: vowel dots and English letters */
+const NIK=/[֑-ׇ]/g;
+function applyAids(){document.documentElement.dataset.tr=S.trOff?"off":"on";}
+function stripNik(root){if(!S.nikOff||!root.querySelectorAll)return;const els=root.matches&&root.matches(".heb,.big,.hwh")?[root]:[...root.querySelectorAll(".heb,.big,.hwh")];els.forEach(el=>{const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;while((n=w.nextNode())){if(NIK.test(n.nodeValue)){NIK.lastIndex=0;n.nodeValue=n.nodeValue.replace(NIK,"");}NIK.lastIndex=0;}});}
+new MutationObserver(ms=>{if(!S.nikOff)return;ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)stripNik(n);}));}).observe(document.documentElement,{childList:true,subtree:true});
+/* first-run tour: the method in three cards */
+function tour(done){const g=$("#gate");const P=[["1 of 3","Speak first, read second","You say each word aloud many times before you look at its letters. Reading comes easily once the word is already in your mouth."],["2 of 3","Four steps, every lesson","Word-play, word-quiz, pattern-drill, free speech. About fifteen minutes. Do them in order and do not skip the talking at the end; it is the point."],["3 of 3","A little, every day","Review first, then one new lesson. Ten minutes daily beats an hour on Sunday. The app tells you what to do each day."]];let i=0;
+ const draw=()=>{const p=P[i];g.replaceChildren(h("div",{class:"gin"},h("div",{class:"tdots"},P.map((x,k)=>h("i",{class:k===i?"on":""}))),h("div",{class:"eyebrow"},p[0]),h("h1",{},p[1]),h("p",{class:"gt"},p[2]),h("button",{class:"btn primary gbtn",onclick:()=>{if(++i<P.length)draw();else done();}},i<P.length-1?"Next":"Start lesson 1"),h("button",{class:"btn quiet",onclick:done},"Skip")));};draw();}
 /* study guide and cheat sheet */
 const HB=s=>h("span",{class:"heb",lang:"he",dir:"rtl"},s);
 const gnav=k=>h("div",{class:"seg"},[["guide","How to study"],["cheat","Cheat sheet"]].map(([r,n])=>h("a",{class:"chip",href:"#"+r,"aria-current":r===k?"page":null,"aria-pressed":String(r===k),style:"text-decoration:none"},n)));
