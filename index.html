@@ -546,13 +546,18 @@ html:not(#_) :focus-visible{outline:3px solid #2f3fae;outline-offset:2px;border-
 html:not(#_) .gs{color:#5a606b} html:not(#_) .gc{color:#5a606b}
 html:not(#_) .evo .c,html:not(#_) .c{color:#5a606b;opacity:1}
 html:not(#_) .btn.hit,html:not(#_) .num.done{background:#2c7552;border-color:#2c7552}
+.tbl{display:flex;gap:6px}
+html:not(#_) .topbar .gear{padding:6px 11px;font-size:.78rem}
+html:not(#_) .topbar .brand{min-width:0} html:not(#_) .topbar .brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html:not(#_) td .heb{font-size:1.7rem !important;line-height:1.4;white-space:nowrap}
+html:not(#_) td .btn.opt{padding:6px 10px;min-height:40px}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f7f6f2"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Free Speech">
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </head>
 <body>
 <canvas id="sky" aria-hidden="true"></canvas>
-<header class="topbar"><a class="brand" href="#lessons"><img src="media/logo-s.webp" alt="" width="34" height="34"><span>Free Speech in Hebrew</span></a><a class="gear" href="#settings" aria-label="Settings and about">Settings</a></header>
+<header class="topbar"><a class="brand" href="#lessons"><img src="media/logo-s.webp" alt="" width="34" height="34"><span>Free Speech in Hebrew</span></a><span class="tbl"><a class="gear" href="#guide">Guide</a><a class="gear" href="#settings" aria-label="Settings and about">Settings</a></span></header>
 <main id="app"></main>
 <div id="gate" hidden></div>
 <nav class="tabs" aria-label="Sections"><div class="in" id="tabs"></div></nav>
@@ -1058,7 +1063,7 @@ function gate(){const g=$("#gate");if(!g)return;if(/[?&]nogate/.test(location.se
   h("p",{class:"gt"},first?"Speak first. Read second. Five new words a lesson, real voices, about half an hour a day.":"Welcome back"+(S.name?", "+S.name:"")+". "+dn+" of "+LESSONS.length+" lessons done."),
   first?inp:null,
   h("button",{class:"btn primary gbtn",onclick:go},first?"Start lesson 1":(dn>=LESSONS.length?"Open the course":"Continue to lesson "+(nx+1))),
-  first?h("p",{class:"gs"},"No password and no sign-up form. Lesson 1 takes about ten minutes."):null,
+  first?h("p",{class:"gs"},"No password and no sign-up form. Lesson 1 takes about ten minutes. The Guide button at the top explains how to study."):null,
   h("p",{class:"gc"},"An unofficial study companion to the course book Free Speech in Hebrew by Alana Shuster, PhD. Built by Joshua Stoltz."),
   stat));g.classList.remove("out");g.hidden=false;}
 V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"","aria-label":"Your first name",placeholder:"Your first name",onchange:e=>{S.name=e.target.value.trim().slice(0,24);save();}});
@@ -1079,8 +1084,79 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 19. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
-const TABS=[["lessons","Lessons","טוס"],["words","Words","מילים"],["letters","Letters","אב"],["roots","Roots","שרש"],["method","Method","דרך"]];
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 20. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+
+/* study guide and cheat sheet */
+const HB=s=>h("span",{class:"heb",lang:"he",dir:"rtl"},s);
+const gnav=k=>h("div",{class:"seg"},[["guide","How to study"],["cheat","Cheat sheet"]].map(([r,n])=>h("a",{class:"chip",href:"#"+r,"aria-current":r===k?"page":null,"aria-pressed":String(r===k),style:"text-decoration:none"},n)));
+V.guide=()=>h("div",{class:"stack"},
+ h("div",{},h("div",{class:"eyebrow"},"Start here"),h("h1",{},"How to study")),gnav("guide"),
+ h("div",{class:"card"},h("h3",{},"The idea in three lines"),tbl(["Rule","What it means for you"],[
+  ["Speak first, read second","You say a word many times before you worry about its letters. Reading is easy once the word is already in your mouth."],
+  ["Few words, many sentences","Each lesson adds about five words. The work is combining them with every word you already own."],
+  ["Out loud, every time","Whispering counts. Reading silently does not. Your mouth has to learn this, not only your eyes."]])),
+ h("div",{class:"card"},h("h3",{},"One lesson, four steps"),h("p",{class:"small soft"},"Every lesson has the same four steps. Do them in order, in one sitting."),tbl(["Step","What you do","Do not"],[
+  ["1. Word-play, 3 min","Meet the new words. Tap to hear each one, read its memory hook, say it aloud three times.","Do not write anything down yet."],
+  ["2. Word-quiz, 5 min","See a picture, say the Hebrew within four seconds, then check. Older words are mixed in on purpose.","Do not peek. A miss teaches more than a peek."],
+  ["3. Pattern-drill, 5 min","One rule and one sample sentence. Hear it, then say it without looking.","Do not study the rule. Copy the sample."],
+  ["4. Free speech, 5 min","Three short rounds of making your own sentences aloud, using any word you own.","Do not aim for correct. Aim for many."]]),
+  h("p",{class:"small"},"After the four steps the lesson shows you one or two letters inside the words you just learned. Tap a letter to watch it written, trace it, then write it on paper.")),
+ h("div",{class:"card"},h("h3",{},"A good day"),h("p",{class:"small soft"},"About 30 minutes. If you only have ten, do the first two rows."),tbl(["Order","What","Minutes","Where"],[
+  ["1","Review whatever is due","5 to 10","Home screen: the review button"],
+  ["2","Warm-up, then one new lesson","15 to 20","Lessons tab"],
+  ["3","Letters from that lesson, on screen then on paper","5","Letters tab"],
+  ["4","Say five sentences about your real day","2","Anywhere, out loud"]]),
+  h("p",{class:"small"},"One new lesson a day is plenty. On a busy day, do only the review. The review is what makes words stay.")),
+ h("div",{class:"card"},h("h3",{},"What each tab is for"),tbl(["Tab","Use it when"],[
+  ["Lessons","You are ready for the next lesson, or want to repeat an old one."],
+  ["Words","You want to look a word up, hear it again, or run a timed review."],
+  ["Letters","You are learning to read and write: stroke order, tracing, meanings, look-alikes."],
+  ["Roots","You start noticing that related words share three letters."],
+  ["Method","You want the reasoning, the sources and the credits."],
+  ["Guide","This page, and the cheat sheet."],
+  ["Settings","Name, text size, voices, backup, sound check."]])),
+ h("div",{class:"card"},h("h3",{},"Habits that work"),tbl(["Do","Why"],[
+  ["Study every day, briefly","Ten minutes daily beats an hour on Sunday. Sleep between sessions is when words settle."],
+  ["Answer within four seconds","A word you need ten seconds to find is not yet yours. The timer is honest about that."],
+  ["Mark misses truthfully","The schedule only works if it knows what you forgot. Missed words simply come back sooner."],
+  ["Record yourself and compare","Your ear corrects your mouth faster than any explanation."],
+  ["Use the memory hooks, then let them go","A hook gets the word in. After a week you will not need it."],
+  ["Talk to yourself in Hebrew","Name what you eat, who is here, what is good. Real use is the point."]])),
+ h("div",{class:"card"},h("h3",{},"Habits to avoid"),tbl(["Avoid","Do this instead"],[
+  ["Memorising lists (one to ten, the days, the alphabet song)","Learn them a few at a time inside sentences, the way the lessons give them."],
+  ["Starting with the alphabet","Meet each letter inside a word you can already say."],
+  ["Two or three new lessons in a day","One lesson, then review. New words push out yesterday's if you rush."],
+  ["Skipping review to reach new lessons","Do the review first, always."],
+  ["Studying grammar tables","Copy the sample sentence and swap one word at a time."],
+  ["Waiting until you feel ready to speak","Speak badly, today."]])),
+ h("div",{class:"card"},h("h3",{},"When you get stuck"),tbl(["Problem","Try"],[
+  ["I forgot yesterday's words","Normal. Do the warm-up at the top of today's lesson. That relearning is the most valuable five minutes."],
+  ["One word will not stick","Say it inside three different sentences aloud. Then make your own memory hook; your own works best."],
+  ["I cannot hear the difference between two sounds","Play both words back to back in the Words tab, then record yourself."],
+  ["The letters all look alike","Open the look-alike pairs on the cheat sheet, and trace each pair side by side."],
+  ["I missed a week","Do reviews only for two days, then repeat your last lesson before moving on."],
+  ["It feels too easy","Good. Speed up your answers and lengthen your free-speech sentences. Do not skip ahead."]])),
+ h("div",{class:"card"},h("h3",{},"What to expect, honestly"),tbl(["After","You can"],[
+  ["Unit A, about a week","Order food, greet, tell a two-line story about a man."],
+  ["Units B to E, about a month","Talk about yourself, ask questions, say what you have, describe things, tell what someone did."],
+  ["All 48 lessons, about ten weeks","Hold a slow, simple conversation with about 240 words, read pointed text aloud, and recognise many words in Genesis."]]),
+  h("p",{class:"small"},"What this companion does not teach yet: the verb and describing forms for women and for groups, and the future. Those come from a teacher or the course book. Nothing here replaces a teacher who can hear you.")),
+ h("a",{class:"btn primary",href:"#cheat",style:"text-decoration:none;text-align:center"},"Open the cheat sheet"));
+const CH_SND={"א":"silent; carries a vowel","ב":"b with a dot, v without","ג":"g as in go","ד":"d","ה":"h; silent at the end of a word","ו":"v; also the vowels o and u","ז":"z","ח":"kh, rough, as in Bach","ט":"t","י":"y; also the vowel i","כ":"k with a dot, kh without","ל":"l","מ":"m","נ":"n","ס":"s","ע":"silent; carries a vowel","פ":"p with a dot, f without","צ":"ts as in cats","ק":"k","ר":"r, in the throat","ש":"sh, dot on the right; s, dot on the left","ת":"t"};
+const CH_PAT=[["Thing + please",["te","bevakasha"],"Tea, please."],["Person + action. No \"is\", no \"a\"",["david","okhelv","basar"],"David eats meat."],["This + word",["ze","tov","meod"],"This is very good."],["\"Not\" goes before the action",["ani","lo","nosea"],"I am not travelling."],["I have / I do not have",["yesh","li","zman"],"I have time."],["Question word first, nothing else moves",["matai","david","ba"],"When does David come?"],["Describing word after the thing",["te","kham"],"Hot tea."],["Belonging: X of Y",["sara","akhot","shel","david"],"Sarah is David's sister."],["With, or, only",["dag","im","orez"],"Fish with rice."],["To and from",["david","nosea","el","yerushalayim"],"David travels to Jerusalem."],["More + describing word",["ze","yoter","tov"],"This is better."],["Yesterday, for \"he\"",["david","natan","matana"],"David gave a gift."]];
+const CH_GRP=[["People",["ani","ata","hu","hi","anakhnu","atem","hem"]],["Question words",["mi","ma","eifo","matai","lama","eikh","kama"]],["Small words that do the work",["lo","gam","rak","im","o","ki","shel","el","min","al","od","meod","yoter","yesh","ein"]],["Numbers",["akhat","shtayim","shalosh","arba","khamesh","shesh","sheva","shmone","tesha","eser","shteim_esre","mea"]],["Days",["yom_rishon","yom_sheni","yom_shlishi","yom_revii","yom_khamishi","yom_shishi","yom_shabat"]],["Time",["hayom","makhar","etmol","akhshav","boker","erev","layla","shaa","shavua"]],["Polite words",["shalom","toda","bevakasha","ken","beseder","boker_tov","lekhaim","mazal_tov"]]];
+V.cheat=()=>h("div",{class:"stack"},
+ h("div",{},h("div",{class:"eyebrow"},"Quick reference"),h("h1",{},"Cheat sheet")),gnav("cheat"),
+ h("a",{class:"btn primary",href:"cheat-sheet.pdf",target:"_blank",rel:"noopener",style:"text-decoration:none;text-align:center"},"Printable version, two pages (PDF)"),
+ h("p",{class:"small soft"},"Print it double-sided and laminate it, or keep this page open while you study. Capital letters in the English spelling show which part of the word is stressed."),
+ h("div",{class:"card"},h("h3",{},"How Hebrew is written"),tbl(["Fact","Detail"],[["Direction","Right to left. Books open from what feels like the back."],["Letters","22 letters, all consonants. No capitals."],["Vowels","Dots and dashes under or beside the letters. Everyday Israeli writing leaves them out; learner texts and the Bible keep them."],["End forms","Five letters change shape at the end of a word."],["The inside dot","A dot inside bet, kaf and pe changes the sound: b/v, k/kh, p/f."],["Stress","Usually on the last syllable."]])),
+ h("div",{class:"card"},h("h3",{},"The 22 letters"),tbl(["Letter","End form","Name","Sound","Number"],LETTERS.map(l=>[HB(l.ch),l.fin?HB(l.fin):"",l.name,CH_SND[l.ch]||"",String(l.val)]))),
+ h("div",{class:"card"},h("h3",{},"Vowel marks"),h("p",{class:"small soft"},"Shown under the letter bet. Read the consonant first, then the vowel."),tbl(["Mark","Name","Sound","As in"],VOWELS.map(v=>[HB(v[0]),v[1],v[2],v[3]]))),
+ h("div",{class:"card"},h("h3",{},"Letters that look alike"),tbl(["Pair","How to tell them apart"],LOOKALIKES.map(p=>[h("span",{},HB(p[0])," ",HB(p[1])),p[2]]))),
+ h("div",{class:"card"},h("h3",{},"Sentence patterns"),h("p",{class:"small soft"},"Copy the sample and swap one word at a time. Tap a sample to hear it word by word."),tbl(["Pattern","Sample","Meaning"],CH_PAT.filter(p=>p[1].every(i=>W[i])).map(p=>[p[0],h("button",{class:"btn opt",style:"display:block;text-align:start;width:100%",onclick:async()=>{for(const i of p[1]){await new Promise(r=>{playId(i);setTimeout(r,950);});}}},h("div",{},HB(p[1].map(i=>W[i].he).join(" "))),h("div",{class:"small soft"},p[1].map(i=>W[i].tr).join(" "))),p[2]]))),
+ CH_GRP.map(g=>h("div",{class:"card"},h("h3",{},g[0]),tbl(["Hebrew","Say","Meaning"],g[1].filter(i=>W[i]).map(i=>[h("button",{class:"btn opt",onclick:()=>playId(i),"aria-label":"Play "+W[i].tr},HB(W[i].he)),W[i].tr,W[i].en])))),
+ h("div",{class:"card"},h("h3",{},"Remember"),tbl(["Rule","Example"],[["Hebrew has no word for \"is\", \"am\", \"are\" in the present","ani kan: I am here"],["There is no word for \"a\"","kelev: a dog"],["Never say lo yesh","Say ein"],["Words for women often end in -a","yeled, yalda"],["The describing word follows its thing","boker tov: morning good"]])));
+const TABS=[["lessons","Lessons","שעור"],["words","Words","מילים"],["letters","Letters","אב"],["roots","Roots","שרש"],["method","Method","דרך"]];
 function route(){let k=(location.hash||"#lessons").slice(1);if(k==="today")k="lessons";if(k==="plan")k="method";let view,tab=k;
  if(session){view=sessionView();tab=(session?session.back:location.hash).slice(1).startsWith("lesson")||k.startsWith("lesson")?"lessons":"words";}
  else{const m=k.match(/^lesson-(\d+)$/);if(m){view=lessonView(+m[1]-1);tab="lessons";}else if(k==="read"){view=V.read();tab="lessons";}else if(k==="forms"){view=V.forms();tab="lessons";}else{if(!V[k])k=tab="lessons";clearInterval(ftimer);view=V[k]();}}
