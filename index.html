@@ -640,7 +640,7 @@ html:not(#_) .pic svg{stroke:color-mix(in srgb,var(--b) 78%,#23262d);filter:none
 html:not(#_) .num{background:#fff;border-color:var(--line);color:var(--ink);box-shadow:none}
 html:not(#_) .num.done{background:var(--good);border-color:var(--good);color:#fff}
 html:not(#_) .unit{background:none;border:0;border-radius:0;padding:18px 4px 2px 66px;min-height:60px;overflow:visible}
-.ub{position:absolute;left:4px;top:14px;width:52px;height:52px;background:url(media/badges.webp) 0 0/1144px 52px no-repeat}
+.ub{position:absolute;left:4px;top:14px;width:52px;height:52px;background:url(media/badges.webp) 0 0/1144px 52px no-repeat}.ubx{background:radial-gradient(circle at 50% 42%,#fff1cf 0 6%,transparent 7%),conic-gradient(from 18deg,#d9a441 0 10%,transparent 0 20%,#d9a441 0 30%,transparent 0 40%,#d9a441 0 50%,transparent 0 60%,#d9a441 0 70%,transparent 0 80%,#d9a441 0 90%,transparent 0);border-radius:50%;-webkit-mask:radial-gradient(circle,#000 0 46%,transparent 47%);mask:radial-gradient(circle,#000 0 46%,transparent 47%)}
 html:not(#_) .hook{background:var(--accent-soft);color:var(--ink)}
 html:not(#_) .slot{background:#fbf3e3;border-color:#ecd5a8}
 html:not(#_) .fc{background:#fff;border:1px solid var(--line);box-shadow:0 1px 2px rgba(35,38,45,.04)}
@@ -742,6 +742,7 @@ html[data-tr="off"] .tr,html[data-tr="off"] .hwt .tr{display:none}
 .recword{text-align:center;padding:14px 6px}.recword .heb{font-size:2.6rem!important;line-height:1.3;white-space:normal}.recword .tr{font-size:1.1rem;margin-top:4px}
 html:not(#_) .btn.recording{background:var(--bad);border-color:var(--bad);color:#fff}
 html[data-tr="off"] .recword .tr{display:block}
+html:not(#_):not([data-theme="dark"]) .pic.g-numbers{color:#8a4e0c!important}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f7f6f2"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Free Speech">
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
@@ -897,7 +898,7 @@ V.lessons=()=>{
   talkathon(),
   UNITS.map(u=>{const idx=LESSONS.map((l,i)=>i).filter(i=>LESSONS[i].u===u[0]),all=idx.every(i=>S.lessons[i]&&S.lessons[i].done);
    const cards=idx.map(i=>{const l=LESSONS[i],st=S.lessons[i]||{},d=st.done;return h("a",{class:"card lcard",href:"#lesson-"+(i+1)},h("span",{class:"num"+(d?" done":i===nx?" next":"")},String(i+1)),h("div",{},h("h3",{},l.t),h("div",{class:"small soft"},l.goal),h("div",{class:"pics",style:"margin-top:6px"},l.words.filter(id=>W[id]).map(id=>pic(id,"sm")))),h("span",{class:"small soft"},d?"done":[1,2,3,4].filter(k=>st["s"+k]).length+"/4"));});
-   return [h("div",{class:"unit"+(all?" earned":"")},h("i",{class:"ub",style:"background-position:"+(-52*Math.max(0,"ABCDEFGHIJKLMNOPQRSTUV".indexOf(u[0])))+"px 0","aria-hidden":"true"}),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
+   return [h("div",{class:"unit"+(all?" earned":"")},(()=>{const bi="ABCDEFGHIJKLMNOPQRSTUV".indexOf(u[0]);return bi<0?h("i",{class:"ub ubx","aria-hidden":"true"}):h("i",{class:"ub",style:"background-position:"+(-52*bi)+"px 0","aria-hidden":"true"});})(),h("div",{class:"eyebrow"},"Unit "+u[0]+(all?" · complete":"")),h("h2",{},u[1]),h("p",{class:"small soft"},u[2])),all?h("details",{class:"unitdone"},h("summary",{class:"small soft"},"All "+idx.length+" lessons finished. Tap to show them."),h("div",{class:"stack"},cards)):cards];}),
   h("a",{class:"card lcard",href:"#read"},h("span",{class:"num"},String(LESSONS.length+1)),h("div",{},h("h3",{},"Skip-read Genesis 1:1-5"),h("div",{class:"small soft"},"The method's reading strategy on the first verses of the Bible."),h("div",{class:"pics",style:"margin-top:6px"},["bereshit","elohim","shamayim","erets","or","yom","layla"].map(id=>pic(id,"sm")))),h("span",{class:"small soft"},"read")),
   h("a",{class:"card lcard",href:"#forms"},h("span",{class:"num"},String(LESSONS.length+2)),h("div",{},h("h3",{},"Forms workshop: she, they, I did"),h("div",{class:"small soft"},"The next rungs of the ladder, as a reference sheet. No built-in recordings exist for these forms, so each one links out to native speakers.")),h("span",{class:"small soft"},"ref")));
 };
@@ -1300,7 +1301,7 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 34. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 35. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
 
 
 /* which root a word belongs to */
@@ -1813,6 +1814,28 @@ function pathStones(n,today){const C=[0,-6.5,2.0],a=81*Math.PI/180,F=[0,Math.sin
   const z=d[1]*F[1]+d[2]*F[2],x=.5+(d[0]/z)/(2*th),y=.5-((d[1]*U[1]+d[2]*U[2])/z)/(2*tv),L=Math.hypot(...d),rx=(.32*(1-.35*t)/z)/(2*th)*540*1.5,ry=rx*Math.max(.12,1.15*(-d[2])/L);
   s+='<ellipse class="st'+(i===n-1&&today?' new':'')+'" cx="'+(x*540).toFixed(1)+'" cy="'+(y*960).toFixed(1)+'" rx="'+rx.toFixed(1)+'" ry="'+ry.toFixed(1)+'" fill="url(#stg)" style="animation-delay:'+(i*.04).toFixed(2)+'s"/>';}
  return svgEl(s+'</svg>');}
+/* ---------- keepsake: a still of the learner's OWN tree or path, drawn on canvas from their data ---------- */
+async function keepsake(kind,data){const W0=1080,H0=1920,cv=document.createElement("canvas");cv.width=W0;cv.height=H0;const c=cv.getContext("2d"),S=2;
+ const img=new Image();img.src=kind==="tree"?STG.tree:STG.path;await img.decode().catch(()=>{});c.drawImage(img,0,0,W0,H0);
+ try{await document.fonts.load('44px "Frank Ruhl Libre"');}catch(e){}const HF='"Frank Ruhl Libre","FRL",serif';
+ if(kind==="tree"){const TX=270,TY=345,found=data.found;const gr=c.createLinearGradient(0,TY*S,0,(TY-300)*S);gr.addColorStop(0,"#b8893e");gr.addColorStop(1,"#fff1cf");
+  found.forEach((id,i)=>{const x=hsh(id),th=((x%150)-75)*Math.PI/180,r=150+((x>>>8)%150),ex=TX+r*Math.sin(th),ey=TY-r*Math.cos(th)-20;
+   c.save();c.scale(S,S);c.strokeStyle=gr;c.lineWidth=2.4;c.lineCap="round";c.shadowColor="rgba(255,214,150,.9)";c.shadowBlur=10;
+   c.stroke(new Path2D("M"+TX+" "+TY+" C"+TX+" "+(TY-r*.45)+" "+(ex*.6+TX*.4)+" "+(ey+50)+" "+ex+" "+ey));
+   c.fillStyle="#fff1cf";c.shadowBlur=14;c.beginPath();c.arc(ex,ey,4.5,0,6.283);c.fill();c.restore();});
+  c.save();c.scale(S,S);c.font="20px "+HF;c.textAlign="center";c.direction="rtl";c.fillStyle="rgba(239,208,143,.85)";c.shadowColor="rgba(0,0,0,.6)";c.shadowBlur=6;
+  const boxes=[];found.slice().reverse().forEach(id=>{const x=hsh(id),th=((x%150)-75)*Math.PI/180,r=150+((x>>>8)%150),ex=TX+r*Math.sin(th),ey=TY-r*Math.cos(th)-20;const w=c.measureText(W[id].he).width,bx=Math.max(w/2+8,Math.min(540-w/2-8,ex)),by=ey-12;const bb=[bx-w/2-4,by-20,bx+w/2+4,by+6];if(boxes.some(q=>!(bb[2]<q[0]||bb[0]>q[2]||bb[3]<q[1]||bb[1]>q[3])))return;boxes.push(bb);c.fillText(W[id].he,bx,by);});c.restore();}
+ else{const svgS=pathStones(data.n,false);const C=[0,-6.5,2.0];[...svgS.querySelectorAll("ellipse")].forEach(e=>{const cx=+e.getAttribute("cx")*S,cy=+e.getAttribute("cy")*S,rx=+e.getAttribute("rx")*S,ry=+e.getAttribute("ry")*S;
+   c.save();c.translate(cx,cy);c.scale(1,ry/rx);const g=c.createRadialGradient(0,0,0,0,0,rx);g.addColorStop(0,"rgba(255,246,221,.95)");g.addColorStop(.5,"rgba(255,213,138,.55)");g.addColorStop(1,"rgba(255,184,77,0)");c.fillStyle=g;c.globalCompositeOperation="lighter";c.beginPath();c.arc(0,0,rx,0,6.283);c.fill();c.restore();});
+  c.save();c.font="64px "+HF;c.textAlign="center";c.direction="rtl";c.fillStyle="#efd08f";c.shadowColor="rgba(255,214,150,.8)";c.shadowBlur=24;c.fillText(data.line,W0/2,470);c.restore();}
+ const band=c.createLinearGradient(0,H0-330,0,H0);band.addColorStop(0,"rgba(5,6,16,0)");band.addColorStop(.45,"rgba(5,6,16,.82)");band.addColorStop(1,"rgba(5,6,16,.95)");c.fillStyle=band;c.fillRect(0,H0-330,W0,330);
+ c.textAlign="center";c.fillStyle="#efd08f";c.font="58px "+HF;c.direction="rtl";c.fillText(kind==="tree"?"הָעֵץ שֶׁלִּי":"הַשְּׁבִיל שֶׁלִּי",W0/2,H0-180);c.direction="ltr";
+ c.fillStyle="rgba(232,228,255,.85)";c.font="500 30px system-ui,sans-serif";const d=new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+ c.fillText((kind==="tree"?"My tree · "+data.found.length+" word"+(data.found.length===1?"":"s")+" caught":"My path · "+data.n+" of 30 takes")+" · "+d,W0/2,H0-118);
+ c.fillStyle="rgba(232,228,255,.5)";c.font="24px system-ui,sans-serif";c.fillText("Free Speech in Hebrew",W0/2,H0-66);
+ const blob=await new Promise(r=>cv.toBlob(r,"image/png"));const name="Free-Speech-in-Hebrew-my-"+kind+".png";
+ try{const f=new File([blob],name,{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:kind==="tree"?"My tree":"My path"});return;}}catch(e){if(e&&e.name==="AbortError")return;}
+ const a=h("a",{href:URL.createObjectURL(blob),download:name});document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000);}
 /* ---------- 4. Root Detective ---------- */
 const FAM=()=>(window.ROOTS||[]).map(r=>({r,ids:(r.w||[]).filter(id=>W[id]&&W[id].a)})).filter(f=>f.ids.length>=2);
 const hsh=s=>{let x=2166136261;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,16777619);}return x>>>0;};
@@ -1834,7 +1857,7 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
  const seeds=async(letters,instant)=>{for(let i=0;i<letters.length;i++){const g=plate.querySelector("#seed"+i);if(!g)continue;const pr=penDraw(g,({"ך":"כ","ם":"מ","ן":"נ","ף":"פ","ץ":"צ"})[letters[i]]||letters[i],{speed:instant?.001:.6});if(!instant)await pr;}};
  const intro=()=>gIntro(st,["You hear two words. Are they one family, grown from the same three-letter root, or is it a trick?",
    h("p",{class:"gmeta",style:"margin:.4em 0"},"Answer out loud in Hebrew: ",h("b",{lang:"he",class:"ghe",style:"font-size:1.3rem"},"כֵּן")," ken for one family, ",h("b",{lang:"he",class:"ghe",style:"font-size:1.3rem"},"לֹא")," lo for a trick."),
-   "Every family you catch grows a branch of light on the tree.",h("div",{class:"gsmall"},gs.found.length+" branches so far · "+fams.length+" families to find")],round,"Start the case");
+   "Every family you catch grows a branch of light on the tree.",h("div",{class:"gsmall"},gs.found.length+" branches so far · "+fams.length+" families to find"),gs.found.length?h("button",{class:"nbtn ghost",style:"min-height:38px;padding:6px 14px;margin-top:10px",onclick:()=>keepsake("tree",{found:gs.found})},"Save my tree"):null],round,"Start the case");
  let qi=0,score=0;
  const trial=()=>{const f=fams[Math.floor(Math.random()*fams.length)];const same=Math.random()<.5;const sh=shuffle(f.ids);
   if(same)return {f,a:sh[0],b:sh[1],same};
@@ -1955,7 +1978,7 @@ V["g-then"]=()=>stageView({he:"אָז וְעַכְשָׁו",en:"Then and Now",bg
   const line=h("div",{class:"glass fadein",style:"max-width:360px"},h("div",{class:"gsmall"},"Your line, the same every day"),h("div",{class:"beads",style:"margin:8px 0"},...gs.sent.map((id,k)=>h("div",{class:"bead"},(()=>{const g=gHe(W[id].he,"","",{mode:"draw",delay:k*200});g.dataset.llalpha=(.35+.65*Math.min(1,n/30)).toFixed(2);return g;})(),h("span",{class:"gsmall tr",html:trHtml(W[id].tr)})))),
    h("button",{class:"nbtn ghost",style:"min-height:38px;padding:6px 14px",onclick:()=>playSeq(gs.sent)},"Hear it"),
    n<=1?h("button",{class:"nbtn ghost",style:"min-height:38px;padding:6px 14px;margin-inline-start:6px",onclick:pickLine},"Choose another line"):null);
-  st.set([line,h("div",{class:"glass",style:"width:min(92vw,380px)"},h("div",{class:"gsmall",style:"margin-bottom:8px"},n>=30?"Thirty takes. The path is complete.":"Take "+n+" of 30"),dots)],
+  st.set([line,h("div",{class:"glass",style:"width:min(92vw,380px)"},h("div",{class:"gsmall",style:"margin-bottom:8px"},n>=30?"Thirty takes. The path is complete.":"Take "+n+" of 30"),dots,n?h("button",{class:"nbtn ghost",style:"min-height:36px;padding:5px 14px;margin-top:10px",onclick:()=>keepsake("path",{n,line:gs.sent.map(id=>W[id].he).join(" ")})},"Save my path"):null)],
    [n>=2?h("button",{class:"nbtn"+(has?" lead":""),onclick:compare},n>=30?"Day 1 and Day 30":"Then and now"):null,h("button",{class:"nbtn"+(has?" ghost":" lead"),onclick:record},has?"Record today again":"Record today's line")]);};
  const pickLine=()=>{st.set([h("div",{class:"glass",style:"max-width:360px;text-align:start"},h("div",{class:"gsmall"},"Pick the line you will say for thirty days"),...opts.slice(-10).reverse().map(o=>h("button",{class:"nbtn ghost",style:"display:block;width:100%;margin-top:8px;text-align:center",onclick:()=>{gs.sent=o.ids;save();home();}},gHe(o.ids.map(id=>W[id].he).join(" "),"","font-size:1.3rem"))))],[h("button",{class:"nbtn ghost",onclick:home},"Back")]);};
  const record=async()=>{const m=await G.mic();if(!st.alive())return;if(!m){st.set([h("p",{class:"gmeta"},"This game needs the microphone. Allow it for this site, then try again.")],[h("button",{class:"nbtn",onclick:home},"Back")]);return;}
