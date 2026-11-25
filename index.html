@@ -261,6 +261,9 @@ body.staged{overflow:hidden}
 .armil{position:absolute;left:50%;top:37%;width:52%;transform:translate(-50%,-50%);pointer-events:none;opacity:.9;mix-blend-mode:screen}
 .seedp .pen{fill:none;stroke:#3a2508;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}.seedp .nib{fill:#fff1cf;filter:drop-shadow(0 0 4px rgba(255,214,150,.95))}
 .tw{position:fixed;inset:0;width:100%;height:100%;z-index:7;pointer-events:none}
+.stones .st{opacity:0;animation:stIn 1s ease forwards}.stones .st.new{animation:stIn 1s ease forwards,stPulse 2.6s ease-in-out 1s infinite}
+@keyframes stIn{to{opacity:1}}@keyframes stPulse{50%{opacity:.55}}
+@media (prefers-reduced-motion:reduce){.stones .st{animation:none;opacity:1}}
 
 .pic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--ink);flex:none;font-family:var(--heb);font-weight:700;font-size:1.15rem;line-height:1}
 .pic svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1297,7 +1300,7 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 33. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 34. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
 
 
 /* which root a word belongs to */
@@ -1758,6 +1761,9 @@ function flightPath(st,log){const n=log.length,pts=log.map((ok,i)=>{const x=92-i
  pts.forEach((p,i)=>{s+=p[2]?'<g class="fs" style="animation-delay:'+(i*.2).toFixed(1)+'s"><line x1="'+(p[0]-3)+'" y1="'+p[1]+'" x2="'+(p[0]+3)+'" y2="'+p[1]+'"/><line x1="'+p[0]+'" y1="'+(p[1]-3)+'" x2="'+p[0]+'" y2="'+(p[1]+3)+'"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="1.25"/></g>':'<circle class="fm" cx="'+p[0]+'" cy="'+p[1]+'" r=".6" style="animation-delay:'+(i*.2).toFixed(1)+'s"/>';});
  const el=svgEl(s+'</svg>');const fl=el.querySelector(".fl");requestAnimationFrame(()=>{const L=fl.getTotalLength();fl.style.strokeDasharray=L;fl.style.strokeDashoffset=L;requestAnimationFrame(()=>{fl.style.transition="stroke-dashoffset 2.4s cubic-bezier(.4,0,.2,1)";fl.style.strokeDashoffset=0;});});return el;}
 let PILOT_PAIRS=null;
+/* room check: only when the microphone is already allowed, so a listening game never asks for it */
+async function roomLoud(){try{if(!navigator.permissions)return false;const p=await navigator.permissions.query({name:"microphone"});if(p.state!=="granted")return false;}catch(e){return false;}
+ await G.mic();if(!G.an)return false;const v=[];for(let i=0;i<14;i++){await G.sleep(80);v.push(G.level());}v.sort((a,b)=>a-b);return v[Math.floor(v.length/2)]>.12;}
 function pilotPairs(){if(PILOT_PAIRS)return PILOT_PAIRS;const ws=(window.WORDS||[]).filter(w=>w.a&&!/[ _]/.test(w.tr)&&w.tr.length>=2);
  const key=w=>w.tr.toLowerCase().replace(/[^a-z]/g,"");const lev=(a,b)=>{if(Math.abs(a.length-b.length)>2)return 9;let p=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[b.length];};
  const out={1:[],2:[],3:[]};for(let i=0;i<ws.length;i++)for(let j=i+1;j<ws.length;j++){const a=key(ws[i]),b=key(ws[j]);if(a===b)continue;const d=lev(a,b);
@@ -1767,7 +1773,8 @@ V["g-pilot"]=()=>stageView({he:"טַיָּס עִוֵּר",en:"Blind Pilot",cls:
  const intro=()=>gIntro(st,[gHe("עֵינַיִם עֲצוּמוֹת","","font-size:1.8rem",{mode:"draw",dur:1100}),"Eyes closed. The screen goes dark. You hear two words.",
   "Swipe left if they are the same word. Swipe right if they are different. You can also tap the left or right half, or use the arrow keys.",
   "Twelve pairs a flight. Score ten and the pairs get closer: one sound apart.",h("div",{class:"gsmall"},"Level "+lvl()+" of 3 · best "+(gs.best||0)+" of 12")],fly,"Take off");
- const fly=async()=>{const pairs=pilotPairs()[lvl()],trials=[];for(let i=0;i<12;i++){const pr=pairs[Math.floor(Math.random()*pairs.length)];const same=Math.random()<.5;const a=pr[Math.random()<.5?0:1];trials.push(same?{a,b:a,same}:{a:pr[0],b:pr[1],same});}const log=[];
+ const fly=async(force)=>{if(force!==true&&await roomLoud()){if(!st.alive())return;st.set([h("div",{class:"glass fadein",style:"max-width:340px"},gHe("שֶׁקֶט","","font-size:1.8rem",{mode:"draw"}),h("p",{class:"gmeta"},"The room sounds loud. Blind Pilot trains very fine differences, and noise hides them."),h("p",{class:"gsmall"},"Headphones or a quieter spot will make every flight count."))],[h("button",{class:"nbtn ghost",onclick:intro},"Back"),h("button",{class:"nbtn lead",onclick:()=>fly(true)},"Fly anyway")]);return;}
+  if(!st.alive())return;const pairs=pilotPairs()[lvl()],trials=[];for(let i=0;i<12;i++){const pr=pairs[Math.floor(Math.random()*pairs.length)];const same=Math.random()<.5;const a=pr[Math.random()<.5?0:1];trials.push(same?{a,b:a,same}:{a:pr[0],b:pr[1],same});}const log=[];
   const pulse=h("div",{class:"pulse"}),pad=h("div",{class:"pilot"},h("span",{class:"side pl"},"same"),h("span",{class:"side pr2"},"different"),pulse);
   st.set([],[]);st.el.append(pad);G.on(()=>pad.remove());let score=0;const miss=[];
   const blip=()=>{pulse.classList.remove("go");void pulse.offsetWidth;pulse.classList.add("go");};
@@ -1795,6 +1802,17 @@ function penDraw(g,ch,o={}){const st=typeof STROKES!=="undefined"&&STROKES[ch];g
  return new Promise(res=>{let i=0,t0=performance.now()+(o.delay||0);const step=now=>{if(!g.isConnected)return res();if(now<t0){requestAnimationFrame(step);return;}
   const L=Ls[i],dur=(o.speed||1)*(140+L*4.2),k=Math.min(1,(now-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;paths[i].style.strokeDashoffset=String(L*(1-e));const pt=paths[i].getPointAtLength(L*e);nib.setAttribute("cx",pt.x);nib.setAttribute("cy",pt.y);
   if(k>=1){i++;t0=now+90;if(i>=paths.length){nib.style.transition="opacity .5s";nib.style.opacity="0";return res();}}requestAnimationFrame(step);};requestAnimationFrame(step);});}
+/* ---------- voice glow: an element brightens with the live microphone level ---------- */
+function voiceGlow(el,o={}){if(RM||!el)return ()=>{};let on=true;const k=o.k||1.6,b=o.blur||14;
+ (function f(){if(!on||!el.isConnected){el.style.filter="";return;}const l=G.level();el.style.filter="brightness("+(1+l*k).toFixed(3)+") drop-shadow(0 0 "+(l*b).toFixed(1)+"px rgba(255,214,150,.9))";requestAnimationFrame(f);})();
+ return ()=>{on=false;el.style.transition="filter .5s";el.style.filter="";setTimeout(()=>{el.style.transition="";},600);};}
+/* ---------- path stones: the Then and Now plate, one stone per take (positions projected from the Blender camera) ---------- */
+function pathStones(n,today){const C=[0,-6.5,2.0],a=81*Math.PI/180,F=[0,Math.sin(a),-Math.cos(a)],U=[0,Math.cos(a),Math.sin(a)],tv=0.6,th=0.6*1080/1920;
+ let s='<svg class="ov stones" viewBox="0 0 540 960" aria-hidden="true"><defs><radialGradient id="stg"><stop offset="0" stop-color="#fff6dd" stop-opacity=".95"/><stop offset=".5" stop-color="#ffd58a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb84d" stop-opacity="0"/></radialGradient></defs>';
+ for(let i=Math.min(30,n)-1;i>=0;i--){const t=i/29,P=[Math.sin(t*4.2)*1.6*(1-t*.5)-.6*(1-t),-2+t*42,.11],d=[P[0]-C[0],P[1]-C[1],P[2]-C[2]];
+  const z=d[1]*F[1]+d[2]*F[2],x=.5+(d[0]/z)/(2*th),y=.5-((d[1]*U[1]+d[2]*U[2])/z)/(2*tv),L=Math.hypot(...d),rx=(.32*(1-.35*t)/z)/(2*th)*540*1.5,ry=rx*Math.max(.12,1.15*(-d[2])/L);
+  s+='<ellipse class="st'+(i===n-1&&today?' new':'')+'" cx="'+(x*540).toFixed(1)+'" cy="'+(y*960).toFixed(1)+'" rx="'+rx.toFixed(1)+'" ry="'+ry.toFixed(1)+'" fill="url(#stg)" style="animation-delay:'+(i*.04).toFixed(2)+'s"/>';}
+ return svgEl(s+'</svg>');}
 /* ---------- 4. Root Detective ---------- */
 const FAM=()=>(window.ROOTS||[]).map(r=>({r,ids:(r.w||[]).filter(id=>W[id]&&W[id].a)})).filter(f=>f.ids.length>=2);
 const hsh=s=>{let x=2166136261;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,16777619);}return x>>>0;};
@@ -1830,10 +1848,10 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
   const pick=v=>{said=v;if(G.sr)try{G.sr.abort();}catch(e){}};
   const btns=[h("button",{class:"nbtn ghost",onclick:async()=>{await playId(t.a);await G.sleep(400);playId(t.b);}},"Again"),h("button",{class:"nbtn",onclick:()=>pick(true)},"כֵּן · family"),h("button",{class:"nbtn",onclick:()=>pick(false)},"לֹא · trick")];
   st.foot.replaceChildren(...btns);
-  if(G.canHear()){await G.mic();const ring=h("div",{class:"ring"},h("span",{},"ken or lo"));st.body.append(ring);
+  if(G.canHear()){await G.mic();const ring=h("div",{class:"ring"},h("span",{},"ken or lo"));st.body.append(ring);const lv=[...plate.querySelectorAll(".leaf")];const unglow=voiceGlow(lv[lv.length-1],{k:2.2,blur:18});G.on(unglow);
    while(said===null&&st.alive()){const r=await G.listen(4000);if(said!==null||!st.alive())break;if(!r){break;}const ws=[r.text,...(r.alts||[])].map(x=>hnorm(x).join(" ")).join(" | ");
     if(/(^|\s)(כנ|קנ|כנה)(\s|$|\|)/.test(ws))said=true;else if(/(^|\s)(לא|לו|לה)(\s|$|\|)/.test(ws))said=false;}
-   ring.remove();}
+   ring.remove();unglow();}
   while(said===null&&st.alive())await G.sleep(120);if(!st.alive())return;
   const ok=said===t.same;G.chime(ok);if(ok)score++;
   const fam=t.same?t.f:null;let nw=null;if(ok&&t.same){[t.a,t.b].forEach(id=>{if(!gs.found.includes(id)){gs.found.push(id);nw=id;}});save();}
@@ -1918,7 +1936,7 @@ V["g-body"]=()=>stageView({he:"עִבְרִית בַּגּוּף",en:"Body Hebre
    async function reveal(){fig.el.classList.remove("dim");fig.show(id);st.foot.replaceChildren();await G.sleep(1900);if(!st.alive())return;const v=verdict({ids:[id],yes:"I moved like that",no:"Not quite",self:"Did your body match the figure?"});
     const bw=gHe(W[id].he,"","font-size:2.2rem",{mode:"draw",delay:750});st.set([h("div",{class:"gsmall"},"Turn "+i+" of 8"),fig.el,bw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);requestAnimationFrame(()=>trailsToWord(st,fig,bw));v.done.then(async ok=>{if(ok){score++;G.win(st,bw);}G.chime(ok);await G.sleep(ok?800:0);if(st.alive())turn();});}}
   else{fig.el.classList.remove("dim");fig.show(id);st.set([h("div",{class:"gsmall"},"Turn "+i+" of 8 · Say it"),fig.el,h("p",{class:"gmeta"},"What is the figure doing? Say it in Hebrew.")],[h("button",{class:"nbtn lead",onclick:say},"Say it")]);
-   async function say(){await G.mic();const res=G.canHear()?await hearYou(st,4500):null;if(!st.alive())return;const ok=G.heard(res,id);const v=verdict({res,ok:res?ok:undefined,ids:[id]});
+   async function say(){await G.mic();const unglow=voiceGlow(fig.el,{k:1.4,blur:22});const res=G.canHear()?await hearYou(st,4500):null;unglow();if(!st.alive())return;const ok=G.heard(res,id);const v=verdict({res,ok:res?ok:undefined,ids:[id]});
     const bw=gHe(W[id].he,"","font-size:2.2rem",{mode:ok?"draw":"etched",delay:ok?750:0});st.set([fig.el,bw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);playId(id);if(!ok)G.lose(bw);else requestAnimationFrame(()=>trailsToWord(st,fig,bw));const good=await v.done;if(good){score++;G.win(st,bw);}G.chime(good);await G.sleep(good?800:0);if(st.alive())turn();}}};
  const end=()=>{gs.plays=(gs.plays||0)+1;save();fig.show("yakhol");st.set([fig.el,h("div",{class:"glass fadein"},h("div",{style:"font-size:2.2rem;color:var(--sg-hi)"},score+" of 8"),h("p",{class:"gmeta"},"Your body remembers more than you think."))],[h("button",{class:"nbtn lead",onclick:()=>{q=order();i=0;score=0;turn();}},"Again")]);};
  intro();}});
@@ -1927,12 +1945,12 @@ function spiral(env){let d="";const n=env.length;for(let i=0;i<n;i++){const t=i/
  return svgEl('<svg class="spiral" viewBox="0 0 24 24" aria-hidden="true"><path d="'+d+'"/></svg>');}
 async function kv(key,val){const d=await idb();return new Promise((res,rej)=>{const x=d.transaction("kv",val===undefined?"readonly":"readwrite"),s=x.objectStore("kv");let out;
  if(val===undefined){const q=s.get(key);q.onsuccess=()=>out=q.result;}else if(val===null)s.delete(key);else s.put(val,key);x.oncomplete=()=>res(out);x.onerror=()=>rej(x.error);});}
-V["g-then"]=()=>stageView({he:"אָז וְעַכְשָׁו",en:"Then and Now",bg:"path",run:async st=>{const gs=GS("then");
+V["g-then"]=()=>stageView({he:"אָז וְעַכְשָׁו",en:"Then and Now",bg:"",run:async st=>{const gs=GS("then");const plate=h("div",{class:"plate",style:"background-image:url("+STG.path+")"});st.el.insertBefore(plate,st.fx.nextSibling);const lightStones=(n,td)=>{plate.replaceChildren(pathStones(n,td));};
  let takes=[];try{takes=(await kv("tn:list"))||[];}catch(e){}if(!st.alive())return;
  const opts=LESSONS.map((l,i)=>({i,ids:l.sample})).filter(x=>x.i<gDone()&&x.ids.every(id=>W[id]&&W[id].a));
  if(!gs.sent||!gs.sent.every(id=>W[id])){const best=opts.slice().sort((a,b)=>b.ids.length-a.ids.length)[0];gs.sent=best?best.ids:["david","okhelv","basar"];save();}
  const getBuf=async t=>{const v=await kv("tn:"+t.day);if(!v)return null;try{return await G.decode(v.buf);}catch(e){return null;}};
- const home=()=>{const td=today(),has=takes.some(t=>t.day===td),n=takes.length;
+ const home=()=>{const td=today(),has=takes.some(t=>t.day===td),n=takes.length;lightStones(n,has);
   const dots=h("div",{class:"dots"},...Array.from({length:30},(_,i)=>{const t=takes[i];const sp=t&&t.env?spiral(t.env):null;return h("button",{class:(t?"hasrec":"")+(t&&t.day===td?" today":"")+(sp?" sealed":""),"aria-label":t?"Take "+(i+1)+", play it":"Take "+(i+1)+", not recorded yet",onclick:async()=>{if(!t)return;const b=await getBuf(t);if(b&&st.alive())G.play(b,0,1.2);}},sp||String(i+1));}));
   const line=h("div",{class:"glass fadein",style:"max-width:360px"},h("div",{class:"gsmall"},"Your line, the same every day"),h("div",{class:"beads",style:"margin:8px 0"},...gs.sent.map((id,k)=>h("div",{class:"bead"},(()=>{const g=gHe(W[id].he,"","",{mode:"draw",delay:k*200});g.dataset.llalpha=(.35+.65*Math.min(1,n/30)).toFixed(2);return g;})(),h("span",{class:"gsmall tr",html:trHtml(W[id].tr)})))),
    h("button",{class:"nbtn ghost",style:"min-height:38px;padding:6px 14px",onclick:()=>playSeq(gs.sent)},"Hear it"),
