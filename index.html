@@ -259,6 +259,8 @@ body.staged{overflow:hidden}
 .nring{overflow:visible}.nring text{font-size:13px;font-weight:600;letter-spacing:.08em;fill:#c9b48a;paint-order:stroke;stroke:rgba(20,10,4,.6);stroke-width:2px}.nring text.on{fill:#fff1cf}.nring .emb{fill:#ffcf8a;filter:drop-shadow(0 0 6px rgba(224,122,58,.95))}
 .dcard{text-align:center}.fadepic{opacity:.12;transition:opacity .6s}
 .armil{position:absolute;left:50%;top:37%;width:52%;transform:translate(-50%,-50%);pointer-events:none;opacity:.9;mix-blend-mode:screen}
+.seedp .pen{fill:none;stroke:#3a2508;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}.seedp .nib{fill:#fff1cf;filter:drop-shadow(0 0 4px rgba(255,214,150,.95))}
+.tw{position:fixed;inset:0;width:100%;height:100%;z-index:7;pointer-events:none}
 
 .pic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--ink);flex:none;font-family:var(--heb);font-weight:700;font-size:1.15rem;line-height:1}
 .pic svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1295,7 +1297,7 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 32. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 33. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
 
 
 /* which root a word belongs to */
@@ -1784,6 +1786,15 @@ V["g-pilot"]=()=>stageView({he:"טַיָּס עִוֵּר",en:"Blind Pilot",cls:
      h("button",{class:"nbtn ghost",style:"min-height:38px;padding:6px 12px",onclick:async()=>{await playId(t.a);await G.sleep(400);playId(t.b);}},"Hear"),h("span",{class:"gmeta"},t.same?"the same word":"two different words"),t.same?gHe(W[t.a].he,"","font-size:1.2rem"):h("div",{class:"row",style:"gap:10px"},...diffPair(W[t.a].he,W[t.b].he))))):null)],
    [h("button",{class:"nbtn ghost",onclick:()=>{st.el.classList.add("ndark");st.el.classList.remove("landed");intro();}},"Back"),h("button",{class:"nbtn lead",onclick:()=>{st.el.classList.add("ndark");st.el.classList.remove("landed");fly();}},"Fly again")]);};
  intro();}});
+/* ---------- pen drawing: letters written stroke by stroke in true order (the Letters tab's own models) ---------- */
+function penDraw(g,ch,o={}){const st=typeof STROKES!=="undefined"&&STROKES[ch];g.innerHTML="";if(!st)return Promise.resolve();const NS="http://www.w3.org/2000/svg";
+ const paths=st.map(pts=>{const pa=document.createElementNS(NS,"path");pa.setAttribute("d","M"+pts.map(q=>q[0]+" "+q[1]).join(" L"));pa.setAttribute("class","pen");g.append(pa);return pa;});
+ const nib=document.createElementNS(NS,"circle");nib.setAttribute("r",o.nib||6);nib.setAttribute("class","nib");g.append(nib);
+ if(RM){nib.remove();return Promise.resolve();}
+ const Ls=paths.map(pa=>{const L=pa.getTotalLength();pa.style.strokeDasharray=L;pa.style.strokeDashoffset=L;return L;});
+ return new Promise(res=>{let i=0,t0=performance.now()+(o.delay||0);const step=now=>{if(!g.isConnected)return res();if(now<t0){requestAnimationFrame(step);return;}
+  const L=Ls[i],dur=(o.speed||1)*(140+L*4.2),k=Math.min(1,(now-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;paths[i].style.strokeDashoffset=String(L*(1-e));const pt=paths[i].getPointAtLength(L*e);nib.setAttribute("cx",pt.x);nib.setAttribute("cy",pt.y);
+  if(k>=1){i++;t0=now+90;if(i>=paths.length){nib.style.transition="opacity .5s";nib.style.opacity="0";return res();}}requestAnimationFrame(step);};requestAnimationFrame(step);});}
 /* ---------- 4. Root Detective ---------- */
 const FAM=()=>(window.ROOTS||[]).map(r=>({r,ids:(r.w||[]).filter(id=>W[id]&&W[id].a)})).filter(f=>f.ids.length>=2);
 const hsh=s=>{let x=2166136261;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,16777619);}return x>>>0;};
@@ -1792,7 +1803,7 @@ function treeSvg(found,newest){const TX=270,TY=345;let s='<svg class="ov" viewBo
   const d="M"+TX+" "+TY+" C"+TX+" "+(TY-r*.45)+" "+(ex*.6+TX*.4)+" "+(ey+50)+" "+ex.toFixed(1)+" "+ey.toFixed(1);const L=r*1.25;const nw=id===newest;
   s+='<path class="branch'+(nw?' grow':'')+'" d="'+d+'" stroke-width="'+(nw?3.4:2.4)+'" style="stroke-dasharray:'+L+';--len:'+L+'"/>';
   s+='<g class="leaf'+(nw?' fadein':'')+'" style="'+(nw?'animation-delay:1.2s':'')+'"><circle cx="'+ex.toFixed(1)+'" cy="'+ey.toFixed(1)+'" r="'+(nw?7:4.5)+'" fill="#fff1cf" filter="url(#glow)"/>'+(i>=found.length-6?'<text x="'+ex.toFixed(1)+'" y="'+(ey-12).toFixed(1)+'" text-anchor="middle" style="opacity:'+(nw?1:.6)+'">'+W[id].he+'</text>':'')+'</g>';});
- [[456,797],[270,799],[87,797]].forEach((p,i)=>{s+='<text class="seedl" id="seed'+i+'" x="'+p[0]+'" y="'+(p[1]+12)+'" text-anchor="middle"></text>';});
+ [[456,797],[270,799],[87,797]].forEach((p,i)=>{s+='<g class="seedp" id="seed'+i+'" transform="translate('+(p[0]-21)+' '+(p[1]-23)+') scale(.42)"></g>';});
  return svgEl(s+'</svg>');}
 V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:"Root Detective",bg:"",run:st=>{const gs=GS("roots");gs.found=gs.found||[];const fams=FAM();
  const plate=h("div",{class:"plate",style:"background-image:url("+STG.tree+")"});st.el.insertBefore(plate,st.fx.nextSibling);st.body.style.justifyContent="flex-start";
@@ -1802,7 +1813,7 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
   await G.sleep(1150);s.style.transition="opacity .6s";s.style.opacity="0";setTimeout(()=>s.remove(),700);};
  const firefly=id=>{const f=gHe(W[id].he,"firefly","");st.el.append(f);G.on(()=>f.remove());setTimeout(()=>f.remove(),1500);};
  const seedRow=k=>h("div",{class:"seedrow","aria-label":"Case "+k+" of 10"},...Array.from({length:10},(_,i)=>h("i",{class:i<k?"on":""})));
- const seeds=(letters)=>{letters.forEach((c,i)=>{const t=plate.querySelector("#seed"+i);if(t){t.textContent=c;t.classList.add("on");}});};
+ const seeds=async(letters,instant)=>{for(let i=0;i<letters.length;i++){const g=plate.querySelector("#seed"+i);if(!g)continue;const pr=penDraw(g,({"ך":"כ","ם":"מ","ן":"נ","ף":"פ","ץ":"צ"})[letters[i]]||letters[i],{speed:instant?.001:.6});if(!instant)await pr;}};
  const intro=()=>gIntro(st,["You hear two words. Are they one family, grown from the same three-letter root, or is it a trick?",
    h("p",{class:"gmeta",style:"margin:.4em 0"},"Answer out loud in Hebrew: ",h("b",{lang:"he",class:"ghe",style:"font-size:1.3rem"},"כֵּן")," ken for one family, ",h("b",{lang:"he",class:"ghe",style:"font-size:1.3rem"},"לֹא")," lo for a trick."),
    "Every family you catch grows a branch of light on the tree.",h("div",{class:"gsmall"},gs.found.length+" branches so far · "+fams.length+" families to find")],round,"Start the case");
@@ -1826,7 +1837,7 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
   while(said===null&&st.alive())await G.sleep(120);if(!st.alive())return;
   const ok=said===t.same;G.chime(ok);if(ok)score++;
   const fam=t.same?t.f:null;let nw=null;if(ok&&t.same){[t.a,t.b].forEach(id=>{if(!gs.found.includes(id)){gs.found.push(id);nw=id;}});save();}
-  seeds(t.f.r.r.split("-"));if(nw){await sap();if(!st.alive())return;redraw(nw);seeds(t.f.r.r.split("-"));}if(ok&&!t.same)firefly(t.f.ids.includes(t.a)?t.b:t.a);
+  await seeds(t.f.r.r.split("-"));if(!st.alive())return;if(nw){await sap();if(!st.alive())return;redraw(nw);seeds(t.f.r.r.split("-"),true);}if(ok&&!t.same)firefly(t.f.ids.includes(t.a)?t.b:t.a);
   st.set([h("div",{class:"gsmall"},ok?(t.same?"Same family. A branch grows.":"Well caught. A trick."):(t.same?"They were one family.":"A trick: two families.")),
    h("div",{class:"glass fadein",style:"max-width:340px"},...[t.a,t.b].map((id,k)=>h("div",{class:"row",style:"justify-content:space-between;gap:10px;padding:4px 0"},h("span",{class:"gmeta"},W[id].en),gHe(W[id].he,"rw","font-size:1.6rem",{mode:"draw",delay:k*350}))),
     h("div",{class:"gsmall",style:"margin-top:6px"},t.same?"Root "+t.f.r.r+": "+t.f.r.en:"Roots "+t.f.r.r+" ("+t.f.r.en+") and "+t.g.r.r+" ("+t.g.r.en+")"))],
@@ -1835,6 +1846,14 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
   st.set([h("div",{class:"glass fadein"},h("div",{style:"font-size:2.2rem;color:var(--sg-hi)"},score+" of 10"),h("p",{class:"gmeta"},gs.found.length+" branches · "+famsFound+" of "+fams.length+" families on your tree."))],[h("button",{class:"nbtn ghost",onclick:intro},"Rules"),h("button",{class:"nbtn lead",onclick:round},"Another case")]);};
  intro();}});
 /* ---------- 5. Body Hebrew ---------- */
+function trailsToWord(st,fig,word){const src=fig.trailPts();if(RM||!src.length||!word)return;const b=word.getBoundingClientRect();if(!b.width)return;
+ const cv=h("canvas",{class:"tw","aria-hidden":"true"});st.el.append(cv);const dpr=Math.min(2,devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;const c=cv.getContext("2d");c.scale(dpr,dpr);
+ const P=src.slice(0,90).map((s,i)=>{const tx=b.right-(i/Math.max(1,Math.min(90,src.length)-1))*b.width*.9-b.width*.05,ty=b.top+b.height*(.35+.3*Math.random());return {x:s[0],y:s[1],sx:s[0],sy:s[1],tx,ty,d:Math.random()*180,a:.4+.6*s[2]};});
+ const t0=performance.now(),T=900;const step=now=>{if(!st.alive()||!cv.isConnected)return;c.clearRect(0,0,W,H);c.globalCompositeOperation="lighter";let live=false;
+  P.forEach(q=>{const k=Math.max(0,Math.min(1,(now-t0-q.d)/T)),e=1-Math.pow(1-k,3);if(k<1)live=true;const x=q.sx+(q.tx-q.sx)*e,y=q.sy+(q.ty-q.sy)*e-Math.sin(Math.PI*e)*40;
+   c.strokeStyle="rgba(239,208,143,"+(.35*q.a*(1-k*.6)).toFixed(3)+")";c.lineWidth=1.4;c.beginPath();c.moveTo(q.x,q.y);c.lineTo(x,y);c.stroke();q.x=x;q.y=y;
+   c.fillStyle="rgba(255,241,207,"+(q.a*(1-Math.max(0,k-.85)/.15)).toFixed(3)+")";c.beginPath();c.arc(x,y,1.6,0,6.283);c.fill();});
+  if(live)requestAnimationFrame(step);else cv.remove();};requestAnimationFrame(step);}
 const PB={x:0,y:0,s:1,t:0,h:0,uaL:-14,faL:-8,uaR:14,faR:8,thL:-7,shL:-4,thR:7,shR:4,wheel:0};
 const SIT={y:30,thL:90,shL:2,thR:86,shR:-2};
 const MOVES={
@@ -1885,7 +1904,8 @@ function figure(){const box=svgEl('<svg class="figure" viewBox="-100 -120 200 22
   raf=requestAnimationFrame(draw);};
  box.querySelector(".soft").setAttribute("style","stroke:rgba(233,194,122,.28);stroke-width:5;fill:none");box.querySelector(".core").setAttribute("style","stroke:rgba(255,241,207,.7);stroke-width:1.1;fill:none");
  box.querySelector(".joints").setAttribute("style","fill:#fff1cf;filter:drop-shadow(0 0 3px rgba(255,226,170,.95))");box.querySelector(".trail").setAttribute("style","fill:none;stroke:#efd08f;stroke-linecap:round;stroke-linejoin:round");
- return {el:box,show:(id,still)=>{mv=MOVES[id]?{...MOVES[id]}:null;if(still&&mv){mv={a:{},b:{},p:1000,still:1};}for(const k in TR)TR[k]=[];t0=performance.now();cancelAnimationFrame(raf);if(RM&&mv){const k=mv;mv={...k,p:1e9};}draw();},stop:()=>cancelAnimationFrame(raf)};}
+ const trailPts=()=>{const m=box.getScreenCTM();if(!m)return [];const pt=box.createSVGPoint(),out=[];for(const k in TR){const a=TR[k];for(let i=a.length-1;i>=0;i-=5){pt.x=a[i][0];pt.y=a[i][1];const q=pt.matrixTransform(m);out.push([q.x,q.y,i/a.length]);}}return out;};
+ return {el:box,trailPts,show:(id,still)=>{mv=MOVES[id]?{...MOVES[id]}:null;if(still&&mv){mv={a:{},b:{},p:1000,still:1};}for(const k in TR)TR[k]=[];t0=performance.now();cancelAnimationFrame(raf);if(RM&&mv){const k=mv;mv={...k,p:1e9};}draw();},stop:()=>cancelAnimationFrame(raf)};}
 V["g-body"]=()=>stageView({he:"עִבְרִית בַּגּוּף",en:"Body Hebrew",bg:"sky",run:st=>{const gs=GS("body");
  const all=Object.keys(MOVES).filter(id=>W[id]&&W[id].a),known=all.filter(id=>gLearned().includes(id)),pool=known.length>=5?known:all;
  const fig=figure();G.on(fig.stop);
@@ -1895,11 +1915,11 @@ V["g-body"]=()=>stageView({he:"עִבְרִית בַּגּוּף",en:"Body Hebre
  const turn=async()=>{if(i>=8)return end();const id=q[i%q.length],act=i%2===0;i++;
   if(act){fig.show(id,true);fig.el.classList.add("dim");st.set([h("div",{class:"gsmall"},"Turn "+i+" of 8 · Act it"),fig.el,h("p",{class:"gmeta"},"Listen, then move.")],[h("button",{class:"nbtn ghost",onclick:()=>playId(id)},"Hear it again"),h("button",{class:"nbtn lead",onclick:reveal},"Show me")]);
    await G.sleep(500);if(st.alive())playId(id);
-   function reveal(){fig.el.classList.remove("dim");fig.show(id);const v=verdict({ids:[id],yes:"I moved like that",no:"Not quite",self:"Did your body match the figure?"});
-    const bw=gHe(W[id].he,"","font-size:2.2rem",{mode:"draw"});st.set([h("div",{class:"gsmall"},"Turn "+i+" of 8"),fig.el,bw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);v.done.then(async ok=>{if(ok){score++;G.win(st,bw);}G.chime(ok);await G.sleep(ok?800:0);if(st.alive())turn();});}}
+   async function reveal(){fig.el.classList.remove("dim");fig.show(id);st.foot.replaceChildren();await G.sleep(1900);if(!st.alive())return;const v=verdict({ids:[id],yes:"I moved like that",no:"Not quite",self:"Did your body match the figure?"});
+    const bw=gHe(W[id].he,"","font-size:2.2rem",{mode:"draw",delay:750});st.set([h("div",{class:"gsmall"},"Turn "+i+" of 8"),fig.el,bw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);requestAnimationFrame(()=>trailsToWord(st,fig,bw));v.done.then(async ok=>{if(ok){score++;G.win(st,bw);}G.chime(ok);await G.sleep(ok?800:0);if(st.alive())turn();});}}
   else{fig.el.classList.remove("dim");fig.show(id);st.set([h("div",{class:"gsmall"},"Turn "+i+" of 8 · Say it"),fig.el,h("p",{class:"gmeta"},"What is the figure doing? Say it in Hebrew.")],[h("button",{class:"nbtn lead",onclick:say},"Say it")]);
    async function say(){await G.mic();const res=G.canHear()?await hearYou(st,4500):null;if(!st.alive())return;const ok=G.heard(res,id);const v=verdict({res,ok:res?ok:undefined,ids:[id]});
-    const bw=gHe(W[id].he,"","font-size:2.2rem",{mode:ok?"draw":"etched"});st.set([fig.el,bw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);playId(id);if(!ok)G.lose(bw);const good=await v.done;if(good){score++;G.win(st,bw);}G.chime(good);await G.sleep(good?800:0);if(st.alive())turn();}}};
+    const bw=gHe(W[id].he,"","font-size:2.2rem",{mode:ok?"draw":"etched",delay:ok?750:0});st.set([fig.el,bw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);playId(id);if(!ok)G.lose(bw);else requestAnimationFrame(()=>trailsToWord(st,fig,bw));const good=await v.done;if(good){score++;G.win(st,bw);}G.chime(good);await G.sleep(good?800:0);if(st.alive())turn();}}};
  const end=()=>{gs.plays=(gs.plays||0)+1;save();fig.show("yakhol");st.set([fig.el,h("div",{class:"glass fadein"},h("div",{style:"font-size:2.2rem;color:var(--sg-hi)"},score+" of 8"),h("p",{class:"gmeta"},"Your body remembers more than you think."))],[h("button",{class:"nbtn lead",onclick:()=>{q=order();i=0;score=0;turn();}},"Again")]);};
  intro();}});
 /* ---------- 6. Then and Now ---------- */
