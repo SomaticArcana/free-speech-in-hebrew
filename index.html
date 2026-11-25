@@ -1830,7 +1830,7 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
   s.querySelectorAll("path").forEach(pa=>{const L=pa.getTotalLength();pa.style.strokeDasharray=L;pa.style.strokeDashoffset=L;requestAnimationFrame(()=>requestAnimationFrame(()=>{pa.style.transition="stroke-dashoffset 1.1s cubic-bezier(.65,0,.35,1)";pa.style.strokeDashoffset=0;}));});
   await G.sleep(1150);s.style.transition="opacity .6s";s.style.opacity="0";setTimeout(()=>s.remove(),700);};
  const firefly=id=>{const f=gHe(W[id].he,"firefly","");st.el.append(f);G.on(()=>f.remove());setTimeout(()=>f.remove(),1500);};
- const seedRow=k=>h("div",{class:"seedrow","aria-label":"Case "+k+" of 10"},...Array.from({length:10},(_,i)=>h("i",{class:i<k?"on":""})));
+ const seedRow=k=>h("div",{class:"seedrow",role:"img","aria-label":"Case "+k+" of 10"},...Array.from({length:10},(_,i)=>h("i",{class:i<k?"on":""})));
  const seeds=async(letters,instant)=>{for(let i=0;i<letters.length;i++){const g=plate.querySelector("#seed"+i);if(!g)continue;const pr=penDraw(g,({"ך":"כ","ם":"מ","ן":"נ","ף":"פ","ץ":"צ"})[letters[i]]||letters[i],{speed:instant?.001:.6});if(!instant)await pr;}};
  const intro=()=>gIntro(st,["You hear two words. Are they one family, grown from the same three-letter root, or is it a trick?",
    h("p",{class:"gmeta",style:"margin:.4em 0"},"Answer out loud in Hebrew: ",h("b",{lang:"he",class:"ghe",style:"font-size:1.3rem"},"כֵּן")," ken for one family, ",h("b",{lang:"he",class:"ghe",style:"font-size:1.3rem"},"לֹא")," lo for a trick."),
