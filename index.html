@@ -255,6 +255,10 @@ body.staged{overflow:hidden}
 .rose{position:absolute;left:50%;bottom:25%;width:46px;height:46px;margin-left:-23px;z-index:3;pointer-events:none;animation:rosefall 1.6s cubic-bezier(.3,.6,.3,1) both}
 .rose path{fill:none;stroke:#efd08f;stroke-width:.7;filter:drop-shadow(0 0 2px rgba(255,214,150,.9))}.rose circle{fill:#fff1cf}
 @keyframes rosefall{from{transform:translateY(-260px) rotate(-60deg);opacity:0}60%{opacity:1}}
+.fov{position:absolute;inset:0;z-index:2;pointer-events:none}.fov .medal{aspect-ratio:1}
+.nring{overflow:visible}.nring text{font-size:13px;font-weight:600;letter-spacing:.08em;fill:#c9b48a;paint-order:stroke;stroke:rgba(20,10,4,.6);stroke-width:2px}.nring text.on{fill:#fff1cf}.nring .emb{fill:#ffcf8a;filter:drop-shadow(0 0 6px rgba(224,122,58,.95))}
+.dcard{text-align:center}.fadepic{opacity:.12;transition:opacity .6s}
+.armil{position:absolute;left:50%;top:37%;width:52%;transform:translate(-50%,-50%);pointer-events:none;opacity:.9;mix-blend-mode:screen}
 
 .pic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--accent-soft);color:var(--ink);flex:none;font-family:var(--heb);font-weight:700;font-size:1.15rem;line-height:1}
 .pic svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1291,7 +1295,7 @@ V.settings=()=>{const nm=h("input",{type:"text",maxlength:"24",value:S.name||"",
   h("div",{class:"card"},h("h3",{},"Put it on your home screen"),tbl(["Device","How"],[["iPhone or iPad","Open the link in Safari, tap Share, then Add to Home Screen."],["Android","Open the link in Chrome, tap the three dots, then Add to Home screen."],["Computer","Bookmark the page, or keep it as a pinned tab."]]),h("p",{class:"small soft"},"After the first visit it also works without an internet connection.")),
   h("div",{class:"card"},h("h3",{},"Privacy, in plain words"),tbl(["What","Where it goes"],[["Your name and learning progress","Your device, and your private space on Claude if signed in"],["Microphone recordings","Nowhere. They play back to you and are discarded when you leave the lesson"],["Tutor messages","Sent to Claude to get a reply, like any Claude chat"],["Ads, tracking, selling data","None"]])),
   h("div",{class:"card"},h("h3",{},"Contact"),h("p",{class:"small"},"Built by "+CONTACT.name+". Found a mistake or have an idea? He would like to hear it."),CONTACT.email?h("a",{class:"btn",href:"mailto:"+CONTACT.email,style:"text-decoration:none"},CONTACT.email):null,CONTACT.phone?h("a",{class:"btn",href:"tel:"+CONTACT.phone.replace(/[^0-9+]/g,""),style:"text-decoration:none"},CONTACT.phone):null),
-  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 31. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
+  h("div",{class:"card"},h("h3",{},"About and credit"),h("p",{class:"small"},"Free Speech in Hebrew study companion, revision 32. The speak-first method and the course book Free Speech in Hebrew, Level 1 (Cognella, 2018) are the work of Alana Shuster, PhD, who teaches Hebrew at UC San Diego and San Diego State. The method was created by Zev bar-Lev. This companion is unofficial: it was built by a student, and it is not published or endorsed by her, her universities or her publisher. Any mistakes in it are the builder's, not hers."),h("p",{class:"small"},"Recordings are by volunteer native speakers, credited by name in the Method tab."),h("div",{class:"row"},h("a",{class:"btn",href:"#guide",style:"text-decoration:none"},"How to study"),h("a",{class:"btn",href:"#method",style:"text-decoration:none"},"Method, sources and credits"),h("button",{class:"btn",onclick:()=>{try{sessionStorage.removeItem("hfs-gate");}catch(e){}gate();}},"Show the title screen"))));};
 
 
 /* which root a word belongs to */
@@ -1531,7 +1535,9 @@ void main(){
   miss(el,dur){const it=item(el);it.prog=0;it.anim="draw";it.start=performance.now()+250;it.dur=dur||1600;}};})();
 
 /* ======================= NIGHT-STAGE GAMES ======================= */
-const STG={sky:"media/stage/sky.webp",tree:"media/stage/tree.webp",lab:"media/stage/lab.webp",theater:"media/stage/theater.webp",path:"media/stage/path.webp"};
+const STG_HI=(()=>{try{return (devicePixelRatio||1)>=1.5&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!!document.createElement("canvas").getContext("webgl2");}catch(e){return false;}})();
+const STG=STG_HI?{sky:"media/stage/sky@2.webp",tree:"media/stage/tree@2.webp",lab:"media/stage/lab@2.webp",theater:"media/stage/theater@2.webp",path:"media/stage/path@2.webp",dial:"media/stage/dial@2.webp",armillary:"media/stage/armillary.webp"}
+ :{sky:"media/stage/sky.webp",tree:"media/stage/tree.webp",lab:"media/stage/lab.webp",theater:"media/stage/theater.webp",path:"media/stage/path.webp",dial:"media/stage/dial.webp",armillary:"media/stage/armillary.webp"};
 const G={tok:0,ac:null,stream:null,an:null,lvl:0,ta:null,cache:{},offs:[],sr:null};
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 G.SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1700,8 +1706,8 @@ function dial(n,p,prev){const R=78,ang=i=>(-90-i*360/n)*Math.PI/180;let s='<svg 
  for(let i=0;i<n;i++){const a=ang(i);s+='<text x="'+(Math.cos(a)*(R+16)).toFixed(1)+'" y="'+(Math.sin(a)*(R+16)+4).toFixed(1)+'" text-anchor="middle" class="'+(i===p?"on":"")+'">P'+(i+1)+'</text>';}
  s+='<circle class="emb" r="5"/></svg>';const el=svgEl(s),em=el.querySelector(".emb");const a0=ang(prev),a1=ang(p)+(p<=prev&&n>1?-2*Math.PI:0),t0=performance.now();
  const go=()=>{const k=Math.min(1,(performance.now()-t0)/900),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,a=a0+(a1-a0)*e,rr=R-14;em.setAttribute("cx",(Math.cos(a)*rr).toFixed(1));em.setAttribute("cy",(Math.sin(a)*rr).toFixed(1));if(k<1&&el.isConnected!==false)requestAnimationFrame(go);};requestAnimationFrame(go);return el;}
-V["g-fuse"]=()=>stageView({he:"פְּתִיל",en:"Four-Second Fuse",bg:"sky",run:st=>{const gs=GS("fuse");let n=gs.players||2,rounds=gs.rounds||3,T=gs.T||4;
- const setup=()=>{const np=h("b",{},String(n)),nr=h("b",{},String(rounds));
+V["g-fuse"]=()=>stageView({he:"פְּתִיל",en:"Four-Second Fuse",bg:"dial",run:st=>{const gs=GS("fuse");let n=gs.players||2,rounds=gs.rounds||3,T=gs.T||4;
+ const setup=()=>{if(typeof fov!=="undefined")fov.replaceChildren();st.body.style.justifyContent="";const np=h("b",{},String(n)),nr=h("b",{},String(rounds));
   const tg=h("div",{class:"gtog"},...[[4,"4 seconds, the method's rule"],[6,"6 seconds, gentle"]].map(([v,l])=>h("button",{"aria-pressed":String(T===v),onclick:e=>{T=v;[...tg.children].forEach(b=>b.setAttribute("aria-pressed",String(b===e.currentTarget)));}},l)));
   st.set([h("div",{class:"glass fadein",style:"max-width:360px"},h("p",{class:"gmeta"},"A picture appears and the fuse starts to burn. Say the Hebrew word before it goes out. Then pass the phone. The others judge with a thumb."),
     h("div",{class:"gsmall"},"Players"),h("div",{class:"gstep"},h("button",{"aria-label":"Fewer players",onclick:()=>{n=Math.max(1,n-1);np.textContent=n;}},"−"),np,h("button",{"aria-label":"More players",onclick:()=>{n=Math.min(6,n+1);np.textContent=n;}},"+")),
@@ -1709,12 +1715,21 @@ V["g-fuse"]=()=>stageView({he:"פְּתִיל",en:"Four-Second Fuse",bg:"sky",ru
     h("div",{class:"gsmall",style:"margin-top:10px"},"Fuse"),tg)],
    [h("button",{class:"nbtn lead",onclick:()=>{gs.players=n;gs.rounds=rounds;gs.T=T;save();play();}},"Light the first fuse")]);};
  let score,deck,turn,sky=null,prevP=0;
+ const fov=h("div",{class:"fov","aria-hidden":"false"});st.el.insertBefore(fov,st.body);
+ const geom=()=>{const vw=st.el.clientWidth,vh=st.el.clientHeight,pw=Math.max(vw,vh*.5625),ph=pw/.5625,top=(vh-ph)/2;return {cx:vw/2,cy:top+ph*.47,pw};};
+ const at=(el,g,w)=>{el.style.position="absolute";el.style.left=g.cx+"px";el.style.top=g.cy+"px";if(w)el.style.width=w+"px";el.style.transform="translate(-50%,-50%)";return el;};
+ const ring=(p,prev)=>{const g=geom(),Rn=.318*g.pw,Re=.351*g.pw,S=2*.42*g.pw,ang=i=>(-90-i*360/n)*Math.PI/180;let s='<svg class="nring" viewBox="'+(-S/2)+' '+(-S/2)+' '+S+' '+S+'" width="'+S+'" height="'+S+'">';
+  for(let i=0;i<n;i++){const a=ang(i);s+='<text x="'+(Math.cos(a)*Rn).toFixed(1)+'" y="'+(Math.sin(a)*Rn+4).toFixed(1)+'" text-anchor="middle" class="'+(i===p?"on":"")+'">P'+(i+1)+'</text>';}
+  s+='<circle class="emb" r="5"/></svg>';const el=at(svgEl(s),g),em=el.querySelector(".emb");const a0=ang(prev),a1=ang(p)+(p<=prev&&n>1?-2*Math.PI:0),t0=performance.now();
+  const go=()=>{const k=Math.min(1,(performance.now()-t0)/900),q=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,a=a0+(a1-a0)*q;em.setAttribute("cx",(Math.cos(a)*Re).toFixed(1));em.setAttribute("cy",(Math.sin(a)*Re).toFixed(1));if(k<1&&st.alive())requestAnimationFrame(go);};requestAnimationFrame(go);return el;};
  const play=async()=>{score=Array(n).fill(0);deck=shuffle(gPicWords());turn=0;prevP=0;if(sky)sky.regs.forEach(r=>r.r.remove());sky=fuseSky(st,n);await G.mic();if(st.alive())next();};
- const next=()=>{if(turn>=n*rounds)return end();const p=turn%n;sky.focus(p);if(n>1){st.set([dial(n,p,prevP),h("div",{class:"glass fadein"},h("div",{class:"gsmall"},"Pass the phone to"),h("div",{style:"font-size:2rem;color:var(--sg-hi);margin:6px 0"},"Player "+(p+1)),h("div",{class:"gmeta"},"Score "+score[p]))],[h("button",{class:"nbtn lead",onclick:()=>fuse(p)},"Ready")]);prevP=p;}else fuse(p);};
- const fuse=async p=>{const id=deck[turn%deck.length];turn++;
+ const next=()=>{fov.replaceChildren();st.body.style.justifyContent="";if(turn>=n*rounds)return end();const p=turn%n;sky.focus(p);
+  if(n>1){const g=geom(),card=at(h("div",{class:"dcard"},h("div",{class:"gsmall"},"Pass the phone to"),h("div",{style:"font-size:1.7rem;color:var(--sg-hi);margin:4px 0"},"Player "+(p+1)),h("div",{class:"gsmall"},"Score "+score[p])),g,.5*g.pw);
+   fov.append(ring(p,prevP),card);st.set([],[h("button",{class:"nbtn lead",onclick:()=>fuse(p)},"Ready")]);prevP=p;}else fuse(p);};
+ const fuse=async p=>{const id=deck[turn%deck.length];turn++;fov.replaceChildren();const g=geom();
   const svg=svgEl('<svg class="fuse" viewBox="0 0 200 200"><defs><linearGradient id="fz" x1="0" x2="1"><stop offset="0" stop-color="#b8893e"/><stop offset="1" stop-color="#fff1cf"/></linearGradient></defs><path d="M100 8 A92 92 0 1 0 100.1 8" fill="none" stroke="rgba(201,196,239,.18)" stroke-width="2"/><path class="live" d="M100 8 A92 92 0 1 0 100.1 8" fill="none" stroke="url(#fz)" stroke-width="3" stroke-linecap="round"/></svg>');
-  const em=h("div",{class:"ember"}),medal=h("div",{class:"medal"},svg,pic(id),em);
-  st.set([h("div",{class:"gsmall"},n>1?"Player "+(p+1):"Say it before the fuse burns out"),medal],[h("div",{class:"ring"},h("span",{},"Say it"))]);
+  const em=h("div",{class:"ember"}),pc=pic(id),medal=at(h("div",{class:"medal"},svg,pc,em),g,.615*g.pw);fov.append(medal);
+  st.body.style.justifyContent="flex-start";st.set([h("div",{class:"gsmall"},n>1?"Player "+(p+1):"Say it before the fuse burns out")],[h("div",{class:"ring"},h("span",{},"Say it"))]);
   const live=svg.querySelector(".live"),len=live.getTotalLength();live.style.strokeDasharray=len;let lit=false,t0=performance.now();
   const place=f=>{const pt=live.getPointAtLength(Math.min(len,f*len)),r=medal.getBoundingClientRect(),k=r.width/200;em.style.left=(pt.x*k)+"px";em.style.top=(pt.y*k)+"px";live.style.strokeDashoffset=String(-f*len);};
   let res=null;const L=G.canHear()?G.listen(T*1000+1400,{interim:t=>{if(!lit&&G.heard({text:t},id)){lit=true;em.classList.add("lit");G.chime(true);}}}).then(r=>res=r):Promise.resolve();
@@ -1722,8 +1737,9 @@ V["g-fuse"]=()=>stageView({he:"פְּתִיל",en:"Four-Second Fuse",bg:"sky",ru
   if(!st.alive())return;if(!lit){em.classList.add("out");try{G.sr&&G.sr.stop();}catch(e){}}await L;if(!st.alive())return;
   const ok=lit||G.heard(res,id);
   const v=verdict({res,ok:G.canHear()?ok:undefined,ids:[id],yes:"Got it",no:"Not yet",self:"Hear the word. The group decides."});
-  const hw=gHe(W[id].he,"","font-size:2.6rem",{mode:lit?"draw":"etched",dur:lit?500:0});st.set([medal,hw,h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);playId(id);if(!lit)G.lose(hw);else setTimeout(()=>G.win(st,hw),550);
-  const good=await v.done;if(!st.alive())return;if(good){score[p]++;G.chime(true);G.win(st,hw);const b=medal.getBoundingClientRect();await flyStar(st,[b.left+b.width/2,b.top+b.height/2],sky.target(p));if(!st.alive())return;sky.add(p);}next();};
+  pc.classList.add("fadepic");const hw=at(gHe(W[id].he,"","font-size:2.8rem",{mode:lit?"draw":"etched",dur:lit?500:0}),g);fov.append(hw);
+  st.body.style.justifyContent="flex-end";st.set([h("div",{class:"gmeta",html:trHtml(W[id].tr)+" · "+W[id].en}),v.el],v.btns);playId(id);if(!lit)G.lose(hw);else setTimeout(()=>G.win(st,hw),550);
+  const good=await v.done;if(!st.alive())return;if(good){score[p]++;G.chime(true);G.win(st,hw);await flyStar(st,[g.cx,g.cy],sky.target(p));if(!st.alive())return;sky.add(p);}next();};
  const end=()=>{const order=score.map((s,i)=>[s,i]).sort((a,b)=>b[0]-a[0]);gs.games=(gs.games||0)+1;save();sky.focus(-1);if(order[0][0]>0)sky.complete(order[0][1]);
   st.set([h("div",{class:"glass fadein board"},h("div",{class:"gsmall",style:"border:0;justify-content:center"},n>1?"Standings":"Your score"),...order.map(([s,i],r)=>h("div",{},h("span",{},(r===0&&n>1?"★ ":"")+"Player "+(i+1)),h("b",{},s+" of "+rounds))))],
    [h("button",{class:"nbtn ghost",onclick:setup},"Change players"),h("button",{class:"nbtn lead",onclick:play},"Play again")]);};
@@ -1810,7 +1826,7 @@ V["g-roots"]=()=>stageView({he:"בַּלָּשׁ הַשָּׁרָשִׁים",en:
   while(said===null&&st.alive())await G.sleep(120);if(!st.alive())return;
   const ok=said===t.same;G.chime(ok);if(ok)score++;
   const fam=t.same?t.f:null;let nw=null;if(ok&&t.same){[t.a,t.b].forEach(id=>{if(!gs.found.includes(id)){gs.found.push(id);nw=id;}});save();}
-  seeds(t.f.r.r.split("-"));if(nw){await sap();if(!st.alive())return;redraw(nw);}if(ok&&!t.same)firefly(t.f.ids.includes(t.a)?t.b:t.a);
+  seeds(t.f.r.r.split("-"));if(nw){await sap();if(!st.alive())return;redraw(nw);seeds(t.f.r.r.split("-"));}if(ok&&!t.same)firefly(t.f.ids.includes(t.a)?t.b:t.a);
   st.set([h("div",{class:"gsmall"},ok?(t.same?"Same family. A branch grows.":"Well caught. A trick."):(t.same?"They were one family.":"A trick: two families.")),
    h("div",{class:"glass fadein",style:"max-width:340px"},...[t.a,t.b].map((id,k)=>h("div",{class:"row",style:"justify-content:space-between;gap:10px;padding:4px 0"},h("span",{class:"gmeta"},W[id].en),gHe(W[id].he,"rw","font-size:1.6rem",{mode:"draw",delay:k*350}))),
     h("div",{class:"gsmall",style:"margin-top:6px"},t.same?"Root "+t.f.r.r+": "+t.f.r.en:"Roots "+t.f.r.r+" ("+t.f.r.en+") and "+t.g.r.r+" ("+t.g.r.en+")"))],
@@ -1933,7 +1949,8 @@ const MOULD={mikhtav:"the mi- mould: a thing made by it",mikdash:"the mi- mould:
 const IMPOSSIBLE=[["מ-ל-כ","כ-ת-ב","A king's letter"],["ש-ל-מ","ב-ר-כ","A blessing for a whole, peaceful home"],["ל-מ-ד","ס-פ-ר","A student in the library"],["ד-ב-ר","א-מ-נ","Speaking the truth"],["ק-ד-ש","ש-מ-ע","Hearing something holy"],
  ["ח-י-ה","א-ה-ב","To life, and to love"],["ע-ב-ד","מ-ל-כ","The servant of a king"],["י-ד-ע","ס-פ-ר","Knowledge kept in a book"],["א-כ-ל","ב-ר-כ","A blessing over the food"],["כ-ת-ב","א-מ-נ","A letter you can trust"]];
 V["g-alchemy"]=()=>stageView({he:"שָׁרָשִׁים חַיִּים",en:"Root Alchemy",bg:"",run:st=>{const gs=GS("alchemy");gs.made=gs.made||0;
- const plate=h("div",{class:"plate",style:"background-image:url("+STG.lab+")"},h("div",{class:"melt-glow"}));st.el.insertBefore(plate,st.fx.nextSibling);st.body.style.justifyContent="flex-start";
+ const arm=h("img",{class:"armil",src:STG.armillary,alt:""});const plate=h("div",{class:"plate",style:"background-image:url("+STG.lab+")"},h("div",{class:"melt-glow"}),arm);st.el.insertBefore(plate,st.fx.nextSibling);
+ {let ang=0,lt=performance.now();const spin=()=>{if(!st.alive())return;const now=performance.now();ang+=(4+10*(G.lvl||0))*(now-lt)/1000;lt=now;if(!RM)arm.style.transform="translate(-50%,-50%) rotate("+ang.toFixed(2)+"deg)";requestAnimationFrame(spin);};requestAnimationFrame(spin);}st.body.style.justifyContent="flex-start";
  const met=new Set([...gLearned(),...Object.keys(S.cards||{})]);
  const fams=FAM().map(f=>({...f,ids:f.ids.filter(id=>MOULD[id])})).filter(f=>f.ids.length);
  let elig=fams.map(f=>({...f,ids:f.ids.filter(id=>met.has(id))})).filter(f=>f.ids.length);const apprentice=elig.reduce((a,f)=>a+f.ids.length,0)<4;if(apprentice)elig=fams;
